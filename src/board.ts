@@ -1,0 +1,39 @@
+import * as ex from 'excalibur';
+import { Cell } from "./cell";
+import { BOARD_OFFSET, SCALE } from './config';
+
+export class Board {
+    tileWidth: number = 32;
+    tileHeight: number = 32;
+    margin: number = 2;
+    rows: number = 5;
+    cols: number = 6;
+
+    cells: Cell[] = [];
+
+    constructor(scene: ex.Scene) {
+        for (let i = 0; i < this.rows * this.cols; i++) {
+            const cell = new Cell(i % this.cols, Math.floor(i / this.cols), this);
+            this.cells.push(cell);
+            scene.add(cell);
+        }
+
+        // setup neighbors connections
+        for (let cell of this.cells) {
+            cell.pathNode.connections = cell.getNeighbors().map(c => c.pathNode);
+        }
+    }
+
+    getCellByWorldPos(pos: ex.Vector): Cell | null {
+        return this.getCell(
+            Math.floor((pos.x - BOARD_OFFSET.x) / ((this.tileWidth+this.margin) * SCALE.x)),
+            Math.floor((pos.y - BOARD_OFFSET.y) / ((this.tileHeight+this.margin) * SCALE.y))
+        );
+    }
+
+    getCell(x: number, y: number): Cell | null {
+        if(x < 0 || x >= this.cols) return null;
+        if(y < 0 || y >= this.rows) return null;
+        return this.cells[x + y * this.cols];
+     }
+}

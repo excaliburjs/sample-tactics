@@ -1,0 +1,64 @@
+import * as ex from 'excalibur';
+import { loader } from './resources';
+import { Cloud } from './cloud';
+import { Cell } from './cell';
+import { Board } from './board';
+import { PathFinder } from './path-finding/path-finding-system';
+import { PathNodeComponent } from './path-finding/path-node-component';
+
+const game = new ex.Engine({
+    width: 800,
+    height: 800,
+    displayMode: ex.DisplayMode.FitScreenAndFill
+});
+
+
+// Add clouds :3
+game.add(new Cloud(ex.vec(800, 0)));
+game.add(new Cloud(ex.vec(400, 300)));
+game.add(new Cloud(ex.vec(700, 700)));
+
+const board = new Board(game.currentScene);
+
+const pathfinder = new PathFinder(game.currentScene);
+
+game.onInitialize = () => {
+    const cell = board.getCell(0, 0);
+    const start = cell?.get(PathNodeComponent);
+    const range = pathfinder.getRange(start!, 3)
+    console.log(range);
+
+    // range.forEach(cell => {
+    //     const graphics = cell.owner?.get(ex.GraphicsComponent);
+    //     if (graphics) {
+    //         graphics.current[0].graphic.tint = ex.Color.Blue;
+    //     }
+    // })
+
+    
+
+    game.input.pointers.on('move', pointer => {
+        const cell = board.getCellByWorldPos(pointer.worldPos);
+        board.cells.forEach(cell => {
+            const graphics = cell.graphics;
+                if (graphics) {
+                    graphics.current[0].graphic.tint = ex.Color.White;
+                }
+        });
+        if (cell) {
+            const path = pathfinder.findPath(start!, cell?.pathNode!);
+            path.forEach(cell => {
+                const graphics = cell.owner?.get(ex.GraphicsComponent);
+                if (graphics) {
+                    graphics.current[0].graphic.tint = ex.Color.Red;
+                }
+            })
+        }
+    })
+
+    
+}
+
+game.start(loader).then(() => {
+    
+});
