@@ -46,8 +46,6 @@ export class PathFinder {
     }
 
     findPath(start: PathNodeComponent, end: PathNodeComponent): PathNodeComponent[] {
-        // TODO also support world space positions
-
         const nodes = this.query.getEntities().map(n => n.get(PathNodeComponent)) as PathNodeComponent[];
         nodes.forEach(node => {
             node.gScore = 0;
@@ -57,16 +55,27 @@ export class PathFinder {
 
         start.gScore = 0;
         start.hScore = start.gScore + this.heuristic(start, end) * this.heuristicWeight;
+        start.direction = ex.Vector.Down;
 
         const openNodes: PathNodeComponent[] = [start];
         const closedNodes: PathNodeComponent[] = [];
 
         while (openNodes.length > 0) {
             // priority queue, evaluate nodes with the lowest cost
-            const current = openNodes.sort((a, b) => {
+            const priorityNodes = openNodes.sort((a, b) => {
+                // tie breaking for aesthetics
+                // if (a.hScore === b.hScore) {
+                //     // console.log(b.direction.normalize());
+                //     // console.log(a.direction.normalize());
+                //     console.log(b.direction.dot(ex.Vector.Down) - a.direction.dot(ex.Vector.Down));
+                //     return b.direction.dot(ex.Vector.Down) - a.direction.dot(ex.Vector.Down);
+                //     // return b.pos.y - a.pos.y;
+                // }
                 return a.hScore - b.hScore;
-            })[0];
+            });
 
+            // tie breaking for aesthetics
+            const current = priorityNodes[0];
 
             // Done!
             if (current === end) {
@@ -87,10 +96,7 @@ export class PathFinder {
             });
 
             // Current direction!
-            let currentDirection = ex.vec(0, 0);//ex.Vector.Down; // pick a default direction? can we use (0, 0)
-            if (current.previousNode) {
-                currentDirection = current.pos.sub(current.previousNode.pos);
-            }
+            let currentDirection = current.direction;
 
             neighbors.forEach((node) => {
                 if (openNodes.indexOf(node) === -1) {
@@ -99,8 +105,10 @@ export class PathFinder {
                     node.hScore = node.gScore + this.heuristic(node, end) * this.heuristicWeight;
 
                     // Turn penalty if direction is not straight
-                    const newDirection = node.pos.sub(current.pos);
-                    if (currentDirection.dot(newDirection) < 1.0) {
+                    const newDirection = node.pos.sub(current.pos).normalize();
+                    node.direction = newDirection;
+                    const inline = currentDirection.dot(newDirection);
+                    if (inline === 0.0) {
                         node.hScore += 130.0;
                     }
 

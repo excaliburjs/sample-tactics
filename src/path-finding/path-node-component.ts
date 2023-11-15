@@ -13,6 +13,7 @@ export class PathNodeComponent extends ex.Component {
     hScore = Infinity;
     weight = 1;
     isWalkable = true;
+    direction: ex.Vector = ex.Vector.Zero;
 
     connections: PathNodeComponent[] = [];
 

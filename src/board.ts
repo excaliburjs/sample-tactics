@@ -6,12 +6,14 @@ export class Board {
     tileWidth: number = 32;
     tileHeight: number = 32;
     margin: number = 2;
-    rows: number = 5;
-    cols: number = 6;
+    rows: number;
+    cols: number;
 
     cells: Cell[] = [];
 
-    constructor(scene: ex.Scene) {
+    constructor(rows: number, cols: number, scene: ex.Scene) {
+        this.rows = rows;
+        this.cols = cols;
         for (let i = 0; i < this.rows * this.cols; i++) {
             const cell = new Cell(i % this.cols, Math.floor(i / this.cols), this);
             this.cells.push(cell);

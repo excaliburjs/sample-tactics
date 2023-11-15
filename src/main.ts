@@ -5,6 +5,7 @@ import { Cell } from './cell';
 import { Board } from './board';
 import { PathFinder } from './path-finding/path-finding-system';
 import { PathNodeComponent } from './path-finding/path-node-component';
+import { Unit } from './unit';
 
 const game = new ex.Engine({
     width: 800,
@@ -12,21 +13,25 @@ const game = new ex.Engine({
     displayMode: ex.DisplayMode.FitScreenAndFill
 });
 
+// TODO move to level
 
 // Add clouds :3
 game.add(new Cloud(ex.vec(800, 0)));
 game.add(new Cloud(ex.vec(400, 300)));
 game.add(new Cloud(ex.vec(700, 700)));
 
-const board = new Board(game.currentScene);
+const board = new Board(6, 6, game.currentScene);
 
 const pathfinder = new PathFinder(game.currentScene);
 
+const unit = new Unit(0, 0, "Spider", board);
+game.add(unit);
+
 game.onInitialize = () => {
-    const cell = board.getCell(0, 0);
+    const cell = board.getCell(2, 2);
     const start = cell?.get(PathNodeComponent);
     const range = pathfinder.getRange(start!, 3)
-    console.log(range);
+    // console.log(range);
 
     // range.forEach(cell => {
     //     const graphics = cell.owner?.get(ex.GraphicsComponent);
@@ -34,8 +39,6 @@ game.onInitialize = () => {
     //         graphics.current[0].graphic.tint = ex.Color.Blue;
     //     }
     // })
-
-    
 
     game.input.pointers.on('move', pointer => {
         const cell = board.getCellByWorldPos(pointer.worldPos);

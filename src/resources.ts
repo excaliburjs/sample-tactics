@@ -37,6 +37,26 @@ export const TerrainSpriteSheet = ex.SpriteSheet.fromImageSource({
     }
 });
 
+export const SpiderSpriteSheet = ex.SpriteSheet.fromImageSource({
+    image: Resources.SpiderSheet,
+    grid: {
+        rows: 1,
+        columns: 4,
+        spriteHeight: 32,
+        spriteWidth: 32
+    }
+});
+
+export const HeartSpriteSheet = ex.SpriteSheet.fromImageSource({
+    image: Resources.HeartSheet,
+    grid: {
+        rows: 1,
+        columns: 5,
+        spriteHeight: 32,
+        spriteWidth: 32
+    }
+});
+
 export const loader = new ex.Loader();
 
 for (let res of Object.values(Resources)) {

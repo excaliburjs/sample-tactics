@@ -36,10 +36,10 @@ export class Cell extends ex.Actor {
 
     getNeighbors(): Cell[] {
         return [
-            this.board.getCell(this.x + 1, this.y),
-            this.board.getCell(this.x, this.y + 1),
-            this.board.getCell(this.x - 1, this.y),
             this.board.getCell(this.x, this.y - 1),
+            this.board.getCell(this.x, this.y + 1),
+            this.board.getCell(this.x + 1, this.y),
+            this.board.getCell(this.x - 1, this.y),
         ].filter(function (cell) {
             return cell !== null;
         }) as Cell[];
