@@ -40,9 +40,25 @@ export class Unit extends ex.Actor {
             this.cell.pathNode.isWalkable = true;
         }
         let currentCell: Cell | null = null;
-        for (let node of path) {
+        let pathMinusFirst = path.slice(1, path.length);
+        for (let node of pathMinusFirst) {
             currentCell = node.owner as Cell;
-            await this.actions.easeTo(currentCell.pos.sub(this.unitConfig.graphics.offset), 300, ex.EasingFunctions.EaseInOutCubic).toPromise();
+            const sound = new ex.ActionSequence(this, (ctx) => {
+                ctx.delay(200);
+                ctx.callMethod(() => {
+                    Resources.MoveSound.play();
+                });
+            });
+
+            const move = new ex.ActionSequence(this, (ctx) => {
+                ctx.easeTo(currentCell!.pos.sub(this.unitConfig.graphics.offset), 300, ex.EasingFunctions.EaseInOutCubic);
+            });
+
+            const parallel = new ex.ParallelActions([
+                sound,
+                move
+            ])
+            await this.actions.runAction(parallel).toPromise();
         }
         if (currentCell) {
             currentCell.addUnit(this);
