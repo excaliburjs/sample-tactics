@@ -1,6 +1,7 @@
 import * as ex from 'excalibur';
 import { Cell } from "./cell";
 import { BOARD_OFFSET, SCALE } from './config';
+import { PathFinder } from './path-finding/path-finding-system';
 
 export class Board {
     tileWidth: number = 32;
@@ -10,6 +11,8 @@ export class Board {
     cols: number;
 
     cells: Cell[] = [];
+
+    pathFinder: PathFinder
 
     constructor(rows: number, cols: number, scene: ex.Scene) {
         this.rows = rows;
@@ -24,6 +27,8 @@ export class Board {
         for (let cell of this.cells) {
             cell.pathNode.connections = cell.getNeighbors().map(c => c.pathNode);
         }
+
+        this.pathFinder = new PathFinder(scene);
     }
 
     getCellByWorldPos(pos: ex.Vector): Cell | null {

@@ -1,13 +1,17 @@
 import * as ex from "excalibur";
 import { Board } from "./board";
-import { TerrainSpriteSheet } from "./resources";
+import { HighlightAnimation, TerrainSpriteSheet } from "./resources";
 import { BOARD_OFFSET, SCALE } from "./config";
 import { PathNodeComponent } from "./path-finding/path-node-component";
+import { Unit } from "./unit";
 
 export class Cell extends ex.Actor {
     sprite: ex.Sprite;
     pathNode: PathNodeComponent;
+    unit: Unit | null = null;
+
     /**
+     * Individual cells on the board
      * 
      * @param x integer coordinate
      * @param y integer coordinate
@@ -28,12 +32,35 @@ export class Cell extends ex.Actor {
         this.sprite = TerrainSpriteSheet.sprites[ex.randomIntInRange(0, 5)];
         this.sprite.scale = SCALE;
         this.graphics.use(this.sprite.clone());
+        HighlightAnimation.scale = SCALE;
+        this.graphics.add('range', HighlightAnimation.clone());
+        this.graphics.add('path', HighlightAnimation.clone());
+    }
+
+    addUnit(unit: Unit) {
+        this.unit = unit;
+        this.unit.cell = this;
+        this.pathNode.isWalkable = false;
+    }
+
+    toggleHighlight(show: boolean, type: 'range' | 'path', tint?: ex.Color) {
+        if (tint && show) {
+            const highlight = this.graphics.getGraphic(type);
+            if (highlight) {
+                highlight.tint = tint;
+            }
+        }
+        show ? this.graphics.show(type) : this.graphics.hide(type);
     }
 
     getDistance(other: Cell) {
         return Math.abs(this.pos.x - other.pos.x) + Math.abs(this.pos.y - other.pos.y);
     }
 
+    /**
+     * Returns the orthogonal neighbors (up, down, left, right)
+     * @returns 
+     */
     getNeighbors(): Cell[] {
         return [
             this.board.getCell(this.x, this.y - 1),

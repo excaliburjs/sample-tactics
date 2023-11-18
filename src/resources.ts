@@ -1,7 +1,7 @@
 import * as ex from 'excalibur';
 
 
-import UnitSpriteSheetPath from '../res/UnitSpriteSheetNew.png';
+import KnightSpriteSheetPath from '../res/KnightSheet.png';
 import SpiderSheetPath from '../res/SpiderSheet.png';
 import HeartSheetPath from '../res/HeartSheet.png';
 import UISheetPath from '../res/UISheet.png';
@@ -14,7 +14,7 @@ import MoveSoundPath from '../res/move.wav';
 import SelectSoundPath from '../res/unitselect.wav';
 
 export const Resources = {
-    UnitSpriteSheet: new ex.ImageSource(UnitSpriteSheetPath),
+    KnightSpriteSheet: new ex.ImageSource(KnightSpriteSheetPath),
     SpiderSheet: new ex.ImageSource(SpiderSheetPath),
     HeartSheet: new ex.ImageSource(HeartSheetPath),
     UISheet: new ex.ImageSource(UISheetPath),
@@ -37,6 +37,29 @@ export const TerrainSpriteSheet = ex.SpriteSheet.fromImageSource({
     }
 });
 
+export const HighlightSpriteSheet = ex.SpriteSheet.fromImageSource({
+    image: Resources.HighlightSheet,
+    grid: {
+        rows: 1,
+        columns: 5,
+        spriteHeight: 32,
+        spriteWidth: 32
+    }
+});
+
+export const HighlightAnimation = ex.Animation.fromSpriteSheetCoordinates({
+    spriteSheet: HighlightSpriteSheet,
+    strategy: ex.AnimationStrategy.Loop,
+    frameCoordinates: [
+        {x: 0, y: 0, duration: 100 },
+        {x: 1, y: 0, duration: 100 },
+        {x: 2, y: 0, duration: 100 },
+        {x: 3, y: 0, duration: 100 },
+        {x: 4, y: 0, duration: 100 },
+    ]
+})
+
+
 export const SpiderSpriteSheet = ex.SpriteSheet.fromImageSource({
     image: Resources.SpiderSheet,
     grid: {
@@ -47,11 +70,43 @@ export const SpiderSpriteSheet = ex.SpriteSheet.fromImageSource({
     }
 });
 
+export const SpiderIdle =  ex.Animation.fromSpriteSheetCoordinates({
+    spriteSheet: SpiderSpriteSheet,
+    strategy: ex.AnimationStrategy.Loop,
+    frameCoordinates: [
+        {x: 0, y: 0, duration: 200},
+        {x: 1, y: 0, duration: 200},
+        {x: 2, y: 0, duration: 200},
+        {x: 3, y: 0, duration: 200}
+    ]
+});
+
+export const KnightSpriteSheet = ex.SpriteSheet.fromImageSource({
+    image: Resources.KnightSpriteSheet,
+    grid: {
+        rows: 1,
+        columns: 4,
+        spriteHeight: 32,
+        spriteWidth: 32
+    }
+});
+
+export const KnightIdle =  ex.Animation.fromSpriteSheetCoordinates({
+    spriteSheet: KnightSpriteSheet,
+    strategy: ex.AnimationStrategy.Loop,
+    frameCoordinates: [
+        {x: 0, y: 0, duration: 200},
+        {x: 1, y: 0, duration: 200},
+        {x: 2, y: 0, duration: 200},
+        {x: 3, y: 0, duration: 200}
+    ]
+});
+
 export const HeartSpriteSheet = ex.SpriteSheet.fromImageSource({
     image: Resources.HeartSheet,
     grid: {
         rows: 1,
-        columns: 5,
+        columns: 6,
         spriteHeight: 32,
         spriteWidth: 32
     }

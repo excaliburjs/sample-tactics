@@ -1,6 +1,11 @@
+import { Unit } from "./unit";
 
 export class Player {
     constructor() {
+
+    }
+
+    addUnit(unit: Unit) {
 
     }
 
@@ -13,7 +18,7 @@ export class Player {
     }
 
     attactUnit() {
-        
+
     }
 
     isDone() {
