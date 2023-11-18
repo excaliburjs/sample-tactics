@@ -2,13 +2,12 @@
   "name": "sample-tactics",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
   "scripts": {
     "start": "parcel serve index.html",
     "build": "parcel build ./index.html --dist-dir ./dist --public-url ./"
   },
-  "author": "",
-  "license": "ISC",
+  "author": "eonarheim",
+  "license": "BSD-2-Clause",
   "dependencies": {
     "excalibur": "0.28.1"
   },
