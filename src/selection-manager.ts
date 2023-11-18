@@ -21,25 +21,41 @@ export class SelectionManager {
         engine.input.pointers.on('move', this.pointermove.bind(this));
     }
 
+    reset() {
+        this.resetHighlight();
+        this.currentUnitSelection = null;
+        this.currentPath = [];
+        this.currentRange = [];
+    }
+
     pointerclick(pointer: ex.PointerEvent) {
         if (!this.active) return;
         if (this.currentUnitSelection) {
-            this.currentUnitSelection.move(this.currentPath);
-
-            this.resetHighlight();
-            this.currentUnitSelection = null;
+            if (this.currentPath.length === 0) {
+                this.showAndFindPath(pointer.worldPos);
+            }
+            if (this.currentPath.length > 1 ) {
+                this.currentUnitSelection.move(this.currentPath).then(() => {
+                    this.reset();
+                });
+                
+                this.resetHighlight();
+                this.currentUnitSelection = null;
+            }
+            this.reset();
         } else {
+            // no unit selected
             const cell = this.board.getCellByWorldPos(pointer.worldPos);
             if (cell?.unit) {
                 this.currentUnitSelection = cell.unit;
-    
-                // TODO unit controlled?
-                this.showRange(this.currentUnitSelection);
+                this.showAndFindRange(this.currentUnitSelection);
+            } else {
+                this.reset();
             }
         }
     }
 
-    showRange(unit: Unit) {
+    showAndFindRange(unit: Unit) {
         if (!this.currentUnitSelection) return;
         if (!unit.cell) return;
         const range = this.board.pathFinder.getRange(unit.cell.pathNode, this.currentUnitSelection.unitConfig.range);
@@ -57,14 +73,13 @@ export class SelectionManager {
         });
     }
 
-    pointermove(pointer: ex.PointerEvent) {
-        if (!this.active) return;
+    showAndFindPath(pos: ex.Vector) {
         if (!this.currentUnitSelection) return;
         const start = this.currentUnitSelection.cell?.pathNode;
-        const pointerCell = this.board.getCellByWorldPos(pointer.worldPos);
+        const pointerCell = this.board.getCellByWorldPos(pos);
 
         this.resetHighlight();
-        this.showRange(this.currentUnitSelection);
+        this.showAndFindRange(this.currentUnitSelection);
 
         if (pointerCell && this.currentRange.includes(pointerCell.pathNode)) {
             // todo limit path by range
@@ -75,5 +90,14 @@ export class SelectionManager {
             });
             this.currentPath = path;
         }
+    }
+
+    pointermove(pointer: ex.PointerEvent) {
+        if (!this.active) return;
+        if (!this.currentUnitSelection) return;
+
+        this.resetHighlight();
+        this.showAndFindRange(this.currentUnitSelection);
+        this.showAndFindPath(pointer.worldPos);
     }
 }

@@ -36,6 +36,7 @@ export class Unit extends ex.Actor {
 
     async move(path: PathNodeComponent[]) {
         if (this.cell) {
+            this.cell.unit = null;
             this.cell.pathNode.isWalkable = true;
         }
         let currentCell: Cell | null = null;
@@ -45,6 +46,7 @@ export class Unit extends ex.Actor {
         }
         if (currentCell) {
             currentCell.addUnit(this);
+            this.cell = currentCell;
         }
     }
 }
