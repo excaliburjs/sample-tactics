@@ -1,6 +1,6 @@
 import * as ex from "excalibur";
 
-export class PathNodeComponent extends ex.Component {
+export class PathNodeComponent<T = any> extends ex.Component {
     static type = 'path-node' as const;
     readonly type = 'path-node' as const;
     pos = ex.vec(0, 0);
@@ -13,9 +13,10 @@ export class PathNodeComponent extends ex.Component {
     hScore = Infinity;
     weight = 1;
     isWalkable = true;
+    data?: T;
     direction: ex.Vector = ex.Vector.Zero;
 
-    connections: PathNodeComponent[] = [];
+    connections: PathNodeComponent<T>[] = [];
 
-    previousNode: PathNodeComponent | null = null;
+    previousNode: PathNodeComponent<T> | null = null;
 }

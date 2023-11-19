@@ -83,7 +83,7 @@ export class SelectionManager {
 
         if (pointerCell && this.currentRange.includes(pointerCell.pathNode)) {
             // todo limit path by range
-            const path = this.board.pathFinder.findPath(start!, pointerCell?.pathNode!);
+            const path = this.board.pathFinder.findPath(start!, pointerCell?.pathNode!, this.currentRange);
             path.forEach(node => {
                 const cell = node.owner as Cell;
                 cell.toggleHighlight(true, 'path', ex.Color.Green);

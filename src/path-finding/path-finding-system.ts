@@ -31,9 +31,9 @@ export class PathFinder {
     private _getRangeHelper(cell: PathNodeComponent, accum: PathNodeComponent[], range: number) {
         if (range >= 0) {
             accum.push(cell);
-            cell.connections.forEach(cell => {
-                this._getRangeHelper(cell, accum, range - 1)
-            })
+            cell.connections
+            .filter(node => node.isWalkable)
+            .forEach(cell => this._getRangeHelper(cell, accum, range - 1))
         }
     }
 
@@ -41,11 +41,12 @@ export class PathFinder {
         let result: PathNodeComponent[] = [];
         this._getRangeHelper(start, result, range);
         // dedup results
-        result = result.filter((val, index, array) => array.indexOf(val) === index);
+        result = result.filter((node, index, nodeArray) => nodeArray.indexOf(node) === index);
+        result = result.filter(node => node.isWalkable);
         return result;
     }
 
-    findPath(start: PathNodeComponent, end: PathNodeComponent): PathNodeComponent[] {
+    findPath(start: PathNodeComponent, end: PathNodeComponent, range?: PathNodeComponent[]): PathNodeComponent[] {
         const nodes = this.query.getEntities().map(n => n.get(PathNodeComponent)) as PathNodeComponent[];
         nodes.forEach(node => {
             node.gScore = 0;
@@ -89,11 +90,16 @@ export class PathFinder {
 
 
             // Find the neighbors that haven't been explored
-            const neighbors = current.connections.filter(node => {
+            let neighbors = current.connections.filter(node => {
                 return node.isWalkable;
             }).filter(node => {
                 return closedNodes.indexOf(node) === -1;
             });
+
+            // If a range is supplied only look for nodes in there
+            if (range) {
+                neighbors = neighbors.filter(node => range.indexOf(node) > -1);
+            }
 
             // Current direction!
             let currentDirection = current.direction;
