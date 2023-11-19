@@ -28,25 +28,33 @@ export class PathFinder {
         return path;
     }
 
-    private _getRangeHelper(cell: PathNodeComponent, accum: PathNodeComponent[], range: number) {
+    private _getRangeHelper(cell: PathNodeComponent, accum: PathNodeComponent[], mask: number, range: number) {
         if (range >= 0) {
             accum.push(cell);
             cell.connections
-            .filter(node => node.isWalkable)
-            .forEach(cell => this._getRangeHelper(cell, accum, range - 1))
+            .filter(node => node.isWalkable && !!(node.walkableMask & mask))
+            .forEach(cell => this._getRangeHelper(cell, accum, mask, range - 1))
         }
     }
 
-    getRange(start: PathNodeComponent, range: number): PathNodeComponent[] {
+    getRange(start: PathNodeComponent, mask: number, range: number): PathNodeComponent[] {
         let result: PathNodeComponent[] = [];
-        this._getRangeHelper(start, result, range);
+        this._getRangeHelper(start, result, mask, range);
         // dedup results
         result = result.filter((node, index, nodeArray) => nodeArray.indexOf(node) === index);
         result = result.filter(node => node.isWalkable);
         return result;
     }
 
-    findPath(start: PathNodeComponent, end: PathNodeComponent, range?: PathNodeComponent[]): PathNodeComponent[] {
+    /**
+     * 
+     * @param start start node for the path
+     * @param end end node for the path
+     * @param mask bit mask to test against the node's walkability mask, same bit position means walkable (0b111 & 0b001) = walkable, (0b010 & 0b001) = not walkable
+     * @param range 
+     * @returns 
+     */
+    findPath(start: PathNodeComponent, end: PathNodeComponent, mask: number, range?: PathNodeComponent[]): PathNodeComponent[] {
         const nodes = this.query.getEntities().map(n => n.get(PathNodeComponent)) as PathNodeComponent[];
         nodes.forEach(node => {
             node.gScore = 0;
@@ -91,7 +99,7 @@ export class PathFinder {
 
             // Find the neighbors that haven't been explored
             let neighbors = current.connections.filter(node => {
-                return node.isWalkable;
+                return node.isWalkable && !!(node.walkableMask & mask);
             }).filter(node => {
                 return closedNodes.indexOf(node) === -1;
             });

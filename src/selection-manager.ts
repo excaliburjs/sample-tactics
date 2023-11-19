@@ -49,11 +49,11 @@ export class SelectionManager {
         this.showHighlight(this.currentRange, 'range');
     }
 
-    async selectDestinationAndMove(unit: Unit, cell: Cell) {
+    async selectDestinationAndMove(unit: Unit, destination: Cell) {
         const range = this.findRange(unit);
         // select a destination if there is no path
         if (this.currentPath.length === 0) {
-            this.currentPath = this.findPath(cell, range);
+            this.currentPath = this.findPath(destination, range);
         }
         // if a valid path was found move!
         if (this.currentPath.length > 1) {
@@ -91,7 +91,8 @@ export class SelectionManager {
     findRange(unit: Unit): PathNodeComponent[] {
         if (!this.currentUnitSelection) return [];
         if (!unit.cell) return [];
-        const range = this.board.pathFinder.getRange(unit.cell.pathNode, this.currentUnitSelection.unitConfig.range);
+        let range = this.board.pathFinder.getRange(unit.cell.pathNode, unit.player.mask, this.currentUnitSelection.unitConfig.range);
+        range = range.filter(node => node.isWalkable && !!(node.walkableMask & unit.player.mask))
         return range;
     }
 
@@ -113,8 +114,8 @@ export class SelectionManager {
         if (!this.currentUnitSelection) return [];
         const start = this.currentUnitSelection.cell?.pathNode;
 
-        if (destination && currentRange.includes(destination.pathNode)) {
-            const path = this.board.pathFinder.findPath(start!, destination?.pathNode!, currentRange);
+        if (destination && !destination.unit && currentRange.includes(destination.pathNode)) {
+            const path = this.board.pathFinder.findPath(start!, destination?.pathNode!, this.currentUnitSelection.player.mask, currentRange);
             return path;
         }
         return [];

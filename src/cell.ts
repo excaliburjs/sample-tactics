@@ -45,7 +45,13 @@ export class Cell extends ex.Actor {
     addUnit(unit: Unit) {
         this.unit = unit;
         this.unit.cell = this;
-        this.pathNode.isWalkable = false;
+        this.pathNode.walkableMask = unit.player.mask;
+    }
+
+    removeUnit(unit: Unit) {
+        this.pathNode.walkableMask = -1;
+        this.unit = null;
+        unit.cell = null;
     }
 
     toggleHighlight(show: boolean, type: 'range' | 'path') {

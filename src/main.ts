@@ -7,6 +7,7 @@ import { PathFinder } from './path-finding/path-finding-system';
 import { PathNodeComponent } from './path-finding/path-node-component';
 import { Unit } from './unit';
 import { SelectionManager } from './selection-manager';
+import { Player } from './player';
 
 const game = new ex.Engine({
     width: 800,
@@ -25,14 +26,18 @@ const board = new Board(6, 6, game.currentScene);
 
 const selectionManager = new SelectionManager(game, board);
 
-const spider1 = new Unit(0, 0, "Spider", board);
+const AI = new Player('Monsters of the Forest');
+const Human = new Player('Knights of the Round Table');
+
+
+const spider1 = new Unit(0, 0, "Spider", board, AI);
 game.add(spider1);
-const spider2 = new Unit(4, 5, "Spider", board);
+const spider2 = new Unit(4, 5, "Spider", board, AI);
 game.add(spider2);
 
-const knight1 = new Unit(1, 1, "Knight", board);
+const knight1 = new Unit(1, 1, "Knight", board, Human);
 game.add(knight1);
-const knight2 = new Unit(2, 1, "Knight", board);
+const knight2 = new Unit(2, 1, "Knight", board, Human);
 game.add(knight2);
 
 game.start(loader).then(() => {

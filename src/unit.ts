@@ -4,11 +4,12 @@ import { HeartSpriteSheet, Resources, SpiderSpriteSheet } from "./resources";
 import { SCALE, UNIT_CONFIG, UnitConfig, UnitType } from "./config";
 import { Cell } from "./cell";
 import { PathNodeComponent } from "./path-finding/path-node-component";
+import { Player } from "./player";
 
 export class Unit extends ex.Actor {
     cell: Cell | null = null;
     unitConfig: UnitConfig;
-    constructor(x: number, y: number, unitType: UnitType, board: Board)  {
+    constructor(x: number, y: number, unitType: UnitType, board: Board, public player: Player)  {
         super({
             anchor: ex.vec(0, 0)
         });
@@ -36,8 +37,7 @@ export class Unit extends ex.Actor {
 
     async move(path: PathNodeComponent[]) {
         if (this.cell) {
-            this.cell.unit = null;
-            this.cell.pathNode.isWalkable = true;
+            this.cell.removeUnit(this);
         }
         let currentCell: Cell | null = null;
         let pathMinusFirst = path.slice(1, path.length);
@@ -62,7 +62,6 @@ export class Unit extends ex.Actor {
         }
         if (currentCell) {
             currentCell.addUnit(this);
-            this.cell = currentCell;
         }
     }
 }

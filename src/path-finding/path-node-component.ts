@@ -4,6 +4,14 @@ export class PathNodeComponent<T = any> extends ex.Component {
     static type = 'path-node' as const;
     readonly type = 'path-node' as const;
     pos = ex.vec(0, 0);
+    /**
+     * Is this path node traversable by anything at all?
+     */
+    isWalkable = true;
+    /**
+     * Is this path node traversable by certain things
+     */
+    walkableMask: number =  -1; // 32-bit mask
     constructor(pos: ex.Vector) {
         super();
         this.pos = pos;
@@ -12,7 +20,6 @@ export class PathNodeComponent<T = any> extends ex.Component {
     gScore = Infinity;
     hScore = Infinity;
     weight = 1;
-    isWalkable = true;
     data?: T;
     direction: ex.Vector = ex.Vector.Zero;
 
