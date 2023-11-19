@@ -5,6 +5,9 @@ import { BOARD_OFFSET, SCALE } from "./config";
 import { PathNodeComponent } from "./path-finding/path-node-component";
 import { Unit } from "./unit";
 
+const RangeHighlightAnimation = HighlightAnimation.clone();
+const PathHighlightAnimation = HighlightAnimation.clone();
+
 export class Cell extends ex.Actor {
     sprite: ex.Sprite;
     pathNode: PathNodeComponent;
@@ -32,9 +35,10 @@ export class Cell extends ex.Actor {
         this.sprite = TerrainSpriteSheet.sprites[ex.randomIntInRange(0, 5)];
         this.sprite.scale = SCALE;
         this.graphics.use(this.sprite.clone());
-        HighlightAnimation.scale = SCALE;
-        this.graphics.add('range', HighlightAnimation.clone());
-        this.graphics.add('path', HighlightAnimation.clone());
+        RangeHighlightAnimation.scale = SCALE;
+        PathHighlightAnimation.scale = SCALE;
+        this.graphics.add('range', RangeHighlightAnimation);
+        this.graphics.add('path', PathHighlightAnimation);
     }
 
     addUnit(unit: Unit) {
