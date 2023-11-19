@@ -37,6 +37,7 @@ export class Cell extends ex.Actor {
         this.graphics.use(this.sprite.clone());
         RangeHighlightAnimation.scale = SCALE;
         PathHighlightAnimation.scale = SCALE;
+        PathHighlightAnimation.tint = ex.Color.Green;
         this.graphics.add('range', RangeHighlightAnimation);
         this.graphics.add('path', PathHighlightAnimation);
     }
@@ -47,14 +48,16 @@ export class Cell extends ex.Actor {
         this.pathNode.isWalkable = false;
     }
 
-    toggleHighlight(show: boolean, type: 'range' | 'path', tint?: ex.Color) {
-        if (tint && show) {
-            const highlight = this.graphics.getGraphic(type);
-            if (highlight) {
-                highlight.tint = tint;
-            }
+    toggleHighlight(show: boolean, type: 'range' | 'path') {
+        // reset highlight
+        this.graphics.hide('range');
+        this.graphics.hide('path');
+
+        if (show) {
+            this.graphics.show(type);
+        } else {
+            this.graphics.hide(type);
         }
-        show ? this.graphics.show(type) : this.graphics.hide(type);
     }
 
     getDistance(other: Cell) {

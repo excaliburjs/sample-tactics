@@ -31,6 +31,10 @@ export class Board {
         this.pathFinder = new PathFinder(scene);
     }
 
+    getEmptyCells(): Cell[] {
+        return this.cells.filter(cell => !cell.unit);
+    }
+
     getCellByWorldPos(pos: ex.Vector): Cell | null {
         return this.getCell(
             Math.floor((pos.x - BOARD_OFFSET.x) / ((this.tileWidth+this.margin) * SCALE.x)),
