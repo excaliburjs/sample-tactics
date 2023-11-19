@@ -15,7 +15,7 @@ export interface UnitConfig {
         idle: ex.Animation
     }
     health: number;
-    range: number;
+    movement: number;
     attack: number;
 }
 export const UNIT_CONFIG: Record<UnitType, UnitConfig> = {
@@ -25,7 +25,7 @@ export const UNIT_CONFIG: Record<UnitType, UnitConfig> = {
             idle: KnightIdle
         },
         health: 5,
-        range: 4,
+        movement: 4,
         attack: 2
     },
     Spider: {
@@ -34,7 +34,7 @@ export const UNIT_CONFIG: Record<UnitType, UnitConfig> = {
             idle: SpiderIdle
         },
         health: 3,
-        range: 3,
+        movement: 3,
         attack: 1
     }
 } as const;

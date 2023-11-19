@@ -1,8 +1,10 @@
 
+Background music
+
 ## Menu
 
 * End turn
-* 
+* Pick attack/move/pass
 
 ## Selection
 

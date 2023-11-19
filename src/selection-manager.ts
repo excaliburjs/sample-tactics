@@ -54,7 +54,7 @@ export class SelectionManager {
     findRange(unit: Unit): PathNodeComponent[] {
         if (!this.currentUnitSelection) return [];
         if (!unit.cell) return [];
-        let range = this.board.pathFinder.getRange(unit.cell.pathNode, unit.player.mask, this.currentUnitSelection.unitConfig.range);
+        let range = this.board.pathFinder.getRange(unit.cell.pathNode, unit.player.mask, this.currentUnitSelection.unitConfig.movement);
         range = range.filter(node => node.isWalkable && !!(node.walkableMask & unit.player.mask))
         return range;
     }

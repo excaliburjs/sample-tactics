@@ -61,7 +61,7 @@ export class HumanPlayer extends Player {
         this.humanMove = new ex.Future();
 
     }
- 
+
     hasMoves() {
         const units = this.board.getUnits()
             .filter(u => u.player === this)
@@ -69,8 +69,6 @@ export class HumanPlayer extends Player {
         return units.length > 0 && !this.passed;
     }
 
-
-    // TODO event handlers need to be here
     override async makeMove(): Promise<boolean> {
         const units = this.board.getUnits().filter(u => u.player === this);
 

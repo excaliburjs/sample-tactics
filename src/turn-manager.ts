@@ -10,7 +10,7 @@ export class TurnManager {
     public currentPlayer: Player;
     private currentPlayerIndex = 0;
     public selectionManager: SelectionManager;
-    constructor(public players: Player[], selectionManager: SelectionManager) {
+    constructor(public players: Player[], selectionManager: SelectionManager, public maxTurns: number) {
         if (players.length === 0) throw Error('Players should be non-zero in length');
         this.currentPlayer = players[this.currentPlayerIndex];
         this.selectionManager = selectionManager;
@@ -18,8 +18,7 @@ export class TurnManager {
 
     // todo generator??
     async start() {
-        let maxTurns = 10;
-        while (maxTurns > 0) {
+        while (this.maxTurns > 0) {
             console.log('Current player turn:', this.currentPlayer.name);
             this.selectionManager.selectPlayer(this.currentPlayer);
             await this.currentPlayer.turnStart();
@@ -29,7 +28,7 @@ export class TurnManager {
             } while (!move);
             await this.currentPlayer.turnEnd();
             this.nextTurn();
-            maxTurns--;
+            this.maxTurns--;
         }
     }
     

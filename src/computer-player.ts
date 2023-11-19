@@ -28,7 +28,7 @@ export class ComputerPlayer extends Player {
             // pick a random valid move
             let range: PathNodeComponent[] = [];
             if (unit.cell) {
-                range = this.board.pathFinder.getRange(unit.cell.pathNode, this.mask, unit.unitConfig.range);
+                range = this.board.pathFinder.getRange(unit.cell.pathNode, this.mask, unit.unitConfig.movement);
             }
             const node = RANDOM.pickOne(range);
             const cell = node.owner as Cell;

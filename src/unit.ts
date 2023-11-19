@@ -11,11 +11,14 @@ export class Unit extends ex.Actor {
     unitConfig: UnitConfig;
     moved = false;
     anim: ex.Animation;
+    health: number;
     constructor(x: number, y: number, unitType: UnitType, board: Board, public player: Player)  {
         super({
             anchor: ex.vec(0, 0)
         });
         this.unitConfig = {...UNIT_CONFIG[unitType]};
+
+        this.health = this.unitConfig.health;
 
         this.anim = this.unitConfig.graphics.idle.clone();
         this.anim.scale = SCALE;
@@ -38,7 +41,7 @@ export class Unit extends ex.Actor {
     }
 
     onPostDraw(ctx: ex.ExcaliburGraphicsContext) {
-        const heart = HeartSpriteSheet.getSprite(ex.clamp(this.unitConfig.health, 0, 5), 0);
+        const heart = HeartSpriteSheet.getSprite(ex.clamp(this.health, 0, 5), 0);
         if (heart) {
             heart.scale = SCALE;
             heart.draw(ctx, 10 * SCALE.x, 16 * SCALE.y);
@@ -82,5 +85,9 @@ export class Unit extends ex.Actor {
 
     canMove() {
         return !this.moved;
+    }
+
+    async attack(other: Unit) {
+
     }
 }

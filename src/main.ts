@@ -29,19 +29,19 @@ const board = new Board(6, 6, game.currentScene);
 
 const selectionManager = new SelectionManager(board);
 
-const AI = new ComputerPlayer('Monsters of the Forest', selectionManager, board);
-const Human = new HumanPlayer('Knights of the Round Table', game, selectionManager, board);
+const computer = new ComputerPlayer('Monsters of the Forest', selectionManager, board);
+const human = new HumanPlayer('Knights of the Round Table', game, selectionManager, board);
 
-const turnManager = new TurnManager([Human, AI], selectionManager);
+const turnManager = new TurnManager([human, computer], selectionManager, 10);
 
-const spider1 = new Unit(0, 0, "Spider", board, AI);
+const spider1 = new Unit(0, 0, "Spider", board, computer);
 game.add(spider1);
-const spider2 = new Unit(4, 5, "Spider", board, AI);
+const spider2 = new Unit(4, 5, "Spider", board, computer);
 game.add(spider2);
 
-const knight1 = new Unit(1, 1, "Knight", board, Human);
+const knight1 = new Unit(1, 1, "Knight", board, human);
 game.add(knight1);
-const knight2 = new Unit(2, 1, "Knight", board, Human);
+const knight2 = new Unit(2, 1, "Knight", board, human);
 game.add(knight2);
 
 game.start(loader).then(() => {
