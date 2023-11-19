@@ -22,10 +22,12 @@ export class TurnManager {
         while (maxTurns > 0) {
             console.log('Current player turn:', this.currentPlayer.name);
             this.selectionManager.selectPlayer(this.currentPlayer);
+            await this.currentPlayer.turnStart();
             let move = true;
             do {
                 move = await this.currentPlayer.makeMove();
             } while (!move);
+            await this.currentPlayer.turnEnd();
             this.nextTurn();
             maxTurns--;
         }

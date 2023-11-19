@@ -16,58 +16,13 @@ export class SelectionManager {
     currentRange: PathNodeComponent[] = [];
     currentPath: PathNodeComponent[] = [];
 
-    active: boolean = false;
-    private humanMove = new ex.Future<void>();
-
-    constructor(private engine: ex.Engine, private board: Board) {
-        engine.input.pointers.on('down', this.pointerClick.bind(this));
-        engine.input.pointers.on('move', this.pointerMove.bind(this));
-    }
+    constructor(private board: Board) {}
 
     reset() {
         this.resetHighlight();
         this.currentUnitSelection = null;
         this.currentPath = [];
         this.currentRange = [];
-    }
-
-    pointerMove(pointer: ex.PointerEvent) {
-        if (!this.active) return;
-        if (!this.currentUnitSelection) return;
-
-        this.resetHighlight();
-        const currentRange = this.findRange(this.currentUnitSelection);
-        this.showHighlight(currentRange, 'range');
-
-        const destination = this.board.getCellByWorldPos(pointer.worldPos);
-        if (destination) {
-            const currentPath = this.findPath(destination, this.currentRange);
-            this.showHighlight(currentPath, 'path');
-        }
-    }
-
-    async pointerClick(pointer: ex.PointerEvent) {
-        if (!this.active) return;
-        const maybeClickedCell = this.board.getCellByWorldPos(pointer.worldPos);
-
-        // a unit is currently selected
-        if (this.currentUnitSelection) {
-            if (maybeClickedCell) {
-                await this.selectDestinationAndMove(this.currentUnitSelection, maybeClickedCell);
-                this.humanMove.resolve();
-            } else {
-                this.reset();
-            }
-        // no unit selected, make a selection
-        } else {
-            // check if the cell clicked has a unit
-            if (maybeClickedCell?.unit) {
-                this.selectUnit(maybeClickedCell.unit);
-            // otherwise clear selection
-            } else {
-                this.reset();
-            }
-        }
     }
 
     selectPlayer(player: Player) {
@@ -90,17 +45,11 @@ export class SelectionManager {
         }
         // if a valid path was found move!
         if (this.currentPath.length > 1) {
-            this.active = false;
             await unit.move(this.currentPath);
         }
         this.reset();
     }
 
-    async waitForHumanMove() {
-        this.active = true;
-        await this.humanMove.promise;
-        this.humanMove = new ex.Future();
-    }
 
     findRange(unit: Unit): PathNodeComponent[] {
         if (!this.currentUnitSelection) return [];

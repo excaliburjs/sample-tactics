@@ -27,10 +27,10 @@ game.add(new Cloud(ex.vec(700, 700)));
 
 const board = new Board(6, 6, game.currentScene);
 
-const selectionManager = new SelectionManager(game, board);
+const selectionManager = new SelectionManager(board);
 
 const AI = new ComputerPlayer('Monsters of the Forest', selectionManager, board);
-const Human = new HumanPlayer('Knights of the Round Table', selectionManager, board);
+const Human = new HumanPlayer('Knights of the Round Table', game, selectionManager, board);
 
 const turnManager = new TurnManager([Human, AI], selectionManager);
 

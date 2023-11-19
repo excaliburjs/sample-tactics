@@ -8,12 +8,19 @@ import { PathNodeComponent } from './path-finding/path-node-component';
 import { Cell } from './cell';
 
 export class ComputerPlayer extends Player {
-    constructor(name: string, private selectionManger: SelectionManager, private board: Board) {
-        super(name);
+    public active: boolean = false;
+    constructor(name: string, private selectionManger: SelectionManager, board: Board) {
+        super(name, board);
     }
 
+    override async turnStart(): Promise<void> {
+        this.active = true;
+    }
+    override async turnEnd(): Promise<void> {
+        this.active = false;
+    }
 
-    async makeMove(): Promise<boolean> {
+    override async makeMove(): Promise<boolean> {
         const units = this.board.getUnits().filter(u => u.player === this);
 
         for (let unit of units) {

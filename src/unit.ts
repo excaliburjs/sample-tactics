@@ -9,21 +9,31 @@ import { Player } from "./player";
 export class Unit extends ex.Actor {
     cell: Cell | null = null;
     unitConfig: UnitConfig;
+    moved = false;
+    anim: ex.Animation;
     constructor(x: number, y: number, unitType: UnitType, board: Board, public player: Player)  {
         super({
             anchor: ex.vec(0, 0)
         });
         this.unitConfig = {...UNIT_CONFIG[unitType]};
 
-        const anim = this.unitConfig.graphics.idle;
-        anim.scale = SCALE;
-        this.graphics.use(anim);
+        this.anim = this.unitConfig.graphics.idle.clone();
+        this.anim.scale = SCALE;
+        this.graphics.use(this.anim);
         this.graphics.onPostDraw = this.onPostDraw.bind(this);
 
         const cell = board.getCell(x, y);
         if (cell) {
             this.pos = cell.pos.sub(this.unitConfig.graphics.offset);
             cell.addUnit(this);
+        }
+    }
+
+    onPostUpdate(): void {
+        if (this.moved) {
+            this.anim.tint = ex.Color.Gray;
+        } else {
+            this.anim.tint = ex.Color.White;
         }
     }
 
@@ -63,5 +73,14 @@ export class Unit extends ex.Actor {
         if (currentCell) {
             currentCell.addUnit(this);
         }
+        this.moved = true;
+    }
+
+    reset() {
+        this.moved = false;
+    }
+
+    canMove() {
+        return !this.moved;
     }
 }
