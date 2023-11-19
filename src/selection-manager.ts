@@ -3,6 +3,7 @@ import { Unit } from "./unit";
 import { Board } from "./board";
 import { Cell } from './cell';
 import { PathNodeComponent } from './path-finding/path-node-component';
+import { Player } from './player';
 
 
 /**
@@ -10,11 +11,13 @@ import { PathNodeComponent } from './path-finding/path-node-component';
  */
 export class SelectionManager {
 
+    currentPlayer: Player | null = null;
     currentUnitSelection: Unit | null = null;
     currentRange: PathNodeComponent[] = [];
     currentPath: PathNodeComponent[] = [];
 
-    active: boolean = true;
+    active: boolean = false;
+    private humanMove = new ex.Future<void>();
 
     constructor(private engine: ex.Engine, private board: Board) {
         engine.input.pointers.on('down', this.pointerClick.bind(this));
@@ -43,28 +46,6 @@ export class SelectionManager {
         }
     }
 
-    selectUnit(unit: Unit) {
-        this.currentUnitSelection = unit;
-        this.currentRange = this.findRange(this.currentUnitSelection);
-        this.showHighlight(this.currentRange, 'range');
-    }
-
-    async selectDestinationAndMove(unit: Unit, destination: Cell) {
-        const range = this.findRange(unit);
-        // select a destination if there is no path
-        if (this.currentPath.length === 0) {
-            this.currentPath = this.findPath(destination, range);
-        }
-        // if a valid path was found move!
-        if (this.currentPath.length > 1) {
-
-            this.active = false;
-            await unit.move(this.currentPath);
-            this.active = true;
-        }
-        this.reset();
-    }
-
     async pointerClick(pointer: ex.PointerEvent) {
         if (!this.active) return;
         const maybeClickedCell = this.board.getCellByWorldPos(pointer.worldPos);
@@ -72,7 +53,8 @@ export class SelectionManager {
         // a unit is currently selected
         if (this.currentUnitSelection) {
             if (maybeClickedCell) {
-                this.selectDestinationAndMove(this.currentUnitSelection, maybeClickedCell);
+                await this.selectDestinationAndMove(this.currentUnitSelection, maybeClickedCell);
+                this.humanMove.resolve();
             } else {
                 this.reset();
             }
@@ -86,6 +68,38 @@ export class SelectionManager {
                 this.reset();
             }
         }
+    }
+
+    selectPlayer(player: Player) {
+        this.currentPlayer = player;
+    }
+
+    selectUnit(unit: Unit) {
+        if (unit.player !== this.currentPlayer) return;
+        this.currentUnitSelection = unit;
+        this.currentRange = this.findRange(this.currentUnitSelection);
+        this.showHighlight(this.currentRange, 'range');
+    }
+
+    async selectDestinationAndMove(unit: Unit, destination: Cell) {
+        if (unit.player !== this.currentPlayer) return;
+        const range = this.findRange(unit);
+        // select a destination if there is no path
+        if (this.currentPath.length === 0) {
+            this.currentPath = this.findPath(destination, range);
+        }
+        // if a valid path was found move!
+        if (this.currentPath.length > 1) {
+            this.active = false;
+            await unit.move(this.currentPath);
+        }
+        this.reset();
+    }
+
+    async waitForHumanMove() {
+        this.active = true;
+        await this.humanMove.promise;
+        this.humanMove = new ex.Future();
     }
 
     findRange(unit: Unit): PathNodeComponent[] {

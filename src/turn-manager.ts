@@ -1,4 +1,5 @@
 import { Player } from "./player";
+import { SelectionManager } from "./selection-manager";
 
 /**
  * Manages player turns, keeps track of which of the N number of players turn it is.
@@ -6,23 +7,32 @@ import { Player } from "./player";
  * Requests moves from either human or AI players
  */
 export class TurnManager {
-    players = []
-
-    start() {
-
+    public currentPlayer: Player;
+    private currentPlayerIndex = 0;
+    public selectionManager: SelectionManager;
+    constructor(public players: Player[], selectionManager: SelectionManager) {
+        if (players.length === 0) throw Error('Players should be non-zero in length');
+        this.currentPlayer = players[this.currentPlayerIndex];
+        this.selectionManager = selectionManager;
     }
 
-    isTurnComplete() {
-
+    // todo generator??
+    async start() {
+        let maxTurns = 10;
+        while (maxTurns > 0) {
+            console.log('Current player turn:', this.currentPlayer.name);
+            this.selectionManager.selectPlayer(this.currentPlayer);
+            let move = true;
+            do {
+                move = await this.currentPlayer.makeMove();
+            } while (!move);
+            this.nextTurn();
+            maxTurns--;
+        }
     }
-
+    
     nextTurn() {
-
+        this.currentPlayerIndex++;
+        this.currentPlayer = this.players[this.currentPlayerIndex % this.players.length];
     }
-
-    requestMove(player: Player) {
-        
-    }
-
-
 }

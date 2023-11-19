@@ -1,3 +1,14 @@
+
+## Menu
+
+* End turn
+* 
+
+## Selection
+
+* Cursor? with arrow
+* Arrow on path?
+
 ## Draw title screen
 * Like excalibird
 
@@ -9,11 +20,26 @@
 
 ## Terrain ideas
 
-Water impassable
+Water impassable by ground units?
+  - Flying units
+Mountain difficult terrain?
+  - Flying units
+Trees cover?
+
+## Build units?
+
+* Get currency from defeating units
+* Enemy's have spawners
+* Players can capture castles to build units
 
 
 ## Enemy/Unit Ideas
 
+### Friendly
+
+
+
+### Enemy
 https://dragonquest.fandom.com/wiki/Dragon_Quest_bestiary
 slime
 ghost

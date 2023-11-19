@@ -8,6 +8,9 @@ import { PathNodeComponent } from './path-finding/path-node-component';
 import { Unit } from './unit';
 import { SelectionManager } from './selection-manager';
 import { Player } from './player';
+import { TurnManager } from './turn-manager';
+import { HumanPlayer } from './human-player';
+import { ComputerPlayer } from './computer-player';
 
 const game = new ex.Engine({
     width: 800,
@@ -26,9 +29,10 @@ const board = new Board(6, 6, game.currentScene);
 
 const selectionManager = new SelectionManager(game, board);
 
-const AI = new Player('Monsters of the Forest');
-const Human = new Player('Knights of the Round Table');
+const AI = new ComputerPlayer('Monsters of the Forest', selectionManager, board);
+const Human = new HumanPlayer('Knights of the Round Table', selectionManager, board);
 
+const turnManager = new TurnManager([Human, AI], selectionManager);
 
 const spider1 = new Unit(0, 0, "Spider", board, AI);
 game.add(spider1);
@@ -41,5 +45,5 @@ const knight2 = new Unit(2, 1, "Knight", board, Human);
 game.add(knight2);
 
 game.start(loader).then(() => {
-    
+    turnManager.start();
 });

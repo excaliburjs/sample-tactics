@@ -2,6 +2,7 @@ import * as ex from 'excalibur';
 import { Cell } from "./cell";
 import { BOARD_OFFSET, SCALE } from './config';
 import { PathFinder } from './path-finding/path-finding-system';
+import { Unit } from './unit';
 
 export class Board {
     tileWidth: number = 32;
@@ -29,6 +30,16 @@ export class Board {
         }
 
         this.pathFinder = new PathFinder(scene);
+    }
+
+    getUnits() {
+        let result: Unit[] = [];
+        for (let cell of this.cells) {
+            if (cell.unit) {
+                result.push(cell.unit);
+            }
+        }
+        return result;
     }
 
     getEmptyCells(): Cell[] {

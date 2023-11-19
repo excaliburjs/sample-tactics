@@ -1,6 +1,9 @@
 import * as ex from "excalibur";
 
 import { KnightIdle, SpiderIdle } from "./resources";
+const seed = performance.now();
+console.log("Random seed:", seed);
+export const RANDOM = new ex.Random(seed);
 
 export const SCALE = ex.vec(3, 3);
 export const BOARD_OFFSET = ex.vec(32 * 3, 32 * 4);
