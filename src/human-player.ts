@@ -52,14 +52,15 @@ export class HumanPlayer extends Player {
                     move: () => {
                         this.selectionManager.selectUnit(maybeClickedCell.unit!, 'move');
                     },
-                    attack: () => {},
+                    attack: () => {
+                        this.selectionManager.selectUnit(maybeClickedCell.unit!, 'attack');
+                    },
                     pass: () => {
                         maybeClickedCell.unit?.pass();
                         this.selectionManager.reset();
                         this.humanMove.resolve();
                     }
                 });
-                // this.selectionManager.selectUnit(maybeClickedCell.unit);
             // otherwise clear selection
             } else {
                 this.selectionManager.reset();

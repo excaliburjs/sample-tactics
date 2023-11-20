@@ -6,12 +6,36 @@ import {classMap} from 'lit/directives/class-map'
 @customElement('unit-menu')
 export class UnitMenu extends LitElement {
     static override styles = css`
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(100%);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0%);
+            }
+        }
+
+        @keyframes fadeOut {
+            from {
+                opacity: 1;
+                transform: translateY(0%);
+            }
+            to {
+                opacity: 0;
+                transform: translateY(0%);
+            }
+        }
+
+
+
         .menu {
             position: absolute;
             top: 0;
             left: 0;
             width: 200px;
-            display: flex;
+            display: none;
             flex-direction: column;
             font-size: 32px;
             background-color: rgba(240, 220, 220, 1);
@@ -27,8 +51,9 @@ export class UnitMenu extends LitElement {
             bottom: 0;
         }
 
-        .hide {
-            display: none;
+        .show {
+            display: flex;
+            animation: fadeIn 200ms ease normal;
         }
                 
         .options {
@@ -87,7 +112,7 @@ export class UnitMenu extends LitElement {
         ${dismissOverlayHtml}
         <div class=${classMap({
             menu: true,
-            hide: !this.show
+            show: this.show
         })} style=${styleMap({
             left: `${this.left}px`, 
             top: `${this.top}px`

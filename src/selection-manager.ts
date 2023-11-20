@@ -12,6 +12,7 @@ import { Player } from './player';
 export class SelectionManager {
 
     currentPlayer: Player | null = null;
+    currentSelectionMode: 'move' | 'attack' = 'move';
     currentUnitSelection: Unit | null = null;
     currentRange: PathNodeComponent[] = [];
     currentPath: PathNodeComponent[] = [];
@@ -32,6 +33,7 @@ export class SelectionManager {
     selectUnit(unit: Unit, type: 'move' | 'attack') {
         if (unit.player !== this.currentPlayer) return;
         this.currentUnitSelection = unit;
+        this.currentSelectionMode = type;
         this.currentRange = this.findRange(this.currentUnitSelection);
         if (type ===  'move') {
             this.showHighlight(this.currentRange, 'range');
@@ -58,7 +60,10 @@ export class SelectionManager {
     findRange(unit: Unit): PathNodeComponent[] {
         if (!this.currentUnitSelection) return [];
         if (!unit.cell) return [];
-        let range = this.board.pathFinder.getRange(unit.cell.pathNode, unit.player.mask, this.currentUnitSelection.unitConfig.movement);
+        let range = this.board.pathFinder.getRange(
+            unit.cell.pathNode, 
+            unit.player.mask, 
+            this.currentUnitSelection.unitConfig.movement);
         range = range.filter(node => node.isWalkable && !!(node.walkableMask & unit.player.mask))
         return range;
     }
