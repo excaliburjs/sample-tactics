@@ -2,13 +2,14 @@ import * as ex from "excalibur";
 import { Board } from "./board";
 import { Player } from "./player";
 import { SelectionManager } from "./selection-manager";
+import { UIManager } from "./ui-manager";
 
 
 export class HumanPlayer extends Player {
     public passed = false;
     private humanMove = new ex.Future<void>();
 
-    constructor(name: string, private engine: ex.Engine, private selectionManager: SelectionManager, board: Board) {
+    constructor(name: string, private engine: ex.Engine, private selectionManager: SelectionManager, public uiManger: UIManager, board: Board) {
         super(name, board);
         engine.input.pointers.on('down', this.pointerClick.bind(this));
         engine.input.pointers.on('move', this.pointerMove.bind(this));
@@ -47,7 +48,18 @@ export class HumanPlayer extends Player {
         } else {
             // check if the cell clicked has a unit
             if (maybeClickedCell?.unit && maybeClickedCell?.unit?.canMove()) {
-                this.selectionManager.selectUnit(maybeClickedCell.unit);
+                this.uiManger.showUnitMenu(maybeClickedCell.unit, {
+                    move: () => {
+                        this.selectionManager.selectUnit(maybeClickedCell.unit!, 'move');
+                    },
+                    attack: () => {},
+                    pass: () => {
+                        maybeClickedCell.unit?.pass();
+                        this.selectionManager.reset();
+                        this.humanMove.resolve();
+                    }
+                });
+                // this.selectionManager.selectUnit(maybeClickedCell.unit);
             // otherwise clear selection
             } else {
                 this.selectionManager.reset();

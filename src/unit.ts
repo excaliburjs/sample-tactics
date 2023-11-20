@@ -87,6 +87,10 @@ export class Unit extends ex.Actor {
         return !this.moved;
     }
 
+    pass() {
+        this.moved = true;
+    }
+
     async attack(other: Unit) {
 
     }

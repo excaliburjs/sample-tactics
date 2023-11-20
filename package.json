@@ -9,10 +9,12 @@
   "author": "eonarheim",
   "license": "BSD-2-Clause",
   "dependencies": {
-    "excalibur": "0.28.1"
+    "excalibur": "0.28.1",
+    "lit": "3.1.0"
   },
   "devDependencies": {
     "parcel": "2.10.2",
+    "ts-lit-plugin": "2.0.1",
     "typescript": "5.2.2"
   }
 }

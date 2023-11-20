@@ -33,7 +33,7 @@ export class ComputerPlayer extends Player {
             const node = RANDOM.pickOne(range);
             const cell = node.owner as Cell;
     
-            this.selectionManger.selectUnit(unit);
+            this.selectionManger.selectUnit(unit, 'move');
             await ex.Util.delay(1000);
     
             const currentPath = this.selectionManger.findPath(cell, range);

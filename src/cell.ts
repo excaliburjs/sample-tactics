@@ -7,6 +7,7 @@ import { Unit } from "./unit";
 
 const RangeHighlightAnimation = HighlightAnimation.clone();
 const PathHighlightAnimation = HighlightAnimation.clone();
+const AttackHighlightAnimation = HighlightAnimation.clone();
 
 export class Cell extends ex.Actor {
     sprite: ex.Sprite;
@@ -36,10 +37,16 @@ export class Cell extends ex.Actor {
         this.sprite.scale = SCALE;
         this.graphics.use(this.sprite.clone());
         RangeHighlightAnimation.scale = SCALE;
+        RangeHighlightAnimation.opacity = 0.75;
         PathHighlightAnimation.scale = SCALE;
+        PathHighlightAnimation.opacity = 0.75;
         PathHighlightAnimation.tint = ex.Color.Green;
+        AttackHighlightAnimation.scale = SCALE;
+        AttackHighlightAnimation.opacity = 0.75;
+        AttackHighlightAnimation.tint = ex.Color.Red;
         this.graphics.add('range', RangeHighlightAnimation);
         this.graphics.add('path', PathHighlightAnimation);
+        this.graphics.add('attack', AttackHighlightAnimation);
     }
 
     addUnit(unit: Unit) {
@@ -54,10 +61,11 @@ export class Cell extends ex.Actor {
         unit.cell = null;
     }
 
-    toggleHighlight(show: boolean, type: 'range' | 'path') {
+    toggleHighlight(show: boolean, type: 'range' | 'path' | 'attack') {
         // reset highlight
         this.graphics.hide('range');
         this.graphics.hide('path');
+        this.graphics.hide('attack');
 
         if (show) {
             this.graphics.show(type);

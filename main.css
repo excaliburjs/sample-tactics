@@ -1,0 +1,8 @@
+@font-face {
+    font-family: "notjamslab14";
+    src: url("./res/font//NotJamSlab14.ttf");
+}
+
+html {
+    font-family: "notjamslab14";
+}

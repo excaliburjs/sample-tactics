@@ -29,11 +29,15 @@ export class SelectionManager {
         this.currentPlayer = player;
     }
 
-    selectUnit(unit: Unit) {
+    selectUnit(unit: Unit, type: 'move' | 'attack') {
         if (unit.player !== this.currentPlayer) return;
         this.currentUnitSelection = unit;
         this.currentRange = this.findRange(this.currentUnitSelection);
-        this.showHighlight(this.currentRange, 'range');
+        if (type ===  'move') {
+            this.showHighlight(this.currentRange, 'range');
+        } else {
+            this.showHighlight(this.currentRange, 'attack');
+        }
     }
 
     async selectDestinationAndMove(unit: Unit, destination: Cell) {
@@ -63,10 +67,11 @@ export class SelectionManager {
         this.board.cells.forEach(cell => {
             cell.toggleHighlight(false, 'range');
             cell.toggleHighlight(false, 'path');
+            cell.toggleHighlight(false, 'attack');
         });
     }
 
-    showHighlight(path: PathNodeComponent[], type: 'path' | 'range'): void {
+    showHighlight(path: PathNodeComponent[], type: 'path' | 'range' | 'attack'): void {
         path.forEach(node => {
             const cell = node.owner as Cell;
             cell.toggleHighlight(true, type);

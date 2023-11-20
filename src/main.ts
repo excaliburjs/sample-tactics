@@ -11,11 +11,13 @@ import { Player } from './player';
 import { TurnManager } from './turn-manager';
 import { HumanPlayer } from './human-player';
 import { ComputerPlayer } from './computer-player';
+import { UIManager } from './ui-manager';
 
 const game = new ex.Engine({
     width: 800,
     height: 800,
-    displayMode: ex.DisplayMode.FitScreenAndFill
+    displayMode: ex.DisplayMode.FitScreenAndFill,
+    antialiasing: false
 });
 
 // TODO move to level
@@ -27,10 +29,12 @@ game.add(new Cloud(ex.vec(700, 700)));
 
 const board = new Board(6, 6, game.currentScene);
 
+const uiManager = new UIManager(game);
+
 const selectionManager = new SelectionManager(board);
 
 const computer = new ComputerPlayer('Monsters of the Forest', selectionManager, board);
-const human = new HumanPlayer('Knights of the Round Table', game, selectionManager, board);
+const human = new HumanPlayer('Knights of the Round Table', game, selectionManager, uiManager, board);
 
 const turnManager = new TurnManager([human, computer], selectionManager, 10);
 
@@ -46,4 +50,8 @@ game.add(knight2);
 
 game.start(loader).then(() => {
     turnManager.start();
+
+    // const uiManager = new UIManager(game);
+    // uiManager.showUnitMenu(knight1, knight1.pos);
+    // // uiManager.showMenu(spider2.pos);
 });
