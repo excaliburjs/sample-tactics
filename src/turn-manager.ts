@@ -16,8 +16,8 @@ export class TurnManager {
         this.selectionManager = selectionManager;
     }
 
-    // todo generator??
     async start() {
+        // TODO win condition
         while (this.maxTurns > 0) {
             console.log('Current player turn:', this.currentPlayer.name);
             this.selectionManager.selectPlayer(this.currentPlayer);

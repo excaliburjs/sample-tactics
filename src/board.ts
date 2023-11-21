@@ -35,7 +35,7 @@ export class Board {
     getUnits() {
         let result: Unit[] = [];
         for (let cell of this.cells) {
-            if (cell.unit) {
+            if (cell.unit && cell.unit.active) {
                 result.push(cell.unit);
             }
         }

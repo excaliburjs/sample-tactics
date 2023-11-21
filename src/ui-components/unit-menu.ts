@@ -4,6 +4,7 @@ import { LitElement, css, html, nothing } from 'lit';
 import { customElement, property, query, state } from 'lit/decorators'
 import {styleMap} from 'lit/directives/style-map'
 import {classMap} from 'lit/directives/class-map'
+import { Unit } from '../unit';
 
 @customElement('unit-menu')
 export class UnitMenu extends LitElement {
@@ -102,6 +103,9 @@ export class UnitMenu extends LitElement {
     @property({type: Number})
     width: number = 0;
 
+    @property({attribute: false})
+    unit: Unit | null = null;
+
     @property({type: Number})
     pixelConversion: number = 1;
 
@@ -161,9 +165,9 @@ export class UnitMenu extends LitElement {
         })}>
             <div class="title-bar"></div>
             <div class="options">
-                <button @click="${this.sendEvent('move')}">Move</button>
-                <button @click="${this.sendEvent('attack')}">Attack</button>
-                <button @click="${this.sendEvent('pass')}">Pass</button>
+                <button style=${styleMap({display: this.unit?.canMove() ? 'block' : 'none' })} @click="${this.sendEvent('move')}">Move</button>
+                <button style=${styleMap({display: this.unit?.canAttack() ? 'block' : 'none' })} @click="${this.sendEvent('attack')}">Attack</button>
+                <button  @click="${this.sendEvent('pass')}">Pass</button>
             </div>
         </div>
         `

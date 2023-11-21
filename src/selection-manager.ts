@@ -34,17 +34,18 @@ export class SelectionManager {
         if (unit.player !== this.currentPlayer) return;
         this.currentUnitSelection = unit;
         this.currentSelectionMode = type;
-        this.currentRange = this.findRange(this.currentUnitSelection);
         if (type ===  'move') {
+            this.currentRange = this.findMovementRange(this.currentUnitSelection);
             this.showHighlight(this.currentRange, 'range');
         } else {
+            this.currentRange = this.findAttackRange(this.currentUnitSelection);
             this.showHighlight(this.currentRange, 'attack');
         }
     }
 
     async selectDestinationAndMove(unit: Unit, destination: Cell) {
         if (unit.player !== this.currentPlayer) return;
-        const range = this.findRange(unit);
+        const range = this.findMovementRange(unit);
         // select a destination if there is no path
         if (this.currentPath.length === 0) {
             this.currentPath = this.findPath(destination, range);
@@ -56,8 +57,18 @@ export class SelectionManager {
         this.reset();
     }
 
+    findAttackRange(unit: Unit): PathNodeComponent[] {
+        if (!this.currentUnitSelection) return [];
+        if (!unit.cell) return [];
+        let range = this.board.pathFinder.getRange(
+            unit.cell.pathNode,
+            ~unit.player.mask, // don't attack friends!
+            this.currentUnitSelection.unitConfig.range);
+        // range = range.filter(node => node.isWalkable && !!(node.walkableMask & unit.player.mask))
+        return range;
+    }
 
-    findRange(unit: Unit): PathNodeComponent[] {
+    findMovementRange(unit: Unit): PathNodeComponent[] {
         if (!this.currentUnitSelection) return [];
         if (!unit.cell) return [];
         let range = this.board.pathFinder.getRange(

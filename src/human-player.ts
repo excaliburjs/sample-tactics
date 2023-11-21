@@ -3,6 +3,8 @@ import { Board } from "./board";
 import { Player } from "./player";
 import { SelectionManager } from "./selection-manager";
 import { UIManager } from "./ui-manager";
+import { Cell } from "./cell";
+import { Unit } from "./unit";
 
 
 export class HumanPlayer extends Player {
@@ -21,13 +23,71 @@ export class HumanPlayer extends Player {
         if (!this.selectionManager.currentUnitSelection) return;
 
         this.selectionManager.resetHighlight();
-        const currentRange = this.selectionManager.findRange(this.selectionManager.currentUnitSelection);
-        this.selectionManager.showHighlight(currentRange, 'range');
 
-        const destination = this.board.getCellByWorldPos(pointer.worldPos);
-        if (destination) {
-            const currentPath = this.selectionManager.findPath(destination, currentRange);
-            this.selectionManager.showHighlight(currentPath, 'path');
+        // move
+        if (this.selectionManager.currentSelectionMode === 'move') {
+            const currentRange = this.selectionManager.findMovementRange(this.selectionManager.currentUnitSelection);
+            this.selectionManager.showHighlight(currentRange, 'range');
+
+            const destination = this.board.getCellByWorldPos(pointer.worldPos);
+            if (destination) {
+                const currentPath = this.selectionManager.findPath(destination, currentRange);
+                this.selectionManager.showHighlight(currentPath, 'path');
+            }
+        // attack
+        } else {
+            const currentRange = this.selectionManager.findAttackRange(this.selectionManager.currentUnitSelection);
+            this.selectionManager.showHighlight(currentRange, 'attack');
+
+            const destination = this.board.getCellByWorldPos(pointer.worldPos);
+            if (destination && this.hasNonPlayerUnit(destination)) {
+                this.selectionManager.showHighlight([destination.pathNode], "path");
+            }
+        }
+    }
+
+    async maybeMove(unit: Unit, destination: Cell | null) {
+        if (destination && unit.canMove()) {
+            this.active = false;
+            await this.selectionManager.selectDestinationAndMove(unit, destination);
+            this.humanMove.resolve();
+        } else {
+            this.selectionManager.reset();
+        }
+    }
+
+    async maybeAttack(attacker: Unit, destination: Cell | null) {
+        if (destination && attacker.canAttack() && this.hasNonPlayerUnit(destination)) {
+            this.active = false;
+            const enemyUnit = destination.unit as Unit;
+            this.selectionManager.reset();
+            await attacker.attack(enemyUnit);
+            this.humanMove.resolve();
+        } else {
+            this.selectionManager.reset();
+        }
+    }
+
+
+    async maybeSelectUnit(cell: Cell | null) {
+         // check if the cell clicked has a unit, then select it
+         if (cell?.unit && this.hasPlayerUnitWithActions(cell)) {
+            this.uiManger.showUnitMenu(cell.unit, {
+                move: () => {
+                    this.selectionManager.selectUnit(cell.unit!, 'move');
+                },
+                attack: () => {
+                    this.selectionManager.selectUnit(cell.unit!, 'attack');
+                },
+                pass: () => {
+                    cell.unit?.pass();
+                    this.selectionManager.reset();
+                    this.humanMove.resolve();
+                }
+            });
+        // otherwise clear selection
+        } else {
+            this.selectionManager.reset();
         }
     }
 
@@ -36,35 +96,23 @@ export class HumanPlayer extends Player {
         const maybeClickedCell = this.board.getCellByWorldPos(pointer.worldPos);
         // a unit is currently selected
         if (this.selectionManager.currentUnitSelection) {
-            if (maybeClickedCell) {
-                this.active = false;
-                await this.selectionManager.selectDestinationAndMove(this.selectionManager.currentUnitSelection, maybeClickedCell);
-                this.humanMove.resolve();
+            if (this.selectionManager.currentSelectionMode === 'move') {
+                await this.maybeMove(this.selectionManager.currentUnitSelection, maybeClickedCell);
             } else {
-                this.selectionManager.reset();
+                await this.maybeAttack(this.selectionManager.currentUnitSelection, maybeClickedCell);
             }
         // no unit selected, make a selection
         } else {
-            // check if the cell clicked has a unit
-            if (maybeClickedCell?.unit && maybeClickedCell?.unit?.canMove() && maybeClickedCell.unit.player === this) {
-                this.uiManger.showUnitMenu(maybeClickedCell.unit, {
-                    move: () => {
-                        this.selectionManager.selectUnit(maybeClickedCell.unit!, 'move');
-                    },
-                    attack: () => {
-                        this.selectionManager.selectUnit(maybeClickedCell.unit!, 'attack');
-                    },
-                    pass: () => {
-                        maybeClickedCell.unit?.pass();
-                        this.selectionManager.reset();
-                        this.humanMove.resolve();
-                    }
-                });
-            // otherwise clear selection
-            } else {
-                this.selectionManager.reset();
-            }
+            this.maybeSelectUnit(maybeClickedCell);
         }
+    }
+
+    hasNonPlayerUnit(maybeClickedCell: Cell) {
+        return maybeClickedCell && maybeClickedCell.unit && maybeClickedCell.unit.player !== this;
+    }
+
+    hasPlayerUnitWithActions(maybeClickedCell: Cell) {
+        return maybeClickedCell?.unit && maybeClickedCell?.unit?.hasActions() && maybeClickedCell.unit.player === this;
     }
 
     async waitForHumanMove() {
@@ -77,7 +125,7 @@ export class HumanPlayer extends Player {
     hasMoves() {
         const units = this.board.getUnits()
             .filter(u => u.player === this)
-            .filter(u => u.canMove());
+            .filter(u => u.hasActions());
         return units.length > 0 && !this.passed;
     }
 

@@ -10,6 +10,7 @@ export class Unit extends ex.Actor {
     cell: Cell | null = null;
     unitConfig: UnitConfig;
     moved = false;
+    attacked = false;
     anim: ex.Animation;
     health: number;
     constructor(x: number, y: number, unitType: UnitType, board: Board, public player: Player)  {
@@ -33,18 +34,31 @@ export class Unit extends ex.Actor {
     }
 
     onPostUpdate(): void {
-        if (this.moved) {
+        if (this.attacked) {
             this.anim.tint = ex.Color.Gray;
         } else {
             this.anim.tint = ex.Color.White;
         }
+
+        if (this.health <= 0) {
+            this.cell?.removeUnit(this);
+            // TODO better death animation
+            this.actions.runAction(
+                new ex.ParallelActions([
+                    new ex.ActionSequence(this, ctx => ctx.rotateBy(2000, .5)),
+                    new ex.ActionSequence(this, ctx => ctx.easeBy(ex.vec(0, -1000), 300, ex.EasingFunctions.EaseInQuad))
+                ])
+            ).die();
+        }
     }
 
     onPostDraw(ctx: ex.ExcaliburGraphicsContext) {
-        const heart = HeartSpriteSheet.getSprite(ex.clamp(this.health, 0, 5), 0);
-        if (heart) {
-            heart.scale = SCALE;
-            heart.draw(ctx, 10 * SCALE.x, 16 * SCALE.y);
+        if (this.health > 0) {
+            const heart = HeartSpriteSheet.getSprite(ex.clamp(this.health, 0, 5), 0);
+            if (heart) {
+                heart.scale = SCALE;
+                heart.draw(ctx, 10 * SCALE.x, 16 * SCALE.y);
+            }
         }
     }
 
@@ -81,17 +95,40 @@ export class Unit extends ex.Actor {
 
     reset() {
         this.moved = false;
+        this.attacked = false;
+    }
+
+    canAttack() {
+        return !this.attacked;
     }
 
     canMove() {
         return !this.moved;
     }
 
+    hasActions() {
+        return this.canMove() || this.canAttack();
+    }
+
     pass() {
         this.moved = true;
+        this.attacked = true;
+    }
+
+    getPossibleTargets()  {
+        if (this.cell) {
+            const range = this.cell.board.pathFinder.getRange(this.cell.pathNode, ~this.player.mask, this.unitConfig.range);
+            return range.filter(node => node.owner);
+        }
     }
 
     async attack(other: Unit) {
+        other.health -= this.unitConfig.attack;
+        Resources.HitSound.play();
 
+        await other.actions.blink(200, 200, 5).toPromise();
+        this.attacked = true;
+
+        // TODO handle enemy death
     }
 }

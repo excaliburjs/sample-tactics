@@ -17,6 +17,7 @@ export interface UnitConfig {
     health: number;
     movement: number;
     attack: number;
+    range: number;
 }
 export const UNIT_CONFIG: Record<UnitType, UnitConfig> = {
     Knight: {
@@ -26,7 +27,8 @@ export const UNIT_CONFIG: Record<UnitType, UnitConfig> = {
         },
         health: 5,
         movement: 4,
-        attack: 2
+        attack: 2,
+        range: 1
     },
     Spider: {
         graphics: {
@@ -35,7 +37,8 @@ export const UNIT_CONFIG: Record<UnitType, UnitConfig> = {
         },
         health: 3,
         movement: 3,
-        attack: 1
+        attack: 1,
+        range: 1
     }
 } as const;
 

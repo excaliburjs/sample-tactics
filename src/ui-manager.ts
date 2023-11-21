@@ -47,6 +47,7 @@ export class UIManager {
         const pagePos = this.engine.screen.worldToPageCoordinates(unit.pos);
         menu.left = pagePos.x + this.worldDistanceToPage(32);
         menu.top = pagePos.y;
+        menu.unit = unit;
 
         const move = () => {
             options.move();
