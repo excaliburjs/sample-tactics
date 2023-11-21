@@ -37,7 +37,7 @@ const selectionManager = new SelectionManager(board);
 const computer = new ComputerPlayer('Monsters of the Forest', selectionManager, board);
 const human = new HumanPlayer('Knights of the Round Table', game, selectionManager, uiManager, board);
 
-const turnManager = new TurnManager([human, computer], selectionManager, 10);
+const turnManager = new TurnManager(game, [human, computer], selectionManager, 10);
 
 const spider1 = new Unit(0, 0, "Spider", board, computer);
 game.add(spider1);
