@@ -1,9 +1,10 @@
-import { Vector } from "excalibur";
+import * as ex from 'excalibur';
 
 import './ui-components/unit-menu';
 import { UnitMenu } from "./ui-components/unit-menu";
 import { SCALE } from "./config";
 import { Unit } from "./unit";
+import { LitElement } from 'lit';
 
 export interface MenuOptions {
     move: () => any;
@@ -17,17 +18,39 @@ export interface MenuOptions {
 export class UIManager {
     // todo handle game resizing
 
-    unitMenu = new UnitMenu();
+    uiToWorldPos = new Map<UnitMenu, ex.Vector>();
+
+    unitMenu: UnitMenu;
     constructor(private engine: ex.Engine) {
+        this.unitMenu = new UnitMenu();
         document.body.appendChild(this.unitMenu);
+        document.documentElement.style.setProperty('--pixel-conversion', this.worldDistanceToPage(1).toString());
+        window.addEventListener('resize', () => {
+            document.documentElement.style.setProperty('--pixel-conversion', this.worldDistanceToPage(1).toString());
+
+            const menuPos = this.uiToWorldPos.get(this.unitMenu)
+            if (menuPos) {
+                const pagePos = this.engine.screen.worldToPageCoordinates(menuPos);
+                this.unitMenu.left = pagePos.x + this.worldDistanceToPage(32);
+                this.unitMenu.top = pagePos.y;
+            }
+        });
+        
+    }
+
+    worldDistanceToPage(distance: number) {
+        const pageOrigin = this.engine.screen.worldToPageCoordinates(ex.Vector.Zero);
+        const pageDistance = this.engine.screen.worldToPageCoordinates(ex.vec(distance * SCALE.x, 0)).sub(pageOrigin);
+        return pageDistance.x;
     }
 
     showUnitMenu(unit: Unit, options: MenuOptions): UnitMenu {
-        const screenPos = this.engine.screen.worldToPageCoordinates(unit.pos);
-
+        // TODO move with screen resize
+        console.log('show menu');
         const menu = this.unitMenu;
-        menu.left = screenPos.x + 48 * SCALE.x;
-        menu.top = screenPos.y;
+        const pagePos = this.engine.screen.worldToPageCoordinates(unit.pos);
+        menu.left = pagePos.x + this.worldDistanceToPage(32);
+        menu.top = pagePos.y;
 
         const move = () => {
             options.move();
@@ -52,7 +75,9 @@ export class UIManager {
             menu.removeEventListener('pass', pass);
         }
 
-        menu.show = true;
+        menu.show();
+
+        this.uiToWorldPos.set(menu, unit.pos);
 
         return menu;
     }

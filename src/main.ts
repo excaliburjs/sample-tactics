@@ -17,7 +17,8 @@ const game = new ex.Engine({
     width: 800,
     height: 800,
     displayMode: ex.DisplayMode.FitScreenAndFill,
-    antialiasing: false
+    antialiasing: false,
+    suppressHiDPIScaling: true
 });
 
 // TODO move to level
@@ -50,8 +51,4 @@ game.add(knight2);
 
 game.start(loader).then(() => {
     turnManager.start();
-
-    // const uiManager = new UIManager(game);
-    // uiManager.showUnitMenu(knight1, knight1.pos);
-    // // uiManager.showMenu(spider2.pos);
 });

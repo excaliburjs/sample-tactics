@@ -1,5 +1,7 @@
+import * as ex from 'excalibur';
+
 import { LitElement, css, html, nothing } from 'lit';
-import { customElement, property } from 'lit/decorators'
+import { customElement, property, query, state } from 'lit/decorators'
 import {styleMap} from 'lit/directives/style-map'
 import {classMap} from 'lit/directives/class-map'
 
@@ -9,7 +11,7 @@ export class UnitMenu extends LitElement {
         @keyframes fadeIn {
             from {
                 opacity: 0;
-                transform: translateY(100%);
+                transform: translateY(50%);
             }
             to {
                 opacity: 1;
@@ -24,23 +26,23 @@ export class UnitMenu extends LitElement {
             }
             to {
                 opacity: 0;
-                transform: translateY(0%);
+                transform: translateY(50%);
             }
         }
-
-
 
         .menu {
             position: absolute;
             top: 0;
             left: 0;
-            width: 200px;
+            width: calc(64px * var(--pixel-conversion));
             display: none;
+            opacity: 0;
             flex-direction: column;
-            font-size: 32px;
+            font-size: calc(8px * var(--pixel-conversion));
             background-color: rgba(240, 220, 220, 1);
 
-            border: black 5px solid;
+            border: black calc(1px * var(--pixel-conversion)) solid;
+            z-index: 1;
         }
 
         .overlay {
@@ -53,25 +55,29 @@ export class UnitMenu extends LitElement {
 
         .show {
             display: flex;
-            animation: fadeIn 200ms ease normal;
+            opacity: 1;
+            animation: fadeIn 140ms ease normal;
         }
-                
+
+        .hide {
+            animation: fadeOut 140ms ease normal;
+        }
+
         .options {
             display: flex;
             flex-direction: column;
-            
         }
 
         .title-bar {
             background-color: red;
             width: 100%;
-            height: 20px;
+            height: calc(7px * var(--pixel-conversion));
         }
 
         button {
             all: unset;
-            padding: 4px;
-            padding-left: 16px;
+            padding: calc(2px * var(--pixel-conversion));
+            padding-left: calc(4px * var(--pixel-conversion));
             cursor: pointer;
         }
 
@@ -90,29 +96,64 @@ export class UnitMenu extends LitElement {
     @property({type: Number})
     top: number = 0;
 
-    @property({type: Boolean})
-    show: boolean = false;
+    @property({type: Number})
+    fontSize: number = 0;
+
+    @property({type: Number})
+    width: number = 0;
+
+    @property({type: Number})
+    pixelConversion: number = 1;
+
+    @state()
+    private _show: boolean = false;
+
+    @query('.menu')
+    menuHtml?: HTMLDivElement;
+
+    override firstUpdated(): void {
+        this.menuHtml?.addEventListener('animationend', evt => {
+            if (evt.animationName === 'fadeOut') {
+                this._show = false;
+                this.menuHtml?.classList.remove('hide');
+                this.requestUpdate();
+            }
+        })
+    }
 
     sendEvent(type: string) {
         return () => {
+            console.log('menu event:', type);
             this.dispatchEvent(new Event(type))
-            this.show = false;
+            this.hide();
             this.requestUpdate();
         }
     }
 
+    // Debounce needed for mobile for some reason
+    // Overlay is also receiving the event
+    private _debounce: number = 0;
+    show() {
+        this._show = true;
+        this._debounce = Date.now();
+    }
+
     hide() {
-        this.show = false;
+        const now = Date.now();
+        if (now - this._debounce > 200) {
+            this.menuHtml?.classList.add('hide');
+            console.log('menu hide');
+        }
     }
 
     override render() {
-        const dismissOverlayHtml = this.show ? html`<div class="overlay" @click=${this.hide}></div>` : nothing;
+        const dismissOverlayHtml = this._show ? html`<div class="overlay" @click=${this.hide}></div>` : nothing;
 
         return html`
         ${dismissOverlayHtml}
         <div class=${classMap({
             menu: true,
-            show: this.show
+            show: this._show
         })} style=${styleMap({
             left: `${this.left}px`, 
             top: `${this.top}px`

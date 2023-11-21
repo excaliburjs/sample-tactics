@@ -34,7 +34,6 @@ export class HumanPlayer extends Player {
     async pointerClick(pointer: ex.PointerEvent) {
         if (!this.active) return;
         const maybeClickedCell = this.board.getCellByWorldPos(pointer.worldPos);
-
         // a unit is currently selected
         if (this.selectionManager.currentUnitSelection) {
             if (maybeClickedCell) {
@@ -47,7 +46,7 @@ export class HumanPlayer extends Player {
         // no unit selected, make a selection
         } else {
             // check if the cell clicked has a unit
-            if (maybeClickedCell?.unit && maybeClickedCell?.unit?.canMove()) {
+            if (maybeClickedCell?.unit && maybeClickedCell?.unit?.canMove() && maybeClickedCell.unit.player === this) {
                 this.uiManger.showUnitMenu(maybeClickedCell.unit, {
                     move: () => {
                         this.selectionManager.selectUnit(maybeClickedCell.unit!, 'move');
