@@ -16,8 +16,6 @@ export interface MenuOptions {
  * UI manager create html elements for game UI
  */
 export class UIManager {
-    // todo handle game resizing
-
     uiToWorldPos = new Map<UnitMenu, ex.Vector>();
 
     unitMenu: UnitMenu;
@@ -45,8 +43,6 @@ export class UIManager {
     }
 
     showUnitMenu(unit: Unit, options: MenuOptions): UnitMenu {
-        // TODO move with screen resize
-        console.log('show menu');
         const menu = this.unitMenu;
         const pagePos = this.engine.screen.worldToPageCoordinates(unit.pos);
         menu.left = pagePos.x + this.worldDistanceToPage(32);
@@ -75,6 +71,7 @@ export class UIManager {
             menu.removeEventListener('pass', pass);
         }
 
+        menu.clearEvents = clearEvents;
         menu.show();
 
         this.uiToWorldPos.set(menu, unit.pos);

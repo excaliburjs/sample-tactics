@@ -111,6 +111,8 @@ export class UnitMenu extends LitElement {
     @query('.menu')
     menuHtml?: HTMLDivElement;
 
+    clearEvents: () => any = () => {};
+
     override firstUpdated(): void {
         this.menuHtml?.addEventListener('animationend', evt => {
             if (evt.animationName === 'fadeOut') {
@@ -123,7 +125,6 @@ export class UnitMenu extends LitElement {
 
     sendEvent(type: string) {
         return () => {
-            console.log('menu event:', type);
             this.dispatchEvent(new Event(type))
             this.hide();
             this.requestUpdate();
@@ -142,7 +143,7 @@ export class UnitMenu extends LitElement {
         const now = Date.now();
         if (now - this._debounce > 200) {
             this.menuHtml?.classList.add('hide');
-            console.log('menu hide');
+            this.clearEvents();
         }
     }
 
