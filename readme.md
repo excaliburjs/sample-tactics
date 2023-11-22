@@ -3,8 +3,10 @@
 This is a high fidelity example that shows you how to make a tactics game (inspired by Advance Wars!)
 
 Features include
+- Turn based combat
 - Human and Computer players
 - Path Finding with A* least turns
+- HTML based UI
 - Level generation
 
 
