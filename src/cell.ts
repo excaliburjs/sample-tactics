@@ -67,9 +67,11 @@ export class Cell extends ex.Actor {
                 break;
             case Terrain.Sand:
                 this.sprite = TerrainSpriteSheet.sprites[ex.randomIntInRange(2, 3)];
+                // TODO slower to move through sand
                 break;
             case Terrain.Water:
                 this.sprite = TerrainSpriteSheet.sprites[4];
+                this.pathNode.isWalkable = false;
                 break;
             case Terrain.Stone:
                 this.sprite = TerrainSpriteSheet.sprites[5];

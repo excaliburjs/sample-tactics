@@ -36,7 +36,7 @@ export const TestLevelData: LevelData = {
         'G', 'G', 'W', 'W', 'G', 'G',
         'G', 'G', 'W', 'W', 'G', 'G',
         'G', 'G', 'W', 'W', 'G', 'G',
-        'GS2', 'G', 'G', 'G', 'G', 'GS2'
+        'GS2', 'GS2', 'GS2', 'GS2', 'GS2', 'GS2'
     ]
 }
 
