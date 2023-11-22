@@ -44,6 +44,7 @@ export class TurnManager {
             color: new ex.Color(240, 50, 50, .4),
             width: screenWidth,
             height: 100,
+            z: 10
         });
         this.turnActor.graphics.opacity = 0;
         this.turnActor.graphics.add('text', this.turnText);
