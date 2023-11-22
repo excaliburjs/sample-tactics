@@ -1,6 +1,7 @@
 import * as ex from 'excalibur';
 
 
+import TitleImagePath from '../res/title.png';
 import KnightSpriteSheetPath from '../res/KnightSheet.png';
 import SpiderSheetPath from '../res/SpiderSheet.png';
 import HeartSheetPath from '../res/HeartSheet.png';
@@ -15,6 +16,7 @@ import MoveSoundPath from '../res/move.wav';
 import SelectSoundPath from '../res/unitselect.wav';
 
 export const Resources = {
+    TitleImage: new ex.ImageSource(TitleImagePath),
     KnightSpriteSheet: new ex.ImageSource(KnightSpriteSheetPath),
     SpiderSheet: new ex.ImageSource(SpiderSheetPath),
     HeartSheet: new ex.ImageSource(HeartSheetPath),
@@ -136,6 +138,8 @@ export const HeartSpriteSheet = ex.SpriteSheet.fromImageSource({
 });
 
 export const Smoke = Resources.SmokeSheet.toSprite();
+
+export const Title = Resources.TitleImage.toSprite();
 
 export const loader = new ex.Loader();
 

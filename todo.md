@@ -1,11 +1,13 @@
 ## Gameplay
-* [ ] Start Screen
+* [x] Start Screen
 * [ ] Win condition
 * [ ] Tutorial (what is the point of the game)
 * [ ] Only show valid actions
 * [ ] Which units are mine?
 * [ ] Show turn countdown
 * [ ] Smarter Enemy AI
+* [ ] Configure enemy turn speed
+* [ ] Little damage numbers float up when attacked!
 
 ## Audio
 
@@ -17,7 +19,9 @@
 
 ## Selection
 
-* [ ] Cursor? with arrow
+* [ ] Allow for gamepad/keyboard input too!
+* [ ] Cursor? with arrow to hint that a player needs to do something
+   - Auto move the cursor to the first available unit?
 * [ ] Arrow on path?
 
 ## Draw title screen

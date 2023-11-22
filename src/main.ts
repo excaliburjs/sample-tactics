@@ -1,15 +1,7 @@
 import * as ex from 'excalibur';
 import { loader } from './resources';
-import { Cloud } from './cloud';
-import { Board } from './board';
-import { Unit } from './unit';
-import { SelectionManager } from './selection-manager';
-import { TurnManager } from './turn-manager';
-import { HumanPlayer } from './human-player';
-import { ComputerPlayer } from './computer-player';
-import { UIManager } from './ui-manager';
-import { DustParticles } from './dust-particles';
 import { LevelBase, TestLevelData } from './levels/level-base';
+import { StartScreen } from './levels/start-screen';
 
 const game = new ex.Engine({
     width: 800,
@@ -22,9 +14,12 @@ const game = new ex.Engine({
     }
 });
 
+const startScreen = new StartScreen();
+game.addScene('start', startScreen);
+
 const level = new LevelBase(TestLevelData)
 game.addScene('level1', level);
 
 game.start(loader).then(() => {
-    game.goToScene('level1');
+    game.goToScene('start');
 });
