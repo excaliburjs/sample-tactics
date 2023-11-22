@@ -3,6 +3,7 @@
 * [ ] Tutorial (what is the point of the game)
 * [ ] Only show valid actions
 * [ ] Which units are mine?
+* [ ] Show turn countdown
 
 
 ## Audio
@@ -22,8 +23,8 @@
 
 ## String based maps
 
-* [ ] Single letter per tile
-* [ ] Single letter per enemy
+* [x] Single letter per tile
+* [x] Single letter per enemy
 
 
 ## Terrain ideas

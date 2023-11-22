@@ -9,10 +9,18 @@ const RangeHighlightAnimation = HighlightAnimation.clone();
 const PathHighlightAnimation = HighlightAnimation.clone();
 const AttackHighlightAnimation = RedHighlightAnimation.clone();
 
+export enum Terrain {
+    Grass = 'G',
+    Water = 'W',
+    Sand  = 'S',
+    Stone = 'T'
+}
+
 export class Cell extends ex.Actor {
-    sprite: ex.Sprite;
+    sprite!: ex.Sprite;
     pathNode: PathNodeComponent;
     unit: Unit | null = null;
+    private _terrain: Terrain = Terrain.Grass;
 
     /**
      * Individual cells on the board
@@ -33,9 +41,8 @@ export class Cell extends ex.Actor {
         this.pathNode = new PathNodeComponent(this.pos);
         this.addComponent(this.pathNode);
 
-        this.sprite = TerrainSpriteSheet.sprites[ex.randomIntInRange(0, 5)];
-        this.sprite.scale = SCALE;
-        this.graphics.use(this.sprite.clone());
+        this.terrain = Terrain.Grass;
+
         RangeHighlightAnimation.scale = SCALE;
         RangeHighlightAnimation.opacity = 0.75;
         PathHighlightAnimation.scale = SCALE;
@@ -43,10 +50,33 @@ export class Cell extends ex.Actor {
         PathHighlightAnimation.tint = ex.Color.Green;
         AttackHighlightAnimation.scale = SCALE;
         AttackHighlightAnimation.opacity = 0.75;
-        // AttackHighlightAnimation.tint = ex.Color.Red;
         this.graphics.add('range', RangeHighlightAnimation);
         this.graphics.add('path', PathHighlightAnimation);
         this.graphics.add('attack', AttackHighlightAnimation);
+    }
+
+    get terrain() {
+        return this._terrain;
+    }
+
+    set terrain(terrain: Terrain) {
+        this._terrain = terrain;
+        switch(this.terrain) {
+            case Terrain.Grass:
+                this.sprite = TerrainSpriteSheet.sprites[ex.randomIntInRange(0, 1)];
+                break;
+            case Terrain.Sand:
+                this.sprite = TerrainSpriteSheet.sprites[ex.randomIntInRange(2, 3)];
+                break;
+            case Terrain.Water:
+                this.sprite = TerrainSpriteSheet.sprites[4];
+                break;
+            case Terrain.Stone:
+                this.sprite = TerrainSpriteSheet.sprites[5];
+                break;
+        }
+        this.sprite.scale = SCALE;
+        this.graphics.use(this.sprite.clone());
     }
 
     addUnit(unit: Unit) {
