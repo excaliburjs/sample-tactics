@@ -96,10 +96,13 @@ export class HumanPlayer extends Player {
         const maybeClickedCell = this.board.getCellByWorldPos(pointer.worldPos);
         // a unit is currently selected
         if (this.selectionManager.currentUnitSelection) {
+            const unit = this.selectionManager.currentUnitSelection;
             if (this.selectionManager.currentSelectionMode === 'move') {
-                await this.maybeMove(this.selectionManager.currentUnitSelection, maybeClickedCell);
+                await this.maybeMove(unit, maybeClickedCell);
+                await this.maybeSelectUnit(unit.cell);
             } else {
-                await this.maybeAttack(this.selectionManager.currentUnitSelection, maybeClickedCell);
+                await this.maybeAttack(unit, maybeClickedCell);
+                await this.maybeSelectUnit(unit.cell);
             }
         // no unit selected, make a selection
         } else {
