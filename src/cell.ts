@@ -1,13 +1,13 @@
 import * as ex from "excalibur";
 import { Board } from "./board";
-import { HighlightAnimation, TerrainSpriteSheet } from "./resources";
+import { HighlightAnimation, RedHighlightAnimation, TerrainSpriteSheet } from "./resources";
 import { BOARD_OFFSET, SCALE } from "./config";
 import { PathNodeComponent } from "./path-finding/path-node-component";
 import { Unit } from "./unit";
 
 const RangeHighlightAnimation = HighlightAnimation.clone();
 const PathHighlightAnimation = HighlightAnimation.clone();
-const AttackHighlightAnimation = HighlightAnimation.clone();
+const AttackHighlightAnimation = RedHighlightAnimation.clone();
 
 export class Cell extends ex.Actor {
     sprite: ex.Sprite;
@@ -43,7 +43,7 @@ export class Cell extends ex.Actor {
         PathHighlightAnimation.tint = ex.Color.Green;
         AttackHighlightAnimation.scale = SCALE;
         AttackHighlightAnimation.opacity = 0.75;
-        AttackHighlightAnimation.tint = ex.Color.Red;
+        // AttackHighlightAnimation.tint = ex.Color.Red;
         this.graphics.add('range', RangeHighlightAnimation);
         this.graphics.add('path', PathHighlightAnimation);
         this.graphics.add('attack', AttackHighlightAnimation);

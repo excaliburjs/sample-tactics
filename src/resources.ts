@@ -7,6 +7,7 @@ import HeartSheetPath from '../res/HeartSheet.png';
 import UISheetPath from '../res/UISheet.png';
 import TerrainSheetPath from '../res/TerrainSheet.png';
 import HighlightSheetPath from '../res/HighlightSheet.png';
+import RedHighlightSheetPath from '../res/RedHighlightSheet.png';
 import CloudSheetPath from '../res/Cloud.png';
 import SmokePath from '../res/Smoke.png';
 import HitSoundPath from '../res/hit.wav';
@@ -20,6 +21,7 @@ export const Resources = {
     UISheet: new ex.ImageSource(UISheetPath),
     TerrainSheet: new ex.ImageSource(TerrainSheetPath),
     HighlightSheet: new ex.ImageSource(HighlightSheetPath),
+    RedHighlightSheet: new ex.ImageSource(RedHighlightSheetPath),
     CloudSheet: new ex.ImageSource(CloudSheetPath),
     SmokeSheet: new ex.ImageSource(SmokePath),
     HitSound: new ex.Sound(HitSoundPath),
@@ -46,9 +48,30 @@ export const HighlightSpriteSheet = ex.SpriteSheet.fromImageSource({
         spriteWidth: 32
     }
 });
+export const RedHighlightSpriteSheet = ex.SpriteSheet.fromImageSource({
+    image: Resources.RedHighlightSheet,
+    grid: {
+        rows: 1,
+        columns: 5,
+        spriteHeight: 32,
+        spriteWidth: 32
+    }
+});
 
 export const HighlightAnimation = ex.Animation.fromSpriteSheetCoordinates({
     spriteSheet: HighlightSpriteSheet,
+    strategy: ex.AnimationStrategy.Loop,
+    frameCoordinates: [
+        {x: 0, y: 0, duration: 100 },
+        {x: 1, y: 0, duration: 100 },
+        {x: 2, y: 0, duration: 100 },
+        {x: 3, y: 0, duration: 100 },
+        {x: 4, y: 0, duration: 100 },
+    ]
+});
+
+export const RedHighlightAnimation = ex.Animation.fromSpriteSheetCoordinates({
+    spriteSheet: RedHighlightSpriteSheet,
     strategy: ex.AnimationStrategy.Loop,
     frameCoordinates: [
         {x: 0, y: 0, duration: 100 },
