@@ -1,4 +1,5 @@
 ## Gameplay
+* [ ] Start Screen
 * [ ] Win condition
 * [ ] Tutorial (what is the point of the game)
 * [ ] Only show valid actions
@@ -8,6 +9,7 @@
 
 ## Audio
 
+* [ ] Audio options
 * [ ] Background music
 * [ ] Better sound effects 
   - hit sound effect
