@@ -61,7 +61,10 @@ export class Unit extends ex.Actor {
             const heart = HeartSpriteSheet.getSprite(ex.clamp(this.health, 0, 5), 0);
             if (heart) {
                 heart.scale = SCALE;
-                heart.draw(ctx, 10 * SCALE.x, 16 * SCALE.y);
+                heart.draw(ctx, 
+                    10 * SCALE.x + this.unitConfig.graphics.offset.x,
+                    10 * SCALE.y + this.unitConfig.graphics.offset.y
+                );
             }
         }
     }
