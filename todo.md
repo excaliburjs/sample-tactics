@@ -4,7 +4,7 @@
 * [ ] Only show valid actions
 * [ ] Which units are mine?
 * [ ] Show turn countdown
-
+* [ ] Smarter Enemy AI
 
 ## Audio
 
