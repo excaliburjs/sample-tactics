@@ -1,23 +1,29 @@
+## Gameplay
+* [ ] Win condition
+* [ ] Tutorial (what is the point of the game)
+* [ ] Only show valid actions
+* [ ] Which units are mine?
 
-Background music
 
-## Menu
+## Audio
 
-* End turn
-* Pick attack/move/pass
+* [ ] Background music
+* [ ] Better sound effects 
+  - hit sound effect
+  - death sound effect
 
 ## Selection
 
-* Cursor? with arrow
-* Arrow on path?
+* [ ] Cursor? with arrow
+* [ ] Arrow on path?
 
 ## Draw title screen
-* Like excalibird
+* [ ] Like excalibird
 
 ## String based maps
 
-* Single letter per tile
-* Single letter per enemy
+* [ ] Single letter per tile
+* [ ] Single letter per enemy
 
 
 ## Terrain ideas
