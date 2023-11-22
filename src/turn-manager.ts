@@ -77,7 +77,7 @@ export class TurnManager {
         while (this.maxTurns > 0) {
             console.log('Current player turn:', this.currentPlayer.name);
             this.selectionManager.selectPlayer(this.currentPlayer);
-            await this.showTurnDisplay();
+            this.showTurnDisplay();
             await this.currentPlayer.turnStart();
             let move = true;
             do {
@@ -91,7 +91,8 @@ export class TurnManager {
     
     nextTurn() {
         this.currentPlayerIndex++;
-        this.currentPlayer = this.players[this.currentPlayerIndex % this.players.length];
+        this.currentPlayerIndex = this.currentPlayerIndex % this.players.length;
+        this.currentPlayer = this.players[this.currentPlayerIndex];
         if (this.currentPlayerIndex === 0) {
             this.currentTurn++;
         }

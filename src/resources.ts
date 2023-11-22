@@ -21,7 +21,7 @@ export const Resources = {
     TerrainSheet: new ex.ImageSource(TerrainSheetPath),
     HighlightSheet: new ex.ImageSource(HighlightSheetPath),
     CloudSheet: new ex.ImageSource(CloudSheetPath),
-    Smoke: new ex.ImageSource(SmokePath),
+    SmokeSheet: new ex.ImageSource(SmokePath),
     HitSound: new ex.Sound(HitSoundPath),
     MoveSound: new ex.Sound(MoveSoundPath),
     SelectSound: new ex.Sound(SelectSoundPath),
@@ -111,6 +111,8 @@ export const HeartSpriteSheet = ex.SpriteSheet.fromImageSource({
         spriteWidth: 32
     }
 });
+
+export const Smoke = Resources.SmokeSheet.toSprite();
 
 export const loader = new ex.Loader();
 

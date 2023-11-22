@@ -1,10 +1,13 @@
 import * as ex from "excalibur";
 import { Board } from "./board";
-import { HeartSpriteSheet, Resources, SpiderSpriteSheet } from "./resources";
+import { HeartSpriteSheet, Resources, Smoke, SpiderSpriteSheet } from "./resources";
 import { SCALE, UNIT_CONFIG, UnitConfig, UnitType } from "./config";
 import { Cell } from "./cell";
 import { PathNodeComponent } from "./path-finding/path-node-component";
 import { Player } from "./player";
+import { DustParticles } from "./dust-particles";
+
+
 
 export class Unit extends ex.Actor {
     cell: Cell | null = null;
@@ -15,7 +18,8 @@ export class Unit extends ex.Actor {
     health: number;
     constructor(x: number, y: number, unitType: UnitType, board: Board, public player: Player)  {
         super({
-            anchor: ex.vec(0, 0)
+            anchor: ex.vec(0, 0),
+            z: 2
         });
         this.unitConfig = {...UNIT_CONFIG[unitType]};
 
@@ -79,6 +83,10 @@ export class Unit extends ex.Actor {
 
             const move = new ex.ActionSequence(this, (ctx) => {
                 ctx.easeTo(currentCell!.pos.sub(this.unitConfig.graphics.offset), 300, ex.EasingFunctions.EaseInOutCubic);
+                ctx.callMethod(() => {
+                    DustParticles.pos = this.pos.add(SCALE.scale(16));
+                    DustParticles.emitParticles(5);
+                })
             });
 
             const parallel = new ex.ParallelActions([

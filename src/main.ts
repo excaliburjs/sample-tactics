@@ -1,24 +1,24 @@
 import * as ex from 'excalibur';
 import { loader } from './resources';
 import { Cloud } from './cloud';
-import { Cell } from './cell';
 import { Board } from './board';
-import { PathFinder } from './path-finding/path-finding-system';
-import { PathNodeComponent } from './path-finding/path-node-component';
 import { Unit } from './unit';
 import { SelectionManager } from './selection-manager';
-import { Player } from './player';
 import { TurnManager } from './turn-manager';
 import { HumanPlayer } from './human-player';
 import { ComputerPlayer } from './computer-player';
 import { UIManager } from './ui-manager';
+import { DustParticles } from './dust-particles';
 
 const game = new ex.Engine({
     width: 800,
     height: 800,
     displayMode: ex.DisplayMode.FitScreenAndFill,
     antialiasing: false,
-    suppressHiDPIScaling: true
+    suppressHiDPIScaling: true,
+    configurePerformanceCanvas2DFallback: {
+        allow: false
+    }
 });
 
 // TODO move to level
@@ -48,6 +48,8 @@ const knight1 = new Unit(1, 1, "Knight", board, human);
 game.add(knight1);
 const knight2 = new Unit(2, 1, "Knight", board, human);
 game.add(knight2);
+
+game.add(DustParticles);
 
 game.start(loader).then(() => {
     turnManager.start();
