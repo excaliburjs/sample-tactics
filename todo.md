@@ -1,3 +1,6 @@
+## UI
+* [x] Add social card!
+
 ## Gameplay
 * [x] Start Screen
 * [ ] Show the name of the stage "Gentle Plains"
