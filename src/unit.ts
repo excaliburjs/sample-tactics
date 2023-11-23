@@ -18,6 +18,7 @@ export class Unit extends ex.Actor {
     health: number;
     constructor(x: number, y: number, unitType: UnitType, board: Board, public player: Player)  {
         super({
+            name: unitType,
             anchor: ex.vec(0, 0),
             z: 2
         });

@@ -5,8 +5,8 @@
 * [ ] Only show valid actions
 * [ ] Which units are mine?
 * [ ] Show turn countdown
-* [ ] Smarter Enemy AI
-* [ ] Configure enemy turn speed
+* [x] Smarter Enemy AI
+* [x] Configure enemy turn speed
 * [ ] Little damage numbers float up when attacked!
 
 ## Audio

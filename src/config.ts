@@ -7,6 +7,7 @@ export const RANDOM = new ex.Random(seed);
 
 export const SCALE = ex.vec(3, 3);
 export const BOARD_OFFSET = ex.vec(32 * 3, 32 * 4);
+export const ENEMY_SPEED = 500;
 
 export type UnitType = "Knight" | "Spider";
 export interface UnitConfig {
