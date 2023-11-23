@@ -2,6 +2,7 @@ import * as ex from 'excalibur';
 import { loader } from './resources';
 import { LevelBase, TestLevelData } from './levels/level-base';
 import { StartScreen } from './levels/start-screen';
+import { Tutorial } from './levels/tutorial';
 
 const game = new ex.Engine({
     width: 800,
@@ -16,6 +17,9 @@ const game = new ex.Engine({
 
 const startScreen = new StartScreen();
 game.addScene('start', startScreen);
+
+const tutorial = new Tutorial();
+game.addScene('tutorial', tutorial);
 
 const level = new LevelBase(TestLevelData)
 game.addScene('level1', level);
