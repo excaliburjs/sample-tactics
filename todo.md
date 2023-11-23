@@ -19,13 +19,14 @@
 
 ## Selection
 
+* [x] Right click to see enemy range
 * [ ] Allow for gamepad/keyboard input too!
 * [ ] Cursor? with arrow to hint that a player needs to do something
    - Auto move the cursor to the first available unit?
 * [ ] Arrow on path?
 
 ## Draw title screen
-* [ ] Like excalibird
+* [x] Like excalibird
 
 ## String based maps
 
@@ -35,7 +36,7 @@
 
 ## Terrain ideas
 
-Water impassable by ground units?
+[x] Water impassable by ground units?
   - Flying units
 Mountain difficult terrain?
   - Flying units

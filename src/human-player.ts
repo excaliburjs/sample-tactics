@@ -15,8 +15,35 @@ export class HumanPlayer extends Player {
         super(name, board);
         engine.input.pointers.on('down', this.pointerClick.bind(this));
         engine.input.pointers.on('move', this.pointerMove.bind(this));
+        document.body.oncontextmenu = () => false;
     }
 
+    async pointerClick(pointer: ex.PointerEvent) {
+        if (!this.active) return;
+        this.selectionManager.resetHighlight();
+        const maybeClickedCell = this.board.getCellByWorldPos(pointer.worldPos);
+
+        if (pointer.button === ex.PointerButton.Left) {
+            // a unit is currently selected
+            if (this.selectionManager.currentUnitSelection) {
+                const unit = this.selectionManager.currentUnitSelection;
+                if (this.selectionManager.currentSelectionMode === 'move') {
+                    await this.maybeMove(unit, maybeClickedCell);
+                    await this.maybeSelectUnit(unit.cell);
+                } else {
+                    await this.maybeAttack(unit, maybeClickedCell);
+                    await this.maybeSelectUnit(unit.cell);
+                }
+            // no unit selected, make a selection
+            } else {
+                this.maybeSelectUnit(maybeClickedCell);
+            }
+        }
+
+        if (pointer.button === ex.PointerButton.Right) {
+            this.highlightUnitRange(maybeClickedCell);
+        }
+    }
 
     pointerMove(pointer: ex.PointerEvent) {
         if (!this.active) return;
@@ -68,6 +95,25 @@ export class HumanPlayer extends Player {
         }
     }
 
+    /**
+     * Highlight the range of any unit friendly or not
+     * @param cell 
+     */
+    async highlightUnitRange(cell: Cell | null) {
+        if (cell?.unit) {
+            const unit = cell.unit;
+            const rangePlusAttack = this.board.pathFinder.getRange(
+                cell.pathNode,
+                ~unit.player.mask,
+                unit.unitConfig.movement + 1);
+            this.selectionManager.showHighlight(rangePlusAttack, 'attack');
+
+            const currentRange = this.selectionManager.findMovementRange(unit);
+            this.selectionManager.showHighlight(currentRange, 'range');
+        } else {
+            this.selectionManager.reset();
+        }
+    }
 
     async maybeSelectUnit(cell: Cell | null) {
          // check if the cell clicked has a unit, then select it
@@ -88,25 +134,6 @@ export class HumanPlayer extends Player {
         // otherwise clear selection
         } else {
             this.selectionManager.reset();
-        }
-    }
-
-    async pointerClick(pointer: ex.PointerEvent) {
-        if (!this.active) return;
-        const maybeClickedCell = this.board.getCellByWorldPos(pointer.worldPos);
-        // a unit is currently selected
-        if (this.selectionManager.currentUnitSelection) {
-            const unit = this.selectionManager.currentUnitSelection;
-            if (this.selectionManager.currentSelectionMode === 'move') {
-                await this.maybeMove(unit, maybeClickedCell);
-                await this.maybeSelectUnit(unit.cell);
-            } else {
-                await this.maybeAttack(unit, maybeClickedCell);
-                await this.maybeSelectUnit(unit.cell);
-            }
-        // no unit selected, make a selection
-        } else {
-            this.maybeSelectUnit(maybeClickedCell);
         }
     }
 
