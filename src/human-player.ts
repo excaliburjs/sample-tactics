@@ -104,9 +104,15 @@ export class HumanPlayer extends Player {
             const unit = cell.unit;
             const rangePlusAttack = this.board.pathFinder.getRange(
                 cell.pathNode,
-                ~unit.player.mask,
+                unit.player.mask,
                 unit.unitConfig.movement + 1);
             this.selectionManager.showHighlight(rangePlusAttack, 'attack');
+
+            const attack = this.board.pathFinder.getRange(
+                cell.pathNode,
+                ~unit.player.mask, // don't attack friends!
+                unit.unitConfig.range);
+            this.selectionManager.showHighlight(attack, 'attack');
 
             const currentRange = this.selectionManager.findMovementRange(unit);
             this.selectionManager.showHighlight(currentRange, 'range');
