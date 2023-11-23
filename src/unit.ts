@@ -144,7 +144,7 @@ export class Unit extends ex.Actor {
         other.health -= this.unitConfig.attack;
         Resources.HitSound.play();
 
-        this.damageManager.spawnDamageNumber(this.pos.add(this.unitConfig.graphics.offset).add(ex.vec(16 * SCALE.x, 0)), this.unitConfig.attack);
+        this.damageManager.spawnDamageNumber(other.pos.add(other.unitConfig.graphics.offset).add(ex.vec(16 * SCALE.x, 0)), this.unitConfig.attack);
         await other.actions.blink(200, 200, 5).toPromise();
         this.attacked = true;
     }
