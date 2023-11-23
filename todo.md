@@ -1,5 +1,6 @@
 ## Gameplay
 * [x] Start Screen
+* [ ] Show the name of the stage "Gentle Plains"
 * [ ] Win condition
 * [ ] Tutorial (what is the point of the game)
 * [ ] Only show valid actions
@@ -8,6 +9,7 @@
 * [x] Smarter Enemy AI
 * [x] Configure enemy turn speed
 * [x] Little damage numbers float up when attacked!
+* [x] Make clouds world space
 
 ## Audio
 

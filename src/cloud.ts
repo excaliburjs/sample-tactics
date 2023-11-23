@@ -7,7 +7,6 @@ export class Cloud extends ex.Actor {
     constructor(pos: ex.Vector) {
         super({
             pos,
-            coordPlane: ex.CoordPlane.Screen,
             vel: ex.vec(ex.randomInRange(-30, -100), 0),
             width: 100,
             height: 100
