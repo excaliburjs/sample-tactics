@@ -6,6 +6,7 @@ import { Cell } from "./cell";
 import { PathNodeComponent } from "./path-finding/path-node-component";
 import { Player } from "./player";
 import { DustParticles } from "./dust-particles";
+import { DamageManager } from "./damage-manager";
 
 
 
@@ -16,6 +17,7 @@ export class Unit extends ex.Actor {
     attacked = false;
     anim: ex.Animation;
     health: number;
+    damageManager!: DamageManager;
     constructor(x: number, y: number, unitType: UnitType, board: Board, public player: Player)  {
         super({
             name: unitType,
@@ -36,6 +38,10 @@ export class Unit extends ex.Actor {
             this.pos = cell.pos.sub(this.unitConfig.graphics.offset);
             cell.addUnit(this);
         }
+    }
+
+    onInitialize(engine: ex.Engine): void {
+        this.damageManager = new DamageManager(engine.currentScene);
     }
 
     onPostUpdate(): void {
@@ -138,9 +144,8 @@ export class Unit extends ex.Actor {
         other.health -= this.unitConfig.attack;
         Resources.HitSound.play();
 
+        this.damageManager.spawnDamageNumber(this.pos.add(this.unitConfig.graphics.offset).add(ex.vec(16 * SCALE.x, 0)), this.unitConfig.attack);
         await other.actions.blink(200, 200, 5).toPromise();
         this.attacked = true;
-
-        // TODO handle enemy death
     }
 }

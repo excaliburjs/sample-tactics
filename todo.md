@@ -7,7 +7,7 @@
 * [ ] Show turn countdown
 * [x] Smarter Enemy AI
 * [x] Configure enemy turn speed
-* [ ] Little damage numbers float up when attacked!
+* [x] Little damage numbers float up when attacked!
 
 ## Audio
 
