@@ -68,14 +68,15 @@ export class LevelBase extends ex.Scene {
 
     override onActivate(): void {
         this.turnManager.start();
-        Resources.LevelMusic1.loop = true;
-        Resources.LevelMusic1.volume = .05;
-        Resources.LevelMusic1.play();
+        Resources.LevelMusic2.loop = true;
+        Resources.LevelMusic2.volume = .05;
+        Resources.LevelMusic2.play();
 
     }
 
     override onDeactivate(): void {
         // TODO deactivate event handlers on types that have them!!
+        Resources.LevelMusic2.stop();
     }
 
     parse(levelData: LevelData): Board {

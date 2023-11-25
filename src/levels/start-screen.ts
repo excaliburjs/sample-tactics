@@ -1,6 +1,6 @@
 import * as ex from 'excalibur';
 import { Cloud } from '../cloud';
-import { Title } from '../resources';
+import { Resources, Title } from '../resources';
 import { SCALE } from '../config';
 
 export class StartScreen extends ex.Scene {
@@ -59,5 +59,14 @@ export class StartScreen extends ex.Scene {
         });
 
         this.add(this.instructions);
+    }
+
+    onActivate(): void {
+        Resources.TitleMusic.loop = true;
+        Resources.TitleMusic.volume = .05;
+        Resources.TitleMusic.play();
+    }
+    onDeactivate(): void {
+        Resources.TitleMusic.stop();
     }
 }

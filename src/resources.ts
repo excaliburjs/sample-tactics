@@ -17,8 +17,10 @@ import SelectSoundPath from '../res/unitselect.wav';
 import TargetSelectPath from '../res/targetselect.wav';
 import TutorialTextPath from '../res/tutorial-text.png';
 import LevelMusic1Path from '../res/5 Action Chiptunes By Juhani Junkala/Juhani Junkala [Retro Game Music Pack] Level 3.wav';
+import LevelMusic2Path from '../res/gba1complete.mp3';
 import ExplosionPath from '../res/explosion.png';
 import ExplosionSoundPath from '../res/explosion.wav';
+import TitleScreenMusic from '../res/two_left_socks.ogg';
 
 export const Resources = {
     TitleImage: new ex.ImageSource(TitleImagePath),
@@ -38,7 +40,9 @@ export const Resources = {
     SelectSound: new ex.Sound(SelectSoundPath),
     TargetSelectSound: new ex.Sound(TargetSelectPath),
     LevelMusic1: new ex.Sound(LevelMusic1Path),
+    LevelMusic2: new ex.Sound(LevelMusic2Path),
     ExplosionSound: new ex.Sound(ExplosionSoundPath),
+    TitleMusic: new ex.Sound(TitleScreenMusic),
 } as const;
 
 export const TutorialTextSheet = ex.SpriteSheet.fromImageSource({

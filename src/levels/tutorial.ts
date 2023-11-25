@@ -127,6 +127,10 @@ export class Tutorial extends LevelBase {
     }
 
     async onActivate() {
+        Resources.LevelMusic2.loop = true;
+        Resources.LevelMusic2.volume = .05;
+        Resources.LevelMusic2.play();
+
         this.camera.strategy.lockToActor(this.focus)
         this.camera.zoomOverTime(1.25, 1000, ex.EasingFunctions.EaseInOutCubic);
 
@@ -178,6 +182,10 @@ export class Tutorial extends LevelBase {
         this.camera.zoomOverTime(1, 1000, ex.EasingFunctions.EaseInOutCubic);
 
         this.engine.goToScene('level1');
+    }
+
+    onDeactivate(): void {
+        Resources.LevelMusic2.stop();
     }
 
 }
