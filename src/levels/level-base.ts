@@ -84,7 +84,6 @@ export class LevelBase extends ex.Scene {
         this.resetAndLoad();
         this.turnManager.start();
         Resources.LevelMusic2.loop = true;
-        Resources.LevelMusic2.volume = .05;
         Resources.LevelMusic2.play();
 
         this.engine.input.keyboard.on('press', (evt) => {

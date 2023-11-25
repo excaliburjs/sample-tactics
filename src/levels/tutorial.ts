@@ -130,7 +130,6 @@ export class Tutorial extends LevelBase {
         })
 
         Resources.LevelMusic2.loop = true;
-        Resources.LevelMusic2.volume = .05;
         Resources.LevelMusic2.play();
 
         this.camera.strategy.lockToActor(this.focus)

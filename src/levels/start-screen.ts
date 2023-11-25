@@ -49,7 +49,6 @@ export class StartScreen extends ex.Scene {
         });
         this.instructions.graphics.use(text);
         this.instructions.actions.repeatForever(ctx => {
-            // ctx.blink(300, 300, 2);
             ctx.rotateTo(Math.PI/32, .2)
             ctx.rotateTo(-Math.PI/32, .2)
         });
@@ -59,7 +58,6 @@ export class StartScreen extends ex.Scene {
 
     onActivate(): void {
         Resources.TitleMusic.loop = true;
-        Resources.TitleMusic.volume = .05;
         Resources.TitleMusic.play();
 
         this.engine.input.pointers.primary.once('down', () => {
