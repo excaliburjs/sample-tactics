@@ -6,6 +6,7 @@
 * [ ] Skip tutorial option
 * [ ] Show the name of the stage "Gentle Plains"
 * [ ] Show the players name when they should move
+* [ ] Range viz, support mobile
 * [x] Win condition
 * [x] Tutorial (what is the point of the game)
 * [x] Only show valid actions

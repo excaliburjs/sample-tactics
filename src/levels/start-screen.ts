@@ -7,13 +7,7 @@ export class StartScreen extends ex.Scene {
     title!: ex.Actor;
     instructions!: ex.Actor;
     override onInitialize(engine: ex.Engine): void {
-        engine.input.pointers.primary.once('down', () => {
-            engine.goToScene('tutorial');
-        });
-        engine.input.keyboard.once('press', () => {
-            engine.goToScene('tutorial');
-        });
-
+        this.engine = engine;
         this.add(new Cloud(ex.vec(800, 0)));
         this.add(new Cloud(ex.vec(400, 300)));
         this.add(new Cloud(ex.vec(700, 700)));
@@ -67,6 +61,14 @@ export class StartScreen extends ex.Scene {
         Resources.TitleMusic.loop = true;
         Resources.TitleMusic.volume = .05;
         Resources.TitleMusic.play();
+
+        this.engine.input.pointers.primary.once('down', () => {
+            this.engine.goToScene('tutorial');
+        });
+        this.engine.input.keyboard.once('press', () => {
+            this.engine.goToScene('tutorial');
+        });
+
     }
     onDeactivate(): void {
         Resources.TitleMusic.stop();

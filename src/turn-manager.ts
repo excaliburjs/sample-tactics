@@ -177,16 +177,14 @@ export class TurnManager {
                 if (this.currentPlayer instanceof HumanPlayer) {
                     await this.showGameOver();
                     this.engine.input.pointers.once('down', () => {
-                        // TODO go to current level name
                         Resources.LevelMusic2.stop();
-                        this.engine.goToScene('level1');
+                        this.engine.goToScene(this.level.levelData.name);
                     });
                     return;
                 }
                 if (this.currentPlayer instanceof ComputerPlayer) {
                     await this.showVictory();
                     this.engine.input.pointers.once('down', () => {
-                        // TODO next level!
                         this.engine.goToScene(this.level.levelData.nextLevel);
                     });
                     return;

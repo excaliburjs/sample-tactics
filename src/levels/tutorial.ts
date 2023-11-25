@@ -6,7 +6,8 @@ import { UnitMenu } from '../ui-components/unit-menu';
 import { HumanPlayer } from '../human-player';
 
 export const TutorialData: LevelData = {
-    name: 'Gentle Plains',
+    name: 'tutorial',
+    displayName: 'Gentle Plains',
     nextLevel: 'level',
     width: 6,
     height: 3,
@@ -42,11 +43,7 @@ export class Tutorial extends LevelBase {
             this.engine.add(this.focus);
         }
 
-        engine.input.keyboard.once('press', evt => {
-            if (evt.key === ex.Keys.Esc) {
-                this.engine.goToScene('level1');
-            }
-        })
+        
     }
 
     async moveToUnit1() {
@@ -126,6 +123,12 @@ export class Tutorial extends LevelBase {
     }
 
     async onActivate() {
+        this.engine.input.keyboard.once('press', evt => {
+            if (evt.key === ex.Keys.Esc) {
+                this.engine.goToScene('level1');
+            }
+        })
+
         Resources.LevelMusic2.loop = true;
         Resources.LevelMusic2.volume = .05;
         Resources.LevelMusic2.play();

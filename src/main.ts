@@ -23,7 +23,8 @@ game.addScene(tutorial.name, tutorial);
 
 
 const Level1Data: LevelData = {
-    name: 'Gentle Plains',
+    displayName: 'Gentle Plains',
+    name: 'level1',
     nextLevel: 'level2',
     width: 6,
     height: 3,
@@ -40,7 +41,8 @@ const level1 = new LevelBase(Level1Data, 'level1')
 game.addScene(level1.name, level1);
 
 export const Level2Data: LevelData = {
-    name: 'Gentle Plains 2',
+    displayName: 'Gentle Plains 2',
+    name: 'level2',
     nextLevel: 'start',
     width: 6,
     height: 6,

@@ -15,6 +15,7 @@ import { Resources } from '../resources';
 
 export interface LevelData {
     name: string;
+    displayName: string;
     nextLevel: string;
     width: number;
     height: number;
@@ -100,6 +101,7 @@ export class LevelBase extends ex.Scene {
 
     override onDeactivate(): void {
         // TODO deactivate event handlers on types that have them!!
+        Resources.LevelMusic2.instances.forEach(i => i.stop());
         Resources.LevelMusic2.stop();
     }
 
