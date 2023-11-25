@@ -64,7 +64,6 @@ export class SelectionManager {
             unit.cell.pathNode,
             ~unit.player.mask, // don't attack friends!
             this.currentUnitSelection.unitConfig.range);
-        // range = range.filter(node => node.isWalkable && !!(node.walkableMask & unit.player.mask))
         return range;
     }
 

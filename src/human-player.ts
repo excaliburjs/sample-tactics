@@ -5,6 +5,7 @@ import { SelectionManager } from "./selection-manager";
 import { UIManager } from "./ui-manager";
 import { Cell } from "./cell";
 import { Unit } from "./unit";
+import { Resources } from "./resources";
 
 
 export class HumanPlayer extends Player {
@@ -124,6 +125,7 @@ export class HumanPlayer extends Player {
     async maybeSelectUnit(cell: Cell | null) {
          // check if the cell clicked has a unit, then select it
          if (cell?.unit && this.hasPlayerUnitWithActions(cell)) {
+            Resources.SelectSound.play();
             this.uiManger.showUnitMenu(cell.unit, {
                 move: () => {
                     this.selectionManager.selectUnit(cell.unit!, 'move');

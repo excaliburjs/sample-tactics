@@ -1,6 +1,8 @@
 # Excalibur Tactics Sample
 
-This is a high fidelity example that shows you how to make a tactics game (inspired by Advance Wars!)
+This is a high fidelity example that shows you how to make a tactics game (inspired by Advance Wars!).
+
+Also it's open source so use as much of this as you want in your own game!
 
 Features include
 - Turn based combat

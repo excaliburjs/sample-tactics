@@ -82,11 +82,11 @@ export class UnitMenu extends LitElement {
             cursor: pointer;
         }
 
-        button:focus, button:hover {
+        button:focus, button:hover, .focus {
             background-color: rgba(220, 200, 200, 1);
         }
 
-        button:active {
+        button:active, .active {
             background-color: rgba(250, 240, 240, 1);
         }
     `

@@ -14,6 +14,7 @@ import SmokePath from '../res/Smoke.png';
 import HitSoundPath from '../res/hit.wav';
 import MoveSoundPath from '../res/move.wav';
 import SelectSoundPath from '../res/unitselect.wav';
+import TutorialTextPath from '../res/tutorial-text.png';
 
 export const Resources = {
     TitleImage: new ex.ImageSource(TitleImagePath),
@@ -26,10 +27,21 @@ export const Resources = {
     RedHighlightSheet: new ex.ImageSource(RedHighlightSheetPath),
     CloudSheet: new ex.ImageSource(CloudSheetPath),
     SmokeSheet: new ex.ImageSource(SmokePath),
+    TutorialText: new ex.ImageSource(TutorialTextPath),
     HitSound: new ex.Sound(HitSoundPath),
     MoveSound: new ex.Sound(MoveSoundPath),
     SelectSound: new ex.Sound(SelectSoundPath),
 } as const;
+
+export const TutorialTextSheet = ex.SpriteSheet.fromImageSource({
+    image: Resources.TutorialText,
+    grid: {
+        rows: 1,
+        columns: 8,
+        spriteWidth: 128,
+        spriteHeight: 64
+    }
+})
 
 export const TerrainSpriteSheet = ex.SpriteSheet.fromImageSource({
     image: Resources.TerrainSheet,

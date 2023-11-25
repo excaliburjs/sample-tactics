@@ -8,7 +8,7 @@ export class StartScreen extends ex.Scene {
     instructions!: ex.Actor;
     override onInitialize(engine: ex.Engine): void {
         engine.input.pointers.primary.once('down', () => {
-            engine.goToScene('level1');
+            engine.goToScene('tutorial');
         });
 
         this.add(new Cloud(ex.vec(800, 0)));
