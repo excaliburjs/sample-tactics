@@ -74,6 +74,7 @@ export class UIManager {
 
         menu.clearEvents = clearEvents;
         menu.show();
+        menu.focus();
 
         this.uiToWorldPos.set(menu, unit.pos);
 

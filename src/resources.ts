@@ -14,7 +14,11 @@ import SmokePath from '../res/Smoke.png';
 import HitSoundPath from '../res/hit.wav';
 import MoveSoundPath from '../res/move.wav';
 import SelectSoundPath from '../res/unitselect.wav';
+import TargetSelectPath from '../res/targetselect.wav';
 import TutorialTextPath from '../res/tutorial-text.png';
+import LevelMusic1Path from '../res/5 Action Chiptunes By Juhani Junkala/Juhani Junkala [Retro Game Music Pack] Level 3.wav';
+import ExplosionPath from '../res/explosion.png';
+import ExplosionSoundPath from '../res/explosion.wav';
 
 export const Resources = {
     TitleImage: new ex.ImageSource(TitleImagePath),
@@ -28,9 +32,13 @@ export const Resources = {
     CloudSheet: new ex.ImageSource(CloudSheetPath),
     SmokeSheet: new ex.ImageSource(SmokePath),
     TutorialText: new ex.ImageSource(TutorialTextPath),
+    ExplosionSheet: new ex.ImageSource(ExplosionPath),
     HitSound: new ex.Sound(HitSoundPath),
     MoveSound: new ex.Sound(MoveSoundPath),
     SelectSound: new ex.Sound(SelectSoundPath),
+    TargetSelectSound: new ex.Sound(TargetSelectPath),
+    LevelMusic1: new ex.Sound(LevelMusic1Path),
+    ExplosionSound: new ex.Sound(ExplosionSoundPath),
 } as const;
 
 export const TutorialTextSheet = ex.SpriteSheet.fromImageSource({
@@ -160,6 +168,30 @@ export const HeartSpriteSheet = ex.SpriteSheet.fromImageSource({
         spriteWidth: 32
     }
 });
+
+export const ExplosionSpriteSheet = ex.SpriteSheet.fromImageSource({
+    image: Resources.ExplosionSheet,
+    grid: {
+        rows: 2,
+        columns: 5,
+        spriteHeight: 32,
+        spriteWidth: 32
+    }
+});
+
+export const Explosion = ex.Animation.fromSpriteSheetCoordinates({
+    spriteSheet: ExplosionSpriteSheet,
+    frameCoordinates: [
+        {x: 0, y: 0, duration: 100 },
+        {x: 1, y: 0, duration: 100 },
+        {x: 2, y: 0, duration: 100 },
+        {x: 3, y: 0, duration: 100 },
+        {x: 4, y: 0, duration: 100 },
+        {x: 0, y: 1, duration: 100 },
+        {x: 1, y: 1, duration: 100 },
+        {x: 2, y: 1, duration: 100 },
+    ]
+})
 
 export const Smoke = Resources.SmokeSheet.toSprite();
 

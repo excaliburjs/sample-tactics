@@ -11,6 +11,7 @@ import { TurnManager } from '../turn-manager';
 import { ComputerPlayer } from '../computer-player';
 import { Cloud } from '../cloud';
 import { DustParticles } from '../dust-particles';
+import { Resources } from '../resources';
 
 export interface LevelData {
     name: string;
@@ -67,6 +68,10 @@ export class LevelBase extends ex.Scene {
 
     override onActivate(): void {
         this.turnManager.start();
+        Resources.LevelMusic1.loop = true;
+        Resources.LevelMusic1.volume = .05;
+        Resources.LevelMusic1.play();
+
     }
 
     override onDeactivate(): void {
@@ -76,6 +81,7 @@ export class LevelBase extends ex.Scene {
     parse(levelData: LevelData): Board {
         const board = new Board(levelData.height, levelData.width, this);
         this.selectionManager = new SelectionManager(board);
+        this.selectionManager.showCursor(0, 0);
         this.uiManager = new UIManager(this.engine);
         // TODO support arbitrary players
         this.players = [

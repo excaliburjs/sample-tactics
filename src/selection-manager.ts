@@ -17,6 +17,8 @@ export class SelectionManager {
     currentRange: PathNodeComponent[] = [];
     currentPath: PathNodeComponent[] = [];
 
+    currentCursor: {x: number, y: number } = {x: 0, y: 0};
+
     constructor(private board: Board) {}
 
     reset() {
@@ -27,10 +29,11 @@ export class SelectionManager {
     }
 
     showCursor(x: number, y: number) {
-        this.board.cells.forEach(c => c.toggleCursor(false));
         const cell = this.board.getCell(x, y);
         if (cell) {
+            this.board.cells.forEach(c => c.toggleCursor(false));
             cell.toggleCursor(true);
+            this.currentCursor = { x, y };
         }
     }
 

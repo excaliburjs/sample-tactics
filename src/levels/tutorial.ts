@@ -42,6 +42,12 @@ export class Tutorial extends LevelBase {
             this.focus.graphics.opacity = 0;
             this.engine.add(this.focus);
         }
+
+        engine.input.keyboard.once('press', evt => {
+            if (evt.key === ex.Keys.Esc) {
+                this.engine.goToScene('level1');
+            }
+        })
     }
 
     async moveToUnit1() {

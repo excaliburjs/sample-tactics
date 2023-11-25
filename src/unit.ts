@@ -1,12 +1,13 @@
 import * as ex from "excalibur";
 import { Board } from "./board";
-import { HeartSpriteSheet, Resources, Smoke, SpiderSpriteSheet } from "./resources";
+import { Explosion, HeartSpriteSheet, Resources, Smoke, SpiderSpriteSheet } from "./resources";
 import { SCALE, UNIT_CONFIG, UnitConfig, UnitType } from "./config";
 import { Cell } from "./cell";
 import { PathNodeComponent } from "./path-finding/path-node-component";
 import { Player } from "./player";
 import { DustParticles } from "./dust-particles";
 import { DamageManager } from "./damage-manager";
+import { AnimationManager } from "./animation-manager";
 
 
 
@@ -18,6 +19,7 @@ export class Unit extends ex.Actor {
     anim: ex.Animation;
     health: number;
     damageManager!: DamageManager;
+    animationManger!: AnimationManager;
     constructor(x: number, y: number, unitType: UnitType, board: Board, public player: Player)  {
         super({
             name: unitType,
@@ -42,24 +44,21 @@ export class Unit extends ex.Actor {
 
     onInitialize(engine: ex.Engine): void {
         this.damageManager = new DamageManager(engine.currentScene);
+        this.animationManger = new AnimationManager(engine.currentScene);
     }
 
     onPostUpdate(): void {
-        if (this.attacked) {
+        if (!this.hasActions()) {
             this.anim.tint = ex.Color.Gray;
         } else {
             this.anim.tint = ex.Color.White;
         }
 
         if (this.health <= 0) {
-            this.cell?.removeUnit(this);
-            // TODO better death animation
-            this.actions.runAction(
-                new ex.ParallelActions([
-                    new ex.ActionSequence(this, ctx => ctx.rotateBy(2000, .5)),
-                    new ex.ActionSequence(this, ctx => ctx.easeBy(ex.vec(0, -1000), 300, ex.EasingFunctions.EaseInQuad))
-                ])
-            ).die();
+            this.actions.delay(500).callMethod(() => {
+                this.animationManger.playExplosion(this.pos);
+                Resources.ExplosionSound.play();
+            }).die()
         }
     }
 
@@ -117,7 +116,7 @@ export class Unit extends ex.Actor {
     }
 
     canAttack() {
-        return !this.attacked;
+        return this.getPossibleTargets()?.length !== 0 && !this.attacked;
     }
 
     canMove() {
@@ -128,15 +127,32 @@ export class Unit extends ex.Actor {
         return this.canMove() || this.canAttack();
     }
 
+    availableActions() {
+        let available: ('move' | 'attack')[] = [];
+        if (this.canMove()) {
+            available.push('move');
+        }
+        if (this.canAttack()) {
+            available.push('attack');
+        }
+        return available;
+    }
+
     pass() {
         this.moved = true;
         this.attacked = true;
     }
 
-    getPossibleTargets()  {
+    getPossibleTargets() {
         if (this.cell) {
             const range = this.cell.board.pathFinder.getRange(this.cell.pathNode, ~this.player.mask, this.unitConfig.range);
-            return range.filter(node => node.owner);
+            const cellsWithEnemies = range.map(node => node.owner as Cell).filter(cell => {
+                if (cell.unit?.player) {
+                    return cell.unit.player !== this.player;
+                }
+                return false;
+            } );
+            return cellsWithEnemies;
         }
     }
 

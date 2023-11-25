@@ -10,6 +10,9 @@ export class StartScreen extends ex.Scene {
         engine.input.pointers.primary.once('down', () => {
             engine.goToScene('tutorial');
         });
+        engine.input.keyboard.once('press', () => {
+            engine.goToScene('tutorial');
+        });
 
         this.add(new Cloud(ex.vec(800, 0)));
         this.add(new Cloud(ex.vec(400, 300)));
