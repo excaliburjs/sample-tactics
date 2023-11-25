@@ -4,9 +4,10 @@
 ## Gameplay
 * [x] Start Screen
 * [ ] Show the name of the stage "Gentle Plains"
+* [ ] Show the players name when they should move
 * [ ] Win condition
-* [ ] Tutorial (what is the point of the game)
-* [ ] Only show valid actions
+* [x] Tutorial (what is the point of the game)
+* [x] Only show valid actions
 * [ ] Which units are mine?
 * [ ] Show turn countdown
 * [x] Smarter Enemy AI
@@ -17,16 +18,16 @@
 ## Audio
 
 * [ ] Audio options
-* [ ] Background music
-* [ ] Better sound effects 
+* [x] Background music
+* [x] Better sound effects 
   - hit sound effect
   - death sound effect
 
 ## Selection
 
 * [x] Right click to see enemy range
-* [ ] Allow for gamepad/keyboard input too!
-* [ ] Cursor? with arrow to hint that a player needs to do something
+* [x] Allow for gamepad/keyboard input too!
+* [x] Cursor? with arrow to hint that a player needs to do something
    - Auto move the cursor to the first available unit?
 * [ ] Arrow on path?
 

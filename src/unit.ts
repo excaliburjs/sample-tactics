@@ -58,7 +58,10 @@ export class Unit extends ex.Actor {
             this.actions.delay(500).callMethod(() => {
                 this.animationManger.playExplosion(this.pos);
                 Resources.ExplosionSound.play();
-            }).die()
+            }).callMethod(() => {
+                this.cell?.removeUnit(this);
+                this.kill();
+            });
         }
     }
 

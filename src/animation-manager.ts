@@ -12,8 +12,11 @@ export class AnimationManager {
         Explosion.reset();
         Explosion.strategy = ex.AnimationStrategy.End;
         Explosion.scale = SCALE;
-        Explosion.events.once('ended', () => {
-            explosionActor.kill();
+        const sub = Explosion.events.on('frame', data => {
+            if (data.frameIndex === 7) {
+                explosionActor.kill();
+                sub.close();
+            }
         });
 
         explosionActor.graphics.use(Explosion);
