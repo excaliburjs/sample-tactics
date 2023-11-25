@@ -1,6 +1,6 @@
 import * as ex from 'excalibur';
 import { loader } from './resources';
-import { LevelBase, LevelData, TestLevelData } from './levels/level-base';
+import { LevelBase, LevelData } from './levels/level-base';
 import { StartScreen } from './levels/start-screen';
 import { Tutorial } from './levels/tutorial';
 
@@ -24,6 +24,7 @@ game.addScene(tutorial.name, tutorial);
 
 const Level1Data: LevelData = {
     name: 'Gentle Plains',
+    nextLevel: 'level2',
     width: 6,
     height: 3,
     maxTurns: 10,
@@ -40,6 +41,7 @@ game.addScene(level1.name, level1);
 
 export const Level2Data: LevelData = {
     name: 'Gentle Plains 2',
+    nextLevel: 'start',
     width: 6,
     height: 6,
     maxTurns: 100,

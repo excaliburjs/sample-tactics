@@ -5,8 +5,9 @@ import { Resources, TutorialTextSheet } from '../resources';
 import { UnitMenu } from '../ui-components/unit-menu';
 import { HumanPlayer } from '../human-player';
 
-export const TestLevelData: LevelData = {
+export const TutorialData: LevelData = {
     name: 'Gentle Plains',
+    nextLevel: 'level',
     width: 6,
     height: 3,
     maxTurns: 10,
@@ -21,7 +22,7 @@ export class Tutorial extends LevelBase {
     focus!: ex.Actor;
     
     constructor() {
-        super(TestLevelData, 'tutorial');
+        super(TutorialData, 'tutorial');
     }
     
     onInitialize(engine: ex.Engine): void {

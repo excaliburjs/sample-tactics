@@ -15,6 +15,7 @@ import { Resources } from '../resources';
 
 export interface LevelData {
     name: string;
+    nextLevel: string;
     width: number;
     height: number;
     maxTurns: number;
@@ -25,21 +26,22 @@ export interface LevelData {
     data: string[];
 }
 
-export const TestLevelData: LevelData = {
-    name: 'Gentle Plains',
-    width: 6,
-    height: 6,
-    maxTurns: 100,
-    players: ['human', 'computer'],
-    data: [
-        'GK1', 'G', 'G', 'G', 'G', 'GK1',
-        'G', 'G', 'G', 'G', 'G', 'G',
-        'G', 'G', 'W', 'W', 'G', 'G',
-        'G', 'G', 'W', 'W', 'G', 'G',
-        'G', 'G', 'W', 'W', 'G', 'G',
-        'GS2', 'GS2', 'GS2', 'GS2', 'GS2', 'GS2'
-    ]
-}
+// export const TestLevelData: LevelData = {
+//     name: 'Gentle Plains',
+//     nextLevel: 'level2',
+//     width: 6,
+//     height: 6,
+//     maxTurns: 100,
+//     players: ['human', 'computer'],
+//     data: [
+//         'GK1', 'G', 'G', 'G', 'G', 'GK1',
+//         'G', 'G', 'G', 'G', 'G', 'G',
+//         'G', 'G', 'W', 'W', 'G', 'G',
+//         'G', 'G', 'W', 'W', 'G', 'G',
+//         'G', 'G', 'W', 'W', 'G', 'G',
+//         'GS2', 'GS2', 'GS2', 'GS2', 'GS2', 'GS2'
+//     ]
+// }
 
 export class LevelBase extends ex.Scene {
 
@@ -112,7 +114,7 @@ export class LevelBase extends ex.Scene {
             new ComputerPlayer(levelData.players[1], this.selectionManager, board)
         ];
 
-        this.turnManager = new TurnManager(this.engine, this.players, this.selectionManager, 10);
+        this.turnManager = new TurnManager(this.engine, this, this.players, this.selectionManager, 10);
 
         for (let y = 0; y < levelData.height; y++) {
             for (let x = 0; x < levelData.width; x++) {

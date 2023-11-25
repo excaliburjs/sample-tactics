@@ -5,6 +5,7 @@ import { SCALE } from './config';
 import { HumanPlayer } from './human-player';
 import { ComputerPlayer } from './computer-player';
 import { Resources } from './resources';
+import { LevelBase } from './levels/level-base';
 
 /**
  * Manages player turns, keeps track of which of the N number of players turn it is.
@@ -24,7 +25,7 @@ export class TurnManager {
     private victory: ex.Actor;
     private failure: ex.Actor;
 
-    constructor(public engine: ex.Engine, public players: Player[], selectionManager: SelectionManager, public maxTurns: number) {
+    constructor(public engine: ex.Engine, public level: LevelBase, public players: Player[], selectionManager: SelectionManager, public maxTurns: number) {
         if (players.length === 0) throw Error('Players should be non-zero in length');
         this.currentPlayer = players[this.currentPlayerIndex];
         this.selectionManager = selectionManager;
@@ -186,7 +187,7 @@ export class TurnManager {
                     await this.showVictory();
                     this.engine.input.pointers.once('down', () => {
                         // TODO next level!
-                        this.engine.goToScene('level2');
+                        this.engine.goToScene(this.level.levelData.nextLevel);
                     });
                     return;
                 }
