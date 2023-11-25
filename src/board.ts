@@ -32,6 +32,13 @@ export class Board {
         this.pathFinder = new PathFinder(scene);
     }
 
+    getCenter() {
+        return ex.vec(
+            this.cols * ((this.tileWidth + this.margin) * SCALE.x),
+            this.rows * ((this.tileHeight + this.margin) * SCALE.y)
+        ).scale(.5);
+    }
+
     getUnits() {
         let result: Unit[] = [];
         for (let cell of this.cells) {
@@ -48,8 +55,8 @@ export class Board {
 
     getCellByWorldPos(pos: ex.Vector): Cell | null {
         return this.getCell(
-            Math.floor((pos.x - BOARD_OFFSET.x) / ((this.tileWidth+this.margin) * SCALE.x)),
-            Math.floor((pos.y - BOARD_OFFSET.y) / ((this.tileHeight+this.margin) * SCALE.y))
+            Math.floor((pos.x /*- BOARD_OFFSET.x*/) / ((this.tileWidth+this.margin) * SCALE.x)),
+            Math.floor((pos.y /*- BOARD_OFFSET.y*/) / ((this.tileHeight+this.margin) * SCALE.y))
         );
     }
 

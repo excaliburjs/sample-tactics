@@ -205,12 +205,19 @@ export class HumanPlayer extends Player {
     }
 
     override async makeMove(): Promise<boolean> {
-        const units = this.board.getUnits().filter(u => u.player === this);
-
-        // TODO while there are moves to make or the player has not passed their turn wait
         while(this.hasMoves()) {
             await this.waitForHumanMove();
         }
         return true;
+    }
+
+    lose() {
+        this.active = false;
+        const playerUnits = this.board.getUnits().filter(u => u.player instanceof HumanPlayer);
+        playerUnits.forEach(u => { 
+            u.health = 0
+            u.cell?.removeUnit(u);
+        });
+        this.humanMove.resolve();
     }
 }

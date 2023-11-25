@@ -3,12 +3,13 @@
 
 ## Gameplay
 * [x] Start Screen
+* [ ] Skip tutorial option
 * [ ] Show the name of the stage "Gentle Plains"
 * [ ] Show the players name when they should move
-* [ ] Win condition
+* [x] Win condition
 * [x] Tutorial (what is the point of the game)
 * [x] Only show valid actions
-* [ ] Which units are mine?
+* [x] Which units are mine?
 * [ ] Show turn countdown
 * [x] Smarter Enemy AI
 * [x] Configure enemy turn speed

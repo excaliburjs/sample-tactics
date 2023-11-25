@@ -4,6 +4,7 @@ import { SCALE } from './config';
 export class Damage extends ex.Actor {
     constructor(pos: ex.Vector, damage: number) {
         super({
+            name: 'damage',
             pos,
             z: 10
         });

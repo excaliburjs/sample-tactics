@@ -2,6 +2,9 @@ import * as ex from 'excalibur';
 import { Player } from "./player";
 import { SelectionManager } from "./selection-manager";
 import { SCALE } from './config';
+import { HumanPlayer } from './human-player';
+import { ComputerPlayer } from './computer-player';
+import { Resources } from './resources';
 
 /**
  * Manages player turns, keeps track of which of the N number of players turn it is.
@@ -18,6 +21,8 @@ export class TurnManager {
     private topScreen = ex.vec(400, -2000);
     private centerScreen = ex.vec(400, 400);
     private bottomScreen = ex.vec(400, 2000);
+    private victory: ex.Actor;
+    private failure: ex.Actor;
 
     constructor(public engine: ex.Engine, public players: Player[], selectionManager: SelectionManager, public maxTurns: number) {
         if (players.length === 0) throw Error('Players should be non-zero in length');
@@ -39,6 +44,7 @@ export class TurnManager {
         const screenWidth = engine.screen.resolution.width;
 
         this.turnActor = new ex.Actor({
+            name: 'turn text',
             pos: this.topScreen,
             coordPlane: ex.CoordPlane.Screen,
             color: new ex.Color(240, 50, 50, .4),
@@ -50,6 +56,71 @@ export class TurnManager {
         this.turnActor.graphics.add('text', this.turnText);
         this.turnActor.graphics.show('text')
         engine.add(this.turnActor);
+
+        const victory = new ex.Text({
+            text: `Victory!`,
+            font: new ex.Font({
+                family: 'notjamslab14',
+                size: 32 * SCALE.x,
+                unit: ex.FontUnit.Px,
+                color: ex.Color.White,
+                baseAlign: ex.BaseAlign.Top,
+                quality: 4
+            }),
+        });
+
+        this.victory = new ex.Actor({
+            name: 'victory text',
+            pos: this.topScreen,
+            coordPlane: ex.CoordPlane.Screen,
+            color: new ex.Color(50, 240, 50, .4),
+            width: screenWidth,
+            height: 100,
+            z: 10
+        });
+        this.victory.graphics.opacity = 0;
+        this.victory.graphics.add('text', victory);
+        this.victory.graphics.show('text')
+        engine.add(this.victory);
+
+        const failureText1 = new ex.Text({
+            text: `Failure!`,
+            font: new ex.Font({
+                family: 'notjamslab14',
+                size: 32 * SCALE.x,
+                unit: ex.FontUnit.Px,
+                color: ex.Color.White,
+                baseAlign: ex.BaseAlign.Top,
+                quality: 4
+            }),
+        });
+        const failureText2 = new ex.Text({
+            text: `Click to try again!`,
+            font: new ex.Font({
+                family: 'notjamslab14',
+                size: 32 * SCALE.x,
+                unit: ex.FontUnit.Px,
+                color: ex.Color.White,
+                baseAlign: ex.BaseAlign.Top,
+                quality: 4
+            }),
+        });
+
+        this.failure = new ex.Actor({
+            name: 'failure text',
+            pos: this.topScreen,
+            coordPlane: ex.CoordPlane.Screen,
+            color: new ex.Color(240, 50, 50, .4),
+            width: screenWidth,
+            height: 250,
+            z: 10
+        });
+        this.failure.graphics.opacity = 0;
+        this.failure.graphics.add('text1', failureText1);
+        this.failure.graphics.add('text2', failureText2);
+        this.failure.graphics.show('text1', { offset: ex.vec(0, -50)})
+        this.failure.graphics.show('text2', {offset: ex.vec(0, 50)})
+        engine.add(this.failure);
     }
 
     async showTurnDisplay() {
@@ -73,10 +144,54 @@ export class TurnManager {
         this.turnActor.pos = this.topScreen;
     }
 
+    async showGameOver() {
+        const transitionTime = 1200;
+        await this.failure.actions.runAction(
+            new ex.ParallelActions([
+                new ex.ActionSequence(this.failure, ctx => 
+                    ctx.easeTo(this.centerScreen, transitionTime, ex.EasingFunctions.EaseInOutCubic)),
+                new ex.ActionSequence(this.failure, ctx => 
+                    ctx.fade(1, transitionTime))
+            ])
+        ).toPromise();
+    }
+    async showVictory() {
+        const transitionTime = 1200;
+        await this.victory.actions.runAction(
+            new ex.ParallelActions([
+                new ex.ActionSequence(this.victory, ctx => 
+                    ctx.easeTo(this.centerScreen, transitionTime, ex.EasingFunctions.EaseInOutCubic)),
+                new ex.ActionSequence(this.victory, ctx => 
+                    ctx.fade(1, transitionTime))
+            ])
+        ).toPromise();
+    }
+
     async start() {
         // TODO win condition
         while (this.maxTurns > 0) {
             console.log('Current player turn:', this.currentPlayer.name);
+            if (this.currentPlayer.hasLost()) {
+                console.log('Player lost!', this.currentPlayer.name);
+                if (this.currentPlayer instanceof HumanPlayer) {
+                    await this.showGameOver();
+                    this.engine.input.pointers.once('down', () => {
+                        // TODO go to current level name
+                        Resources.LevelMusic2.stop();
+                        this.engine.goToScene('level1');
+                    });
+                    return;
+                }
+                if (this.currentPlayer instanceof ComputerPlayer) {
+                    await this.showVictory();
+                    this.engine.input.pointers.once('down', () => {
+                        // TODO next level!
+                        this.engine.goToScene('level2');
+                    });
+                    return;
+                }
+            }
+
             this.selectionManager.selectPlayer(this.currentPlayer);
             this.showTurnDisplay();
             await this.currentPlayer.turnStart();

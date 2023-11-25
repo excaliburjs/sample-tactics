@@ -29,7 +29,7 @@ export const TestLevelData: LevelData = {
     name: 'Gentle Plains',
     width: 6,
     height: 6,
-    maxTurns: 10,
+    maxTurns: 100,
     players: ['human', 'computer'],
     data: [
         'GK1', 'G', 'G', 'G', 'G', 'GK1',
@@ -49,12 +49,21 @@ export class LevelBase extends ex.Scene {
     engine!: ex.Engine;
     players!: Player[];
     turnManager!: TurnManager;
-    constructor(public levelData: LevelData) {
+    constructor(public levelData: LevelData, public name: string) {
         super();
     }
 
     override onInitialize(engine: ex.Engine): void {
         this.engine = engine;
+    }
+
+    resetAndLoad() {
+        const entities = this.entities;
+        for (let i = entities.length - 1; i >= 0; i--) {
+            this.world.remove(entities[i], false);
+        }
+
+        Resources.LevelMusic2.stop();
 
         this.add(new Cloud(ex.vec(800, 0)));
         this.add(new Cloud(ex.vec(400, 300)));
@@ -64,13 +73,26 @@ export class LevelBase extends ex.Scene {
         this.board = this.parse(this.levelData);
 
         this.add(DustParticles);
+
+        this.camera.pos = this.board.getCenter();
     }
 
     override onActivate(): void {
+        this.resetAndLoad();
         this.turnManager.start();
         Resources.LevelMusic2.loop = true;
         Resources.LevelMusic2.volume = .05;
         Resources.LevelMusic2.play();
+
+        this.engine.input.keyboard.on('press', (evt) => {
+            // DELETEME for debugging
+            if (evt.key === ex.Keys.W) {
+                (this.players[1] as ComputerPlayer).lose();
+            }
+            if (evt.key === ex.Keys.L) {
+                (this.players[0] as HumanPlayer).lose();
+            }
+        });
 
     }
 

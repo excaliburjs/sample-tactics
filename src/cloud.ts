@@ -6,6 +6,7 @@ export class Cloud extends ex.Actor {
     cloudSprite!: ex.Sprite;
     constructor(pos: ex.Vector) {
         super({
+            name: 'cloud',
             pos,
             vel: ex.vec(ex.randomInRange(-30, -100), 0),
             width: 100,

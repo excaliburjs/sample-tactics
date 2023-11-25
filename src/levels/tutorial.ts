@@ -8,31 +8,29 @@ import { HumanPlayer } from '../human-player';
 export const TestLevelData: LevelData = {
     name: 'Gentle Plains',
     width: 6,
-    height: 6,
+    height: 3,
     maxTurns: 10,
     players: ['human', 'computer'],
     data: [
         'GK1', 'G', 'G', 'GS2', 'G', 'GS2',
         'GK1', 'G', 'GS2', 'G', 'G', 'GS2',
         'G', 'G', 'W', 'W', 'G', 'G',
-        'G', 'G', 'W', 'W', 'G', 'G',
-        'G', 'G', 'W', 'W', 'G', 'G',
-        'G', 'G', 'G', 'G', 'G', 'G'
     ]
 }
 export class Tutorial extends LevelBase {
     focus!: ex.Actor;
     
-    // TODO cinematic?
     constructor() {
-        super(TestLevelData);
+        super(TestLevelData, 'tutorial');
     }
     
     onInitialize(engine: ex.Engine): void {
         super.onInitialize(engine);
+        this.resetAndLoad();
         const unit = this.board.cells[0].unit;
         if (unit) {
             this.focus = new ex.Actor({
+                name: 'focus',
                 pos: unit.pos.add(ex.vec(16, 16).scale(SCALE)),
                 width: 32,
                 height: 32,

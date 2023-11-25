@@ -35,7 +35,7 @@ export class Cell extends ex.Actor {
             pos: ex.vec(
                 x * (board.tileWidth + board.margin) * SCALE.x,
                 y * (board.tileHeight + board.margin) * SCALE.y
-            ).add(BOARD_OFFSET),
+            ),
             anchor: ex.Vector.Zero
         });
         this.pathNode = new PathNodeComponent(this.pos);

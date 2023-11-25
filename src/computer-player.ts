@@ -140,24 +140,19 @@ export class ComputerPlayer extends Player {
                     // try again to attack
                     await this.maybeAttack(unit, closestEnemy);
                 }
-
-                // // possible targets
-                // const possibleTargets = this.findAttackableTargets(unit);
-                // if (possibleTargets.length > 0) {
-                //     const currentRange = possibleTargets.map(c => c.pathNode);
-                //     this.selectionManger.showHighlight(currentRange, 'attack');
-                //     await ex.Util.delay(ENEMY_SPEED);
-
-                //     this.selectionManger.showHighlight([closestEnemy.cell!.pathNode], 'path');
-                //     await ex.Util.delay(ENEMY_SPEED);
-
-                //     // attack
-                //     await unit.attack(closestEnemy);
-                // }
                 this.selectionManger.reset();
             }
         }
 
         return true;
+    }
+
+    lose() {
+        this.active = false;
+        const computerUnits = this.board.getUnits().filter(u => u.player instanceof ComputerPlayer);
+        computerUnits.forEach(u => { 
+            u.health = 0
+            u.cell?.removeUnit(u);
+        });
     }
 }

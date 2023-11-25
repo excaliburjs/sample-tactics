@@ -19,6 +19,7 @@ export class StartScreen extends ex.Scene {
         this.add(new Cloud(ex.vec(700, 700)));
 
         this.title = new ex.Actor({
+            name: 'title',
             pos: ex.vec(400, 400),
             coordPlane: ex.CoordPlane.Screen,
         });
@@ -32,6 +33,7 @@ export class StartScreen extends ex.Scene {
         this.add(this.title);
 
         this.instructions = new ex.Actor({
+            name: 'instructions',
             pos: ex.vec(400, 600),
             coordPlane: ex.CoordPlane.Screen
         });

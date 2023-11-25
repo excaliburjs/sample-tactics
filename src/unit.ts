@@ -55,11 +55,11 @@ export class Unit extends ex.Actor {
         }
 
         if (this.health <= 0) {
+            this.cell?.removeUnit(this);
             this.actions.delay(500).callMethod(() => {
                 this.animationManger.playExplosion(this.pos);
                 Resources.ExplosionSound.play();
             }).callMethod(() => {
-                this.cell?.removeUnit(this);
                 this.kill();
             });
         }

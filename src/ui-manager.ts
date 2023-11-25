@@ -80,4 +80,8 @@ export class UIManager {
 
         return menu;
     }
+
+    showNextMission(pos: ex.Vector) {
+
+    }
 }
