@@ -26,6 +26,14 @@ export class SelectionManager {
         this.currentRange = [];
     }
 
+    showCursor(x: number, y: number) {
+        this.board.cells.forEach(c => c.toggleCursor(false));
+        const cell = this.board.getCell(x, y);
+        if (cell) {
+            cell.toggleCursor(true);
+        }
+    }
+
     selectPlayer(player: Player) {
         this.currentPlayer = player;
     }

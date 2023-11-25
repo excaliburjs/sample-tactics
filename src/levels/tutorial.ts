@@ -124,6 +124,8 @@ export class Tutorial extends LevelBase {
         this.camera.strategy.lockToActor(this.focus)
         this.camera.zoomOverTime(1.25, 1000, ex.EasingFunctions.EaseInOutCubic);
 
+        this.selectionManager.showCursor(0, 0);
+
         await ex.Util.delay(1000);
 
         // hey look at all these spiders!

@@ -53,6 +53,18 @@ export const TerrainSpriteSheet = ex.SpriteSheet.fromImageSource({
     }
 });
 
+export const CursorAnimation = ex.Animation.fromSpriteSheetCoordinates({
+    spriteSheet: TerrainSpriteSheet,
+    frameCoordinates: [
+        { x: 1, y: 1, duration: 200 },
+        { x: 2, y: 1, duration: 200 },
+        { x: 3, y: 1, duration: 200 },
+        { x: 3, y: 1, duration: 200 },
+        { x: 3, y: 1, duration: 200 },
+        { x: 2, y: 1, duration: 200 },
+    ]
+});
+
 export const HighlightSpriteSheet = ex.SpriteSheet.fromImageSource({
     image: Resources.HighlightSheet,
     grid: {

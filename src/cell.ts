@@ -1,6 +1,6 @@
 import * as ex from "excalibur";
 import { Board } from "./board";
-import { HighlightAnimation, RedHighlightAnimation, TerrainSpriteSheet } from "./resources";
+import { CursorAnimation, HighlightAnimation, RedHighlightAnimation, TerrainSpriteSheet } from "./resources";
 import { BOARD_OFFSET, SCALE } from "./config";
 import { PathNodeComponent } from "./path-finding/path-node-component";
 import { Unit } from "./unit";
@@ -50,9 +50,11 @@ export class Cell extends ex.Actor {
         PathHighlightAnimation.tint = ex.Color.Green;
         AttackHighlightAnimation.scale = SCALE;
         AttackHighlightAnimation.opacity = 0.75;
+        CursorAnimation.scale = SCALE;
         this.graphics.add('range', RangeHighlightAnimation);
         this.graphics.add('path', PathHighlightAnimation);
         this.graphics.add('attack', AttackHighlightAnimation);
+        this.graphics.add('cursor', CursorAnimation);
     }
 
     get terrain() {
@@ -103,6 +105,14 @@ export class Cell extends ex.Actor {
             this.graphics.show(type);
         } else {
             this.graphics.hide(type);
+        }
+    }
+
+    toggleCursor(show: boolean) {
+        if (show) {
+            this.graphics.show('cursor');
+        } else {
+            this.graphics.hide('cursor');
         }
     }
 

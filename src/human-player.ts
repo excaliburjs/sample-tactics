@@ -48,6 +48,12 @@ export class HumanPlayer extends Player {
 
     pointerMove(pointer: ex.PointerEvent) {
         if (!this.active) return;
+
+        const cellBelowPointer = this.board.getCellByWorldPos(pointer.worldPos);
+        if (cellBelowPointer) {
+            this.selectionManager.showCursor(cellBelowPointer.x, cellBelowPointer.y);
+        }
+
         if (!this.selectionManager.currentUnitSelection) return;
 
         this.selectionManager.resetHighlight();
