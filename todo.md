@@ -1,9 +1,16 @@
+## Bugs
+* [ ] Sometimes the tutorial crashes and there is no way to proceed
+
 ## UI
 * [x] Add social card!
 
 ## Gameplay
 * [x] Start Screen
 * [ ] Skip tutorial option
+* [ ] Add instructions to the win screen
+* [ ] Add a stats win screen
+   * [ ] Units kills/units lost
+* [ ] Wait for death anim before popping ui?
 * [ ] Show the name of the stage "Gentle Plains"
 * [ ] Show the players name when they should move
 * [ ] Range viz, support mobile
