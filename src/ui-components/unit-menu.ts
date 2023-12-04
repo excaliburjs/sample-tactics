@@ -167,7 +167,7 @@ export class UnitMenu extends LitElement {
             <div class="options">
                 <button style=${styleMap({display: this.unit?.canMove() ? 'block' : 'none' })} @click="${this.sendEvent('move')}">Move</button>
                 <button style=${styleMap({display: this.unit?.canAttack() ? 'block' : 'none' })} @click="${this.sendEvent('attack')}">Attack</button>
-                <button  @click="${this.sendEvent('pass')}">Pass</button>
+                <button  @click="${this.sendEvent('pass')}">Done</button>
             </div>
         </div>
         `
