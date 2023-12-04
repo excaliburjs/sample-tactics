@@ -53,7 +53,7 @@ export class Tutorial extends LevelBase {
                 unit: ex.FontUnit.Px,
                 color: ex.Color.White,
                 baseAlign: ex.BaseAlign.Top,
-                quality: 4
+                quality: 1
             }),
         });
 
@@ -153,11 +153,15 @@ export class Tutorial extends LevelBase {
         const text = TutorialTextSheet.getSprite(index, 0) as ex.Sprite;
         text.scale = SCALE;
         this.focus.graphics.use(text);
-        await this.focus.actions.fade(1, 200).toPromise();
+        this.focus.graphics.opacity = 1;
+        await ex.Util.delay(1000);
+        // await this.focus.actions.fade(1, 200).toPromise();
     }
 
     async hideText() {
-        await this.focus.actions.fade(0, 200).toPromise();
+        this.focus.graphics.opacity = 0;
+        await ex.Util.delay(1000);
+        // await this.focus.actions.fade(0, 200).toPromise();
     }
 
     private _subs: ex.Subscription[] = [];

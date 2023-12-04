@@ -108,7 +108,7 @@ export class LevelBase extends ex.Scene {
                 unit: ex.FontUnit.Px,
                 color: ex.Color.White,
                 baseAlign: ex.BaseAlign.Top,
-                quality: 4
+                quality: 1
             }),
         });
 
