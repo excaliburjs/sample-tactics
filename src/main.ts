@@ -53,12 +53,12 @@ export const Level2Data: LevelData = {
     maxTurns: 100,
     players: ['human', 'computer'],
     data: [
-        'GK1', 'G', 'GS2', 'G', 'G', 'GS2',
+        'GK1', 'G', 'GM2', 'G', 'G', 'GS2',
         'GK1', 'G', 'G', 'G', 'G', 'GS2',
         'GK1', 'G', 'W', 'W', 'G', 'G',
         'G', 'G', 'W', 'W', 'G', 'G',
         'G', 'G', 'W', 'W', 'G', 'G',
-        'G', 'GS2', 'W', 'W', 'GS2', 'GS2',
+        'GM2', 'GM2', 'W', 'W', 'GS2', 'GS2',
     ]
 }
 

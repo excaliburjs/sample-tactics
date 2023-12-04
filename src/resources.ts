@@ -4,6 +4,7 @@ import * as ex from 'excalibur';
 import TitleImagePath from '../res/title.png';
 import KnightSpriteSheetPath from '../res/KnightSheet.png';
 import SpiderSheetPath from '../res/SpiderSheet.png';
+import SlimeSheetPath from '../res/slime.png';
 import HeartSheetPath from '../res/HeartSheet.png';
 import UISheetPath from '../res/UISheet.png';
 import TerrainSheetPath from '../res/TerrainSheet.png';
@@ -26,6 +27,7 @@ export const Resources = {
     TitleImage: new ex.ImageSource(TitleImagePath),
     KnightSpriteSheet: new ex.ImageSource(KnightSpriteSheetPath),
     SpiderSheet: new ex.ImageSource(SpiderSheetPath),
+    SlimeSheet: new ex.ImageSource(SlimeSheetPath),
     HeartSheet: new ex.ImageSource(HeartSheetPath),
     UISheet: new ex.ImageSource(UISheetPath),
     TerrainSheet: new ex.ImageSource(TerrainSheetPath),
@@ -133,6 +135,27 @@ export const SpiderSpriteSheet = ex.SpriteSheet.fromImageSource({
 
 export const SpiderIdle =  ex.Animation.fromSpriteSheetCoordinates({
     spriteSheet: SpiderSpriteSheet,
+    strategy: ex.AnimationStrategy.Loop,
+    frameCoordinates: [
+        {x: 0, y: 0, duration: 200},
+        {x: 1, y: 0, duration: 200},
+        {x: 2, y: 0, duration: 200},
+        {x: 3, y: 0, duration: 200}
+    ]
+});
+
+export const SlimeSpriteSheet = ex.SpriteSheet.fromImageSource({
+    image: Resources.SlimeSheet,
+    grid: {
+        rows: 1,
+        columns: 4,
+        spriteHeight: 32,
+        spriteWidth: 32
+    }
+});
+
+export const SlimeIdle =  ex.Animation.fromSpriteSheetCoordinates({
+    spriteSheet: SlimeSpriteSheet,
     strategy: ex.AnimationStrategy.Loop,
     frameCoordinates: [
         {x: 0, y: 0, duration: 200},

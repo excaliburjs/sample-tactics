@@ -8,7 +8,7 @@ import { HumanPlayer } from '../human-player';
 export const TutorialData: LevelData = {
     name: 'tutorial',
     displayName: 'Gentle Plains',
-    nextLevel: 'level',
+    nextLevel: 'level1',
     width: 6,
     height: 3,
     maxTurns: 10,
@@ -21,7 +21,9 @@ export const TutorialData: LevelData = {
 }
 export class Tutorial extends LevelBase {
     focus!: ex.Actor;
-    
+    tutorialDirections!: ex.Actor;
+    private bottomScreen = ex.vec(400, 2000);
+    private centerScreen = ex.vec(400, 700);
     constructor() {
         super(TutorialData, 'tutorial');
     }
@@ -42,8 +44,44 @@ export class Tutorial extends LevelBase {
             this.focus.graphics.opacity = 0;
             this.engine.add(this.focus);
         }
+        const screenWidth = engine.screen.resolution.width;
+        const tutorialDirections = new ex.Text({
+            text: `S or Tap to Skip!`,
+            font: new ex.Font({
+                family: 'notjamslab14',
+                size: 32 * SCALE.x,
+                unit: ex.FontUnit.Px,
+                color: ex.Color.White,
+                baseAlign: ex.BaseAlign.Top,
+                quality: 4
+            }),
+        });
 
-        
+        this.tutorialDirections = new ex.Actor({
+            name: 'directions',
+            pos: this.bottomScreen,
+            coordPlane: ex.CoordPlane.Screen,
+            color: new ex.Color(50, 240, 50, .4),
+            width: screenWidth,
+            height: 100,
+            z: 10
+        });
+        this.tutorialDirections.graphics.opacity = 0;
+        this.tutorialDirections.graphics.add('text', tutorialDirections);
+        this.tutorialDirections.graphics.show('text')
+        engine.add(this.tutorialDirections);
+    }
+
+    async showSkip() {
+        const transitionTime = 1200;
+        await this.tutorialDirections.actions.runAction(
+            new ex.ParallelActions([
+                new ex.ActionSequence(this.tutorialDirections, ctx => 
+                    ctx.easeTo(this.centerScreen, transitionTime, ex.EasingFunctions.EaseInOutCubic)),
+                new ex.ActionSequence(this.tutorialDirections, ctx => 
+                    ctx.fade(1, transitionTime))
+            ])
+        ).toPromise();
     }
 
     async moveToUnit1() {
@@ -122,12 +160,20 @@ export class Tutorial extends LevelBase {
         await this.focus.actions.fade(0, 200).toPromise();
     }
 
+    private _subs: ex.Subscription[] = [];
     async onActivate() {
-        this.engine.input.keyboard.once('press', evt => {
-            if (evt.key === ex.Keys.Esc) {
+        this.showSkip();
+        console.log('activate tutorial');
+        this._subs.push(
+            this.engine.input.keyboard.on('press', evt => {
+                if (evt.key === ex.Keys.S) {
+                    this.engine.goToScene('level1');
+                }
+        }));
+        this._subs.push(
+            this.engine.input.pointers.primary.on('down', evt => {
                 this.engine.goToScene('level1');
-            }
-        })
+        }));
 
         Resources.LevelMusic2.loop = true;
         Resources.LevelMusic2.play();
@@ -177,7 +223,7 @@ export class Tutorial extends LevelBase {
         await this.hideText();
 
         await this.showText(7);
-        await this.focus.actions.delay(7000);
+        await this.focus.actions.delay(3000);
         await this.hideText();
 
         this.camera.zoomOverTime(1, 1000, ex.EasingFunctions.EaseInOutCubic);
@@ -187,6 +233,7 @@ export class Tutorial extends LevelBase {
 
     onDeactivate(): void {
         Resources.LevelMusic2.stop();
+        this._subs.forEach(s => s.close());
     }
 
 }

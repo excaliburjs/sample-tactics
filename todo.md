@@ -1,13 +1,15 @@
 ## Bugs
 * [ ] Sometimes the tutorial crashes and there is no way to proceed
+* [ ] Re-entering the tutorial is in a weird state
 
 ## UI
 * [x] Add social card!
 
 ## Gameplay
 * [x] Start Screen
-* [ ] Skip tutorial option
-* [ ] Add instructions to the win screen
+* [ ] Disable cheats
+* [x] Skip tutorial option
+* [x] Add instructions to the win screen
 * [ ] Add a stats win screen
    * [ ] Units kills/units lost
 * [ ] Wait for death anim before popping ui?

@@ -23,6 +23,7 @@ export class TurnManager {
     private centerScreen = ex.vec(400, 400);
     private bottomScreen = ex.vec(400, 2000);
     private victory: ex.Actor;
+    private victoryDirections: ex.Actor;
     private failure: ex.Actor;
 
     constructor(public engine: ex.Engine, public level: LevelBase, public players: Player[], selectionManager: SelectionManager, public maxTurns: number) {
@@ -83,6 +84,32 @@ export class TurnManager {
         this.victory.graphics.add('text', victory);
         this.victory.graphics.show('text')
         engine.add(this.victory);
+
+        const victoryDirections = new ex.Text({
+            text: `Click to proceed!`,
+            font: new ex.Font({
+                family: 'notjamslab14',
+                size: 32 * SCALE.x,
+                unit: ex.FontUnit.Px,
+                color: ex.Color.White,
+                baseAlign: ex.BaseAlign.Top,
+                quality: 4
+            }),
+        });
+
+        this.victoryDirections = new ex.Actor({
+            name: 'directions',
+            pos: this.topScreen,
+            coordPlane: ex.CoordPlane.Screen,
+            color: new ex.Color(50, 240, 50, .4),
+            width: screenWidth,
+            height: 100,
+            z: 10
+        });
+        this.victoryDirections.graphics.opacity = 0;
+        this.victoryDirections.graphics.add('text', victoryDirections);
+        this.victoryDirections.graphics.show('text')
+        engine.add(this.victoryDirections);
 
         const failureText1 = new ex.Text({
             text: `Failure!`,
@@ -166,6 +193,15 @@ export class TurnManager {
                     ctx.fade(1, transitionTime))
             ])
         ).toPromise();
+
+        await this.victoryDirections.actions.runAction(
+            new ex.ParallelActions([
+                new ex.ActionSequence(this.victoryDirections, ctx => 
+                    ctx.easeTo(this.centerScreen.add(ex.vec(0, 150)), transitionTime, ex.EasingFunctions.EaseInOutCubic)),
+                new ex.ActionSequence(this.victoryDirections, ctx => 
+                    ctx.fade(1, transitionTime))
+            ])
+        ).toPromise();
     }
 
     async start() {
@@ -185,7 +221,9 @@ export class TurnManager {
                 if (this.currentPlayer instanceof ComputerPlayer) {
                     await this.showVictory();
                     this.engine.input.pointers.once('down', () => {
-                        this.engine.goToScene(this.level.levelData.nextLevel);
+                        setTimeout(() => {
+                            this.engine.goToScene(this.level.levelData.nextLevel);
+                        });
                     });
                     return;
                 }

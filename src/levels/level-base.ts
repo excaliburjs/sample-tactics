@@ -44,6 +44,12 @@ export interface LevelData {
 //     ]
 // }
 
+export const CharToUnit = {
+    K: 'Knight',
+    S: 'Spider',
+    M: 'Slime'
+} as const;
+
 export class LevelBase extends ex.Scene {
 
     board!: Board;
@@ -80,13 +86,15 @@ export class LevelBase extends ex.Scene {
         this.camera.pos = this.board.getCenter();
     }
 
+    private _subscriptions: ex.Subscription[] = [];
     override onActivate(): void {
         this.resetAndLoad();
         this.turnManager.start();
         Resources.LevelMusic2.loop = true;
         Resources.LevelMusic2.play();
 
-        this.engine.input.keyboard.on('press', (evt) => {
+        this._subscriptions.push(
+            this.engine.input.keyboard.once('press', (evt) => {
             // DELETEME for debugging
             if (evt.key === ex.Keys.W) {
                 (this.players[1] as ComputerPlayer).lose();
@@ -94,7 +102,7 @@ export class LevelBase extends ex.Scene {
             if (evt.key === ex.Keys.L) {
                 (this.players[0] as HumanPlayer).lose();
             }
-        });
+        }));
 
     }
 
@@ -102,6 +110,7 @@ export class LevelBase extends ex.Scene {
         // TODO deactivate event handlers on types that have them!!
         Resources.LevelMusic2.instances.forEach(i => i.stop());
         Resources.LevelMusic2.stop();
+        this._subscriptions.forEach(s => s.close());
     }
 
     parse(levelData: LevelData): Board {
@@ -123,7 +132,7 @@ export class LevelBase extends ex.Scene {
                 const terrain = data.charAt(0) as Terrain;
                 let unit: Unit | null = null;
                 if (data.length === 3) {
-                    const unitType: UnitType = data.charAt(1) === 'K' ? 'Knight' : 'Spider';
+                    const unitType: UnitType = CharToUnit[data.charAt(1) as 'K' | 'S' | 'M']
                     const playerIndex = (+data.charAt(2)) - 1;
 
                     unit = new Unit(x, y, unitType, board, this.players[playerIndex]);

@@ -56,19 +56,24 @@ export class StartScreen extends ex.Scene {
         this.add(this.instructions);
     }
 
+    _subscriptions: ex.Subscription[] = [];
     onActivate(): void {
+        console.log('activate start screen')
         Resources.TitleMusic.loop = true;
         Resources.TitleMusic.play();
 
-        this.engine.input.pointers.primary.once('down', () => {
+        this._subscriptions.push(
+            this.engine.input.pointers.primary.once('down', () => {
+                this.engine.goToScene('tutorial');
+        }));
+        this._subscriptions.push(
+            this.engine.input.keyboard.once('press', () => {
             this.engine.goToScene('tutorial');
-        });
-        this.engine.input.keyboard.once('press', () => {
-            this.engine.goToScene('tutorial');
-        });
+        }));
 
     }
     onDeactivate(): void {
         Resources.TitleMusic.stop();
+        this._subscriptions.forEach(h => h.close());
     }
 }
