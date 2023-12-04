@@ -42,6 +42,10 @@ export class UIManager {
         return pageDistance.x;
     }
 
+    dismissAll() {
+        this.unitMenu.hide();
+    }
+
     showUnitMenu(unit: Unit, options: MenuOptions): UnitMenu {
         const menu = this.unitMenu;
         const pagePos = this.engine.screen.worldToPageCoordinates(unit.pos);

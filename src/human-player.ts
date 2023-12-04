@@ -62,7 +62,9 @@ export class HumanPlayer extends Player {
                     await this.maybeSelectUnit(unit.cell);
                 } else {
                     await this.maybeAttack(unit, maybeClickedCell);
-                    await this.maybeSelectUnit(unit.cell);
+                    if (!this.hasWon()) {
+                        await this.maybeSelectUnit(unit.cell);
+                    }
                 }
             // no unit selected, make a selection
             } else {
@@ -129,6 +131,11 @@ export class HumanPlayer extends Player {
             this.humanMove.resolve();
         } else {
             this.selectionManager.reset();
+        }
+
+        if (this.hasWon()) {
+            this.humanMove.resolve();
+            this.uiManger.dismissAll();
         }
     }
 
@@ -201,7 +208,7 @@ export class HumanPlayer extends Player {
         const units = this.board.getUnits()
             .filter(u => u.player === this)
             .filter(u => u.hasActions());
-        return units.length > 0 && !this.passed;
+        return units.length > 0 && !this.passed && !this.hasWon();
     }
 
     override async makeMove(): Promise<boolean> {

@@ -204,10 +204,10 @@ export class TurnManager {
         ).toPromise();
     }
 
-    async checkWin() {
-        if (this.currentPlayer.hasLost()) {
-            console.log('Player lost!', this.currentPlayer.name);
-            if (this.currentPlayer instanceof HumanPlayer) {
+    async checkWin(player: Player) {
+        if (player.hasLost()) {
+            console.log('Player lost!', player.name);
+            if (player instanceof HumanPlayer) {
                 await this.showGameOver();
                 this.engine.input.pointers.once('down', () => {
                     Resources.LevelMusic2.stop();
@@ -215,7 +215,7 @@ export class TurnManager {
                 });
                 return true;
             }
-            if (this.currentPlayer instanceof ComputerPlayer) {
+            if (player instanceof ComputerPlayer) {
                 await this.showVictory();
                 this.engine.input.pointers.once('down', () => {
                     setTimeout(() => {
@@ -231,7 +231,7 @@ export class TurnManager {
     async start() {
         while (this.maxTurns > 0) {
             console.log('Current player turn:', this.currentPlayer.name);
-            if (await this.checkWin()) return;
+            if (await this.checkWin(this.currentPlayer)) return;
             this.selectionManager.selectPlayer(this.currentPlayer);
             this.showTurnDisplay();
             await this.currentPlayer.turnStart();

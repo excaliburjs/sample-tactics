@@ -24,6 +24,12 @@ export abstract class Player {
         return units.length === 0;
     }
 
+    hasWon() {
+        const units = this.board.getUnits()
+            .filter(u => u.player !== this)
+        return units.length === 0;
+    }
+
     async turnEnd(): Promise<void> {
         this.active = false;
     }
