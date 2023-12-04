@@ -1,6 +1,6 @@
 import * as ex from "excalibur";
 
-import { KnightIdle, SlimeIdle, SpiderIdle } from "./resources";
+import { CrabIdle, KnightIdle, SlimeIdle, SpiderIdle } from "./resources";
 const seed = Date.now();
 console.log("Random seed:", seed);
 export const RANDOM = new ex.Random(seed);
@@ -9,7 +9,7 @@ export const SCALE = ex.vec(3, 3);
 export const BOARD_OFFSET = ex.vec(32 * 3, 32 * 4);
 export const ENEMY_SPEED = 200;
 
-export type UnitType = "Knight" | "Spider" | "Slime";
+export type UnitType = "Knight" | "Spider" | "Slime" | "Crab";
 export interface UnitConfig {
     graphics: {
         offset: ex.Vector,
@@ -27,7 +27,7 @@ export const UNIT_CONFIG: Record<UnitType, UnitConfig> = {
             idle: KnightIdle
         },
         health: 5,
-        movement: 3,
+        movement: 2,
         attack: 2,
         range: 1
     },
@@ -37,7 +37,7 @@ export const UNIT_CONFIG: Record<UnitType, UnitConfig> = {
             idle: SpiderIdle
         },
         health: 3,
-        movement: 3,
+        movement: 2,
         attack: 1,
         range: 1
     },
@@ -49,6 +49,16 @@ export const UNIT_CONFIG: Record<UnitType, UnitConfig> = {
         health: 2,
         movement: 1,
         attack: 4,
+        range: 1
+    },
+    Crab: {
+        graphics: {
+            offset: ex.vec(0, 8 * SCALE.y),
+            idle: CrabIdle
+        },
+        health: 3,
+        movement: 3,
+        attack: 2,
         range: 1
     }
 } as const;

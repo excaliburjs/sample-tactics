@@ -5,6 +5,7 @@ import TitleImagePath from '../res/title.png';
 import KnightSpriteSheetPath from '../res/KnightSheet.png';
 import SpiderSheetPath from '../res/SpiderSheet.png';
 import SlimeSheetPath from '../res/slime.png';
+import CrabSheetPath from '../res/crab.png';
 import HeartSheetPath from '../res/HeartSheet.png';
 import UISheetPath from '../res/UISheet.png';
 import TerrainSheetPath from '../res/TerrainSheet.png';
@@ -28,6 +29,7 @@ export const Resources = {
     KnightSpriteSheet: new ex.ImageSource(KnightSpriteSheetPath),
     SpiderSheet: new ex.ImageSource(SpiderSheetPath),
     SlimeSheet: new ex.ImageSource(SlimeSheetPath),
+    CrabSheet: new ex.ImageSource(CrabSheetPath),
     HeartSheet: new ex.ImageSource(HeartSheetPath),
     UISheet: new ex.ImageSource(UISheetPath),
     TerrainSheet: new ex.ImageSource(TerrainSheetPath),
@@ -156,6 +158,27 @@ export const SlimeSpriteSheet = ex.SpriteSheet.fromImageSource({
 
 export const SlimeIdle =  ex.Animation.fromSpriteSheetCoordinates({
     spriteSheet: SlimeSpriteSheet,
+    strategy: ex.AnimationStrategy.Loop,
+    frameCoordinates: [
+        {x: 0, y: 0, duration: 200},
+        {x: 1, y: 0, duration: 200},
+        {x: 2, y: 0, duration: 200},
+        {x: 3, y: 0, duration: 200}
+    ]
+});
+
+export const CrabSpriteSheet = ex.SpriteSheet.fromImageSource({
+    image: Resources.CrabSheet,
+    grid: {
+        rows: 1,
+        columns: 4,
+        spriteHeight: 32,
+        spriteWidth: 32
+    }
+});
+
+export const CrabIdle =  ex.Animation.fromSpriteSheetCoordinates({
+    spriteSheet: CrabSpriteSheet,
     strategy: ex.AnimationStrategy.Loop,
     frameCoordinates: [
         {x: 0, y: 0, duration: 200},

@@ -1,7 +1,7 @@
 import * as ex from 'excalibur';
 import { Board } from '../board';
 import { Terrain } from '../cell';
-import { UnitType } from '../config';
+import { SCALE, UnitType } from '../config';
 import { Unit } from '../unit';
 import { Player } from '../player';
 import { HumanPlayer } from '../human-player';
@@ -47,7 +47,8 @@ export interface LevelData {
 export const CharToUnit = {
     K: 'Knight',
     S: 'Spider',
-    M: 'Slime'
+    M: 'Slime',
+    C: 'Crab'
 } as const;
 
 export class LevelBase extends ex.Scene {
@@ -58,12 +59,26 @@ export class LevelBase extends ex.Scene {
     engine!: ex.Engine;
     players!: Player[];
     turnManager!: TurnManager;
+    levelName!: ex.Actor;
     constructor(public levelData: LevelData, public name: string) {
         super();
     }
 
     override onInitialize(engine: ex.Engine): void {
         this.engine = engine;
+        // Add entities to resetAndLoad()!
+    }
+
+    async showLevelName() {
+        const transitionTime = 1500;
+        await this.levelName.actions.runAction(
+            new ex.ParallelActions([
+                new ex.ActionSequence(this.levelName, ctx => 
+                    ctx.easeTo(ex.vec(600, 50), transitionTime, ex.EasingFunctions.EaseInOutCubic)),
+                new ex.ActionSequence(this.levelName, ctx => 
+                    ctx.fade(1, transitionTime))
+            ])
+        ).toPromise();
     }
 
     resetAndLoad() {
@@ -84,12 +99,39 @@ export class LevelBase extends ex.Scene {
         this.add(DustParticles);
 
         this.camera.pos = this.board.getCenter();
+
+        const levelName = new ex.Text({
+            text: this.levelData.displayName,
+            font: new ex.Font({
+                family: 'notjamslab14',
+                size: 16 * SCALE.x,
+                unit: ex.FontUnit.Px,
+                color: ex.Color.White,
+                baseAlign: ex.BaseAlign.Top,
+                quality: 4
+            }),
+        });
+
+        this.levelName = new ex.Actor({
+            name: 'level',
+            pos: ex.vec(2000, 50),
+            coordPlane: ex.CoordPlane.Screen,
+            color: new ex.Color(50, 240, 50, .4),
+            width: 400,
+            height: 100,
+            z: 10
+        });
+        this.levelName.graphics.opacity = 0;
+        this.levelName.graphics.add('text', levelName);
+        this.levelName.graphics.show('text')
+        this.add(this.levelName);
     }
 
     private _subscriptions: ex.Subscription[] = [];
-    override onActivate(): void {
+    override onActivate() {
         this.resetAndLoad();
         this.turnManager.start();
+        this.showLevelName();
         Resources.LevelMusic2.loop = true;
         Resources.LevelMusic2.play();
 
@@ -132,7 +174,7 @@ export class LevelBase extends ex.Scene {
                 const terrain = data.charAt(0) as Terrain;
                 let unit: Unit | null = null;
                 if (data.length === 3) {
-                    const unitType: UnitType = CharToUnit[data.charAt(1) as 'K' | 'S' | 'M']
+                    const unitType: UnitType = CharToUnit[data.charAt(1) as 'K' | 'S' | 'M' | 'C']
                     const playerIndex = (+data.charAt(2)) - 1;
 
                     unit = new Unit(x, y, unitType, board, this.players[playerIndex]);
