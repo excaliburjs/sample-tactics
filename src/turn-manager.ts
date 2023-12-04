@@ -204,31 +204,34 @@ export class TurnManager {
         ).toPromise();
     }
 
+    async checkWin() {
+        if (this.currentPlayer.hasLost()) {
+            console.log('Player lost!', this.currentPlayer.name);
+            if (this.currentPlayer instanceof HumanPlayer) {
+                await this.showGameOver();
+                this.engine.input.pointers.once('down', () => {
+                    Resources.LevelMusic2.stop();
+                    this.engine.goToScene(this.level.levelData.name);
+                });
+                return true;
+            }
+            if (this.currentPlayer instanceof ComputerPlayer) {
+                await this.showVictory();
+                this.engine.input.pointers.once('down', () => {
+                    setTimeout(() => {
+                        this.engine.goToScene(this.level.levelData.nextLevel);
+                    });
+                });
+                return true;
+            }
+        }
+        return false;
+    }
+
     async start() {
-        // TODO win condition
         while (this.maxTurns > 0) {
             console.log('Current player turn:', this.currentPlayer.name);
-            if (this.currentPlayer.hasLost()) {
-                console.log('Player lost!', this.currentPlayer.name);
-                if (this.currentPlayer instanceof HumanPlayer) {
-                    await this.showGameOver();
-                    this.engine.input.pointers.once('down', () => {
-                        Resources.LevelMusic2.stop();
-                        this.engine.goToScene(this.level.levelData.name);
-                    });
-                    return;
-                }
-                if (this.currentPlayer instanceof ComputerPlayer) {
-                    await this.showVictory();
-                    this.engine.input.pointers.once('down', () => {
-                        setTimeout(() => {
-                            this.engine.goToScene(this.level.levelData.nextLevel);
-                        });
-                    });
-                    return;
-                }
-            }
-
+            if (await this.checkWin()) return;
             this.selectionManager.selectPlayer(this.currentPlayer);
             this.showTurnDisplay();
             await this.currentPlayer.turnStart();
