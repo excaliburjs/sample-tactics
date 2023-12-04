@@ -71,14 +71,15 @@ export class LevelBase extends ex.Scene {
 
     async showLevelName() {
         const transitionTime = 1500;
-        await this.levelName.actions.runAction(
-            new ex.ParallelActions([
-                new ex.ActionSequence(this.levelName, ctx => 
-                    ctx.easeTo(ex.vec(600, 50), transitionTime, ex.EasingFunctions.EaseInOutCubic)),
-                new ex.ActionSequence(this.levelName, ctx => 
-                    ctx.fade(1, transitionTime))
-            ])
-        ).toPromise();
+        await this.levelName.actions.easeTo(ex.vec(600, 50), transitionTime, ex.EasingFunctions.EaseInOutCubic).toPromise();
+        // await this.levelName.actions.runAction(
+        //     new ex.ParallelActions([
+        //         new ex.ActionSequence(this.levelName, ctx => 
+        //             ctx.easeTo(ex.vec(600, 50), transitionTime, ex.EasingFunctions.EaseInOutCubic)),
+        //         new ex.ActionSequence(this.levelName, ctx => 
+        //             ctx.fade(1, transitionTime))
+        //     ])
+        // ).toPromise();
     }
 
     resetAndLoad() {
@@ -104,13 +105,14 @@ export class LevelBase extends ex.Scene {
             text: this.levelData.displayName,
             font: new ex.Font({
                 family: 'notjamslab14',
-                size: 16 * SCALE.x,
+                size: 16,
                 unit: ex.FontUnit.Px,
                 color: ex.Color.White,
                 baseAlign: ex.BaseAlign.Top,
-                quality: 1
+                quality: 2
             }),
         });
+        levelName.scale = SCALE;
 
         this.levelName = new ex.Actor({
             name: 'level',
@@ -121,7 +123,7 @@ export class LevelBase extends ex.Scene {
             height: 100,
             z: 10
         });
-        this.levelName.graphics.opacity = 0;
+        // this.levelName.graphics.opacity = 0;
         this.levelName.graphics.add('text', levelName);
         this.levelName.graphics.show('text')
         this.add(this.levelName);

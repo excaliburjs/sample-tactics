@@ -49,13 +49,14 @@ export class Tutorial extends LevelBase {
             text: `S or Tap to Skip!`,
             font: new ex.Font({
                 family: 'notjamslab14',
-                size: 32 * SCALE.x,
+                size: 16,
                 unit: ex.FontUnit.Px,
                 color: ex.Color.White,
                 baseAlign: ex.BaseAlign.Top,
-                quality: 1
+                quality: 2
             }),
         });
+        tutorialDirections.scale = SCALE;
 
         this.tutorialDirections = new ex.Actor({
             name: 'directions',
@@ -66,7 +67,7 @@ export class Tutorial extends LevelBase {
             height: 100,
             z: 10
         });
-        this.tutorialDirections.graphics.opacity = 0;
+        // this.tutorialDirections.graphics.opacity = 0;
         this.tutorialDirections.graphics.add('text', tutorialDirections);
         this.tutorialDirections.graphics.show('text')
         engine.add(this.tutorialDirections);
@@ -74,14 +75,15 @@ export class Tutorial extends LevelBase {
 
     async showSkip() {
         const transitionTime = 1200;
-        await this.tutorialDirections.actions.runAction(
-            new ex.ParallelActions([
-                new ex.ActionSequence(this.tutorialDirections, ctx => 
-                    ctx.easeTo(this.centerScreen, transitionTime, ex.EasingFunctions.EaseInOutCubic)),
-                new ex.ActionSequence(this.tutorialDirections, ctx => 
-                    ctx.fade(1, transitionTime))
-            ])
-        ).toPromise();
+        await this.tutorialDirections.actions.easeTo(this.centerScreen, transitionTime, ex.EasingFunctions.EaseInOutCubic).toPromise();
+        // await this.tutorialDirections.actions.runAction(
+        //     new ex.ParallelActions([
+        //         new ex.ActionSequence(this.tutorialDirections, ctx => 
+        //             ctx.easeTo(this.centerScreen, transitionTime, ex.EasingFunctions.EaseInOutCubic)),
+        //         new ex.ActionSequence(this.tutorialDirections, ctx => 
+        //             ctx.fade(1, transitionTime))
+        //     ])
+        // ).toPromise();
     }
 
     async moveToUnit1() {
