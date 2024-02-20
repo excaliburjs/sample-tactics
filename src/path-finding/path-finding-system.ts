@@ -3,10 +3,10 @@ import { PathNodeComponent } from "./path-node-component";
 
 
 export class PathFinder {
-    query: ex.Query<PathNodeComponent>;
+    query: ex.Query<typeof PathNodeComponent>;
 
     constructor(scene: ex.Scene) {
-        this.query = scene.world.queryManager.createQuery([PathNodeComponent.type]);
+        this.query = scene.world.queryManager.createQuery([PathNodeComponent]);
     }
 
     heuristicWeight = 1;
