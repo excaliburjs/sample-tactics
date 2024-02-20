@@ -66,20 +66,21 @@ export class LevelBase extends ex.Scene {
 
     override onInitialize(engine: ex.Engine): void {
         this.engine = engine;
+        this.input.keyboard.on('press', (evt) => {
+            // DELETEME for debugging
+            if (evt.key === ex.Keys.W) {
+                (this.players[1] as ComputerPlayer).lose();
+            }
+            if (evt.key === ex.Keys.L) {
+                (this.players[0] as HumanPlayer).lose();
+            }
+        });
         // Add entities to resetAndLoad()!
     }
 
     async showLevelName() {
         const transitionTime = 1500;
         await this.levelName.actions.easeTo(ex.vec(600, 50), transitionTime, ex.EasingFunctions.EaseInOutCubic).toPromise();
-        // await this.levelName.actions.runAction(
-        //     new ex.ParallelActions([
-        //         new ex.ActionSequence(this.levelName, ctx => 
-        //             ctx.easeTo(ex.vec(600, 50), transitionTime, ex.EasingFunctions.EaseInOutCubic)),
-        //         new ex.ActionSequence(this.levelName, ctx => 
-        //             ctx.fade(1, transitionTime))
-        //     ])
-        // ).toPromise();
     }
 
     resetAndLoad() {
@@ -118,14 +119,16 @@ export class LevelBase extends ex.Scene {
             name: 'level',
             pos: ex.vec(2000, 50),
             coordPlane: ex.CoordPlane.Screen,
+            z: 10
+        });
+        this.levelName.graphics.add('text', levelName);
+        this.levelName.graphics.use('text')
+        // cyan background using child actor
+        this.levelName.addChild(new ex.Actor({
             color: new ex.Color(50, 240, 50, .4),
             width: 400,
             height: 100,
-            z: 10
-        });
-        // this.levelName.graphics.opacity = 0;
-        this.levelName.graphics.add('text', levelName);
-        this.levelName.graphics.show('text')
+        }));
         this.add(this.levelName);
     }
 
@@ -136,18 +139,6 @@ export class LevelBase extends ex.Scene {
         this.showLevelName();
         Resources.LevelMusic2.loop = true;
         Resources.LevelMusic2.play();
-
-        this._subscriptions.push(
-            this.engine.input.keyboard.once('press', (evt) => {
-            // DELETEME for debugging
-            if (evt.key === ex.Keys.W) {
-                (this.players[1] as ComputerPlayer).lose();
-            }
-            if (evt.key === ex.Keys.L) {
-                (this.players[0] as HumanPlayer).lose();
-            }
-        }));
-
     }
 
     override onDeactivate(): void {

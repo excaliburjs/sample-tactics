@@ -17,6 +17,7 @@ export enum Terrain {
 }
 
 export class Cell extends ex.Actor {
+    decoration: ex.Actor;
     sprite!: ex.Sprite;
     pathNode: PathNodeComponent;
     unit: Unit | null = null;
@@ -38,6 +39,9 @@ export class Cell extends ex.Actor {
             ),
             anchor: ex.Vector.Zero
         });
+        this.decoration = new ex.Actor({anchor: ex.vec(0, 0)});
+        this.addChild(this.decoration);
+
         this.pathNode = new PathNodeComponent(this.pos);
         this.addComponent(this.pathNode);
 
@@ -51,10 +55,10 @@ export class Cell extends ex.Actor {
         AttackHighlightAnimation.scale = SCALE;
         AttackHighlightAnimation.opacity = 0.75;
         CursorAnimation.scale = SCALE;
-        this.graphics.add('range', RangeHighlightAnimation);
-        this.graphics.add('path', PathHighlightAnimation);
-        this.graphics.add('attack', AttackHighlightAnimation);
-        this.graphics.add('cursor', CursorAnimation);
+        this.decoration.graphics.add('range', RangeHighlightAnimation);
+        this.decoration.graphics.add('path', PathHighlightAnimation);
+        this.decoration.graphics.add('attack', AttackHighlightAnimation);
+        this.decoration.graphics.add('cursor', CursorAnimation);
     }
 
     get terrain() {
@@ -97,22 +101,20 @@ export class Cell extends ex.Actor {
 
     toggleHighlight(show: boolean, type: 'range' | 'path' | 'attack') {
         // reset highlight
-        this.graphics.hide('range');
-        this.graphics.hide('path');
-        this.graphics.hide('attack');
+        this.decoration.graphics.hide();
 
         if (show) {
-            this.graphics.show(type);
+            this.decoration.graphics.use(type);
         } else {
-            this.graphics.hide(type);
+            this.decoration.graphics.hide();
         }
     }
 
     toggleCursor(show: boolean) {
         if (show) {
-            this.graphics.show('cursor');
+            this.decoration.graphics.use('cursor');
         } else {
-            this.graphics.hide('cursor');
+            this.decoration.graphics.hide();
         }
     }
 

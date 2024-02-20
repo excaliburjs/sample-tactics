@@ -6,15 +6,15 @@
     "start": "parcel serve index.html",
     "build": "parcel build ./index.html --dist-dir ./dist --public-url ./"
   },
-  "author": "eonarheim",
+  "author": "Erik Onarheim",
   "license": "BSD-2-Clause",
   "dependencies": {
-    "excalibur": "0.28.2",
-    "lit": "3.1.0"
+    "excalibur": "0.30.0-alpha.942",
+    "lit": "3.1.2"
   },
   "devDependencies": {
-    "parcel": "2.10.2",
+    "parcel": "2.11.0",
     "ts-lit-plugin": "2.0.1",
-    "typescript": "5.3.2"
+    "typescript": "5.3.3"
   }
 }

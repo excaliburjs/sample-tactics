@@ -4,6 +4,7 @@
 
 ## UI
 * [x] Add social card!
+* [ ] Big bright cursor for selections
 
 ## Gameplay
 * [x] Start Screen

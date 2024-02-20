@@ -49,14 +49,17 @@ export class TurnManager {
             name: 'turn text',
             pos: this.topScreen,
             coordPlane: ex.CoordPlane.Screen,
-            color: new ex.Color(240, 50, 50, .4),
-            width: screenWidth,
-            height: 100,
             z: 10
         });
         this.turnActor.graphics.opacity = 0;
         this.turnActor.graphics.add('text', this.turnText);
-        this.turnActor.graphics.show('text')
+        this.turnActor.graphics.use('text')
+        // background graphic
+        this.turnActor.addChild(new ex.Actor({
+            color: new ex.Color(240, 50, 50, .4),
+            width: screenWidth,
+            height: 100,
+        }));
         engine.add(this.turnActor);
 
         const victory = new ex.Text({
@@ -118,6 +121,7 @@ export class TurnManager {
                 size: 32 * SCALE.x,
                 unit: ex.FontUnit.Px,
                 color: ex.Color.White,
+                textAlign: ex.TextAlign.Center,
                 baseAlign: ex.BaseAlign.Top,
                 quality: 4
             }),
@@ -129,25 +133,29 @@ export class TurnManager {
                 size: 32 * SCALE.x,
                 unit: ex.FontUnit.Px,
                 color: ex.Color.White,
+                textAlign: ex.TextAlign.Center,
                 baseAlign: ex.BaseAlign.Top,
                 quality: 4
             }),
+        });
+        const failureGroup = new ex.GraphicsGroup({
+            members: [
+                new ex.Rectangle({
+                    width: screenWidth, height: 250, color: new ex.Color(240, 50, 50, .4)
+                }),
+                { graphic: failureText1, useBounds: false, offset: ex.vec(screenWidth/2, 0) },
+                { graphic: failureText2, useBounds: false, offset: ex.vec(screenWidth/2, 100) },
+            ]
         });
 
         this.failure = new ex.Actor({
             name: 'failure text',
             pos: this.topScreen,
             coordPlane: ex.CoordPlane.Screen,
-            color: new ex.Color(240, 50, 50, .4),
-            width: screenWidth,
-            height: 250,
             z: 10
         });
         this.failure.graphics.opacity = 0;
-        this.failure.graphics.add('text1', failureText1);
-        this.failure.graphics.add('text2', failureText2);
-        this.failure.graphics.show('text1', { offset: ex.vec(0, -50)})
-        this.failure.graphics.show('text2', {offset: ex.vec(0, 50)})
+        this.failure.graphics.use(failureGroup);
         engine.add(this.failure);
     }
 

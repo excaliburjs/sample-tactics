@@ -10,7 +10,8 @@ const game = new ex.Engine({
     width: 800,
     height: 800,
     displayMode: ex.DisplayMode.FitScreenAndFill,
-    antialiasing: false,
+    pixelArt: true,
+    pixelRatio: 2,
     suppressHiDPIScaling: true,
     configurePerformanceCanvas2DFallback: {
         allow: false

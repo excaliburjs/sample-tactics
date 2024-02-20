@@ -30,6 +30,14 @@ export class Tutorial extends LevelBase {
     
     onInitialize(engine: ex.Engine): void {
         super.onInitialize(engine);
+        this.input.keyboard.on('press', evt => {
+            if (evt.key === ex.Keys.S) {
+                this.engine.goToScene('level1');
+            }
+        });
+        this.input.pointers.on('down', evt => {
+            this.engine.goToScene('level1');
+        });
         this.resetAndLoad();
         const unit = this.board.cells[0].unit;
         if (unit) {
@@ -76,14 +84,6 @@ export class Tutorial extends LevelBase {
     async showSkip() {
         const transitionTime = 1200;
         await this.tutorialDirections.actions.easeTo(this.centerScreen, transitionTime, ex.EasingFunctions.EaseInOutCubic).toPromise();
-        // await this.tutorialDirections.actions.runAction(
-        //     new ex.ParallelActions([
-        //         new ex.ActionSequence(this.tutorialDirections, ctx => 
-        //             ctx.easeTo(this.centerScreen, transitionTime, ex.EasingFunctions.EaseInOutCubic)),
-        //         new ex.ActionSequence(this.tutorialDirections, ctx => 
-        //             ctx.fade(1, transitionTime))
-        //     ])
-        // ).toPromise();
     }
 
     async moveToUnit1() {
@@ -170,16 +170,7 @@ export class Tutorial extends LevelBase {
     async onActivate() {
         this.showSkip();
         console.log('activate tutorial');
-        this._subs.push(
-            this.engine.input.keyboard.on('press', evt => {
-                if (evt.key === ex.Keys.S) {
-                    this.engine.goToScene('level1');
-                }
-        }));
-        this._subs.push(
-            this.engine.input.pointers.primary.on('down', evt => {
-                this.engine.goToScene('level1');
-        }));
+        
 
         Resources.LevelMusic2.loop = true;
         Resources.LevelMusic2.play();
@@ -239,7 +230,6 @@ export class Tutorial extends LevelBase {
 
     onDeactivate(): void {
         Resources.LevelMusic2.stop();
-        this._subs.forEach(s => s.close());
     }
 
 }
