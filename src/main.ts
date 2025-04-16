@@ -76,12 +76,12 @@ export const Level3Data: LevelData = {
     maxTurns: 100,
     players: ['human', 'computer'],
     data: [
-        'S', 'S',   'SM2', 'S',  'SK1',   'W',
-        'SK1', 'S',   'S',   'SK1', 'W',   'W',
-        'SK1', 'S',   'W',   'W', 'W',   'W',
-        'S',   'S',   'S',   'W', 'W',   'W',
-        'S',   'S',   'SM2',   'SC2', 'SC2',   'W',
-        'S',   'SC2',   'S',   'SM2', 'SM2', 'W',
+        'S', 'S', 'SM2', 'S', 'SK1', 'W',
+        'SK1', 'S', 'S', 'SK1', 'W', 'W',
+        'SK1', 'S', 'W', 'W', 'W', 'W',
+        'S', 'S', 'S', 'W', 'W', 'W',
+        'S', 'S', 'SM2', 'SC2', 'SC2', 'W',
+        'S', 'SC2', 'S', 'SM2', 'SM2', 'W',
     ]
 }
 
@@ -89,5 +89,7 @@ const level3 = new LevelBase(Level3Data, 'level3')
 game.addScene(level3.name, level3);
 
 game.start(loader).then(() => {
+    game.screen.pixelRatioOverride = 4;
+    game.screen.applyResolutionAndViewport();
     game.goToScene('start');
 });
