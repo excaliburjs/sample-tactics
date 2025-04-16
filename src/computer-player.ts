@@ -131,8 +131,11 @@ export class ComputerPlayer extends Player {
                     // try again to attack
                     await this.maybeAttack(unit, closestEnemy);
                 }
+
                 this.selectionManger.reset();
             }
+            // pass if nothing done
+            unit.pass();
         }
 
         return true;

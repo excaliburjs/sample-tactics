@@ -20,13 +20,13 @@ export class Unit extends ex.Actor {
     health: number;
     damageManager!: DamageManager;
     animationManger!: AnimationManager;
-    constructor(x: number, y: number, unitType: UnitType, board: Board, public player: Player)  {
+    constructor(x: number, y: number, unitType: UnitType, board: Board, public player: Player) {
         super({
             name: unitType,
             anchor: ex.vec(0, 0),
             z: 2
         });
-        this.unitConfig = {...UNIT_CONFIG[unitType]};
+        this.unitConfig = { ...UNIT_CONFIG[unitType] };
 
         this.health = this.unitConfig.health;
 
@@ -70,7 +70,7 @@ export class Unit extends ex.Actor {
             const heart = HeartSpriteSheet.getSprite(ex.clamp(this.health, 0, 5), 0);
             if (heart) {
                 heart.scale = SCALE;
-                heart.draw(ctx, 
+                heart.draw(ctx,
                     10 * SCALE.x + this.unitConfig.graphics.offset.x,
                     10 * SCALE.y + this.unitConfig.graphics.offset.y
                 );
@@ -154,12 +154,13 @@ export class Unit extends ex.Actor {
                     return cell.unit.player !== this.player;
                 }
                 return false;
-            } );
+            });
             return cellsWithEnemies;
         }
     }
 
     async attack(other: Unit) {
+        this.attacked = true;
         other.health -= this.unitConfig.attack;
         Resources.HitSound.play();
 
