@@ -5,14 +5,14 @@ import { Resources } from "./resources";
 
 export class AudioManager {
     static levels = new Map<ex.Sound, number>([
-        [Resources.HitSound, 1.0],
-        [Resources.MoveSound, 1.0],
-        [Resources.SelectSound, 1.0],
-        [Resources.TargetSelectSound, 1.0],
-        [Resources.LevelMusic1, .05],
-        [Resources.LevelMusic2, .05],
-        [Resources.ExplosionSound, 1.0],
-        [Resources.TitleMusic, .05],
+        [Resources.HitSound, .5],
+        [Resources.MoveSound, .5],
+        [Resources.SelectSound, .5],
+        [Resources.TargetSelectSound, .5],
+        [Resources.LevelMusic1, .25],
+        [Resources.LevelMusic2, .25],
+        [Resources.ExplosionSound, .20],
+        [Resources.TitleMusic, .25],
     ])
 
     static init() {

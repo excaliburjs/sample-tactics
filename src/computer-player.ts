@@ -14,13 +14,6 @@ export class ComputerPlayer extends Player {
         super(name, board);
     }
 
-    override async turnStart(): Promise<void> {
-        this.active = true;
-    }
-    override async turnEnd(): Promise<void> {
-        this.active = false;
-    }
-
     findClosestEnemy(unit: Unit): Unit | null {
         const enemyCells = this.board.getUnits()
             .filter(u => u.player !== this)
@@ -94,13 +87,11 @@ export class ComputerPlayer extends Player {
             attacked = true;
         }
 
-        return attacked
+        return attacked;
     }
 
     override async makeMove(): Promise<boolean> {
-        const enemyUnits = this.board.getUnits().filter(u => u.player !== this);
-
-        const units = this.board.getUnits().filter(u => u.player === this);
+        const units = this.board.getUnits().filter(u => u.player === this && u.hasActions());
 
 
         for (let unit of units) {
@@ -150,7 +141,7 @@ export class ComputerPlayer extends Player {
     lose() {
         this.active = false;
         const computerUnits = this.board.getUnits().filter(u => u.player instanceof ComputerPlayer);
-        computerUnits.forEach(u => { 
+        computerUnits.forEach(u => {
             u.health = 0
             u.cell?.removeUnit(u);
         });
