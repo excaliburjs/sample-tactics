@@ -8,6 +8,7 @@ import SlimeSheetPath from '../res/slime.png';
 import CrabSheetPath from '../res/crab.png';
 import HeartSheetPath from '../res/HeartSheet.png';
 import UISheetPath from '../res/UISheet.png';
+import SelectionSheet from '../res/selection.png';
 import TerrainSheetPath from '../res/TerrainSheet.png';
 import HighlightSheetPath from '../res/HighlightSheet.png';
 import RedHighlightSheetPath from '../res/RedHighlightSheet.png';
@@ -36,6 +37,7 @@ export const Resources = {
     HighlightSheet: new ex.ImageSource(HighlightSheetPath),
     RedHighlightSheet: new ex.ImageSource(RedHighlightSheetPath),
     CloudSheet: new ex.ImageSource(CloudSheetPath),
+    SelectionSprite: new ex.ImageSource(SelectionSheet),
     SmokeSheet: new ex.ImageSource(SmokePath),
     TutorialText: new ex.ImageSource(TutorialTextPath),
     ExplosionSheet: new ex.ImageSource(ExplosionPath),
@@ -62,23 +64,11 @@ export const TutorialTextSheet = ex.SpriteSheet.fromImageSource({
 export const TerrainSpriteSheet = ex.SpriteSheet.fromImageSource({
     image: Resources.TerrainSheet,
     grid: {
-        rows: 5,
-        columns: 5,
-        spriteHeight: 32,
+        rows: 1,
+        columns: 6,
+        spriteHeight: 48,
         spriteWidth: 32
     }
-});
-
-export const CursorAnimation = ex.Animation.fromSpriteSheetCoordinates({
-    spriteSheet: TerrainSpriteSheet,
-    frameCoordinates: [
-        { x: 1, y: 1, duration: 200 },
-        { x: 2, y: 1, duration: 200 },
-        { x: 3, y: 1, duration: 200 },
-        { x: 3, y: 1, duration: 200 },
-        { x: 3, y: 1, duration: 200 },
-        { x: 2, y: 1, duration: 200 },
-    ]
 });
 
 export const HighlightSpriteSheet = ex.SpriteSheet.fromImageSource({
@@ -90,40 +80,6 @@ export const HighlightSpriteSheet = ex.SpriteSheet.fromImageSource({
         spriteWidth: 32
     }
 });
-export const RedHighlightSpriteSheet = ex.SpriteSheet.fromImageSource({
-    image: Resources.RedHighlightSheet,
-    grid: {
-        rows: 1,
-        columns: 5,
-        spriteHeight: 32,
-        spriteWidth: 32
-    }
-});
-
-export const HighlightAnimation = ex.Animation.fromSpriteSheetCoordinates({
-    spriteSheet: HighlightSpriteSheet,
-    strategy: ex.AnimationStrategy.Loop,
-    frameCoordinates: [
-        {x: 0, y: 0, duration: 100 },
-        {x: 1, y: 0, duration: 100 },
-        {x: 2, y: 0, duration: 100 },
-        {x: 3, y: 0, duration: 100 },
-        {x: 4, y: 0, duration: 100 },
-    ]
-});
-
-export const RedHighlightAnimation = ex.Animation.fromSpriteSheetCoordinates({
-    spriteSheet: RedHighlightSpriteSheet,
-    strategy: ex.AnimationStrategy.Loop,
-    frameCoordinates: [
-        {x: 0, y: 0, duration: 100 },
-        {x: 1, y: 0, duration: 100 },
-        {x: 2, y: 0, duration: 100 },
-        {x: 3, y: 0, duration: 100 },
-        {x: 4, y: 0, duration: 100 },
-    ]
-})
-
 
 export const SpiderSpriteSheet = ex.SpriteSheet.fromImageSource({
     image: Resources.SpiderSheet,
@@ -137,7 +93,7 @@ export const SpiderSpriteSheet = ex.SpriteSheet.fromImageSource({
 
 export const SpiderIdle =  ex.Animation.fromSpriteSheetCoordinates({
     spriteSheet: SpiderSpriteSheet,
-    strategy: ex.AnimationStrategy.Loop,
+    strategy: ex.AnimationStrategy.PingPong,
     frameCoordinates: [
         {x: 0, y: 0, duration: 200},
         {x: 1, y: 0, duration: 200},
@@ -214,8 +170,8 @@ export const HeartSpriteSheet = ex.SpriteSheet.fromImageSource({
     grid: {
         rows: 1,
         columns: 6,
-        spriteHeight: 32,
-        spriteWidth: 32
+        spriteHeight: 16,
+        spriteWidth: 16
     }
 });
 

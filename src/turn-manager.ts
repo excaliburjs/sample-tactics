@@ -85,7 +85,7 @@ export class TurnManager {
         });
         this.victory.graphics.opacity = 0;
         this.victory.graphics.add('text', victory);
-        this.victory.graphics.show('text')
+        this.victory.graphics.use('text')
         engine.add(this.victory);
 
         const victoryDirections = new ex.Text({
@@ -111,7 +111,7 @@ export class TurnManager {
         });
         this.victoryDirections.graphics.opacity = 0;
         this.victoryDirections.graphics.add('text', victoryDirections);
-        this.victoryDirections.graphics.show('text')
+        this.victoryDirections.graphics.use('text')
         engine.add(this.victoryDirections);
 
         const failureText1 = new ex.Text({

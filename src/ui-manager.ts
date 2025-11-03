@@ -5,6 +5,7 @@ import { UnitMenu } from "./ui-components/unit-menu";
 import { SCALE } from "./config";
 import { Unit } from "./unit";
 import { LitElement } from 'lit';
+import {DialogBox} from "./ui-components/dialog-box";
 
 export interface MenuOptions {
     move: () => any;
@@ -19,6 +20,7 @@ export class UIManager {
     uiToWorldPos = new Map<UnitMenu, ex.Vector>();
 
     unitMenu: UnitMenu;
+    dialogBox: DialogBox;
     constructor(private engine: ex.Engine) {
         this.unitMenu = new UnitMenu();
         document.body.appendChild(this.unitMenu);
@@ -33,7 +35,9 @@ export class UIManager {
                 this.unitMenu.top = pagePos.y;
             }
         });
-        
+
+        this.dialogBox = new DialogBox();
+        document.body.appendChild(this.dialogBox);
     }
 
     worldDistanceToPage(distance: number) {
@@ -83,6 +87,17 @@ export class UIManager {
         this.uiToWorldPos.set(menu, unit.pos);
 
         return menu;
+    }
+
+    showDialog(text: string) {
+        const box = this.dialogBox;
+        box.text = (text);
+        box.show();
+        box.focus();
+        return box;
+    }
+    hideDialog(){
+        this.dialogBox.hide();
     }
 
     showNextMission(pos: ex.Vector) {

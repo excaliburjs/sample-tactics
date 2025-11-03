@@ -18,6 +18,7 @@ export class Unit extends ex.Actor {
     attacked = false;
     anim: ex.Animation;
     health: number;
+    heart: ex.Actor;
     damageManager!: DamageManager;
     animationManger!: AnimationManager;
     constructor(x: number, y: number, unitType: UnitType, board: Board, public player: Player) {
@@ -33,13 +34,19 @@ export class Unit extends ex.Actor {
         this.anim = this.unitConfig.graphics.idle.clone();
         this.anim.scale = SCALE;
         this.graphics.use(this.anim);
-        this.graphics.onPostDraw = this.onPostDraw.bind(this);
+        this.graphics.onPreDraw = this.onPreDraw.bind(this);
 
         const cell = board.getCell(x, y);
         if (cell) {
             this.pos = cell.pos.sub(this.unitConfig.graphics.offset);
             cell.addUnit(this);
         }
+
+        this.heart = new ex.Actor({
+            pos:ex.vec(board.tileWidth-4, board.tileHeight-3).scale(SCALE).add(this.unitConfig.graphics.offset),
+        });
+        this.heart.scale = SCALE;
+        this.addChild(this.heart)
     }
 
     onInitialize(engine: ex.Engine): void {
@@ -65,17 +72,8 @@ export class Unit extends ex.Actor {
         }
     }
 
-    onPostDraw(ctx: ex.ExcaliburGraphicsContext) {
-        if (this.health > 0) {
-            const heart = HeartSpriteSheet.getSprite(ex.clamp(this.health, 0, 5), 0);
-            if (heart) {
-                heart.scale = SCALE;
-                heart.draw(ctx,
-                    10 * SCALE.x + this.unitConfig.graphics.offset.x,
-                    10 * SCALE.y + this.unitConfig.graphics.offset.y
-                );
-            }
-        }
+    onPreDraw(ctx: ex.ExcaliburGraphicsContext) {
+        this.heart.graphics.use(HeartSpriteSheet.getSprite(ex.clamp(this.health, 0, 5), 0));
     }
 
     async move(path: PathNodeComponent[]) {

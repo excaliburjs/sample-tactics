@@ -6,8 +6,8 @@ import { Unit } from './unit';
 
 export class Board {
     tileWidth: number = 32;
-    tileHeight: number = 32;
-    margin: number = 2;
+    tileHeight: number = 24;
+    margin: number = 4;
     rows: number;
     cols: number;
 

@@ -1,10 +1,10 @@
 import * as ex from 'excalibur';
-import { loader } from './resources';
-import { LevelBase, LevelData } from './levels/level-base';
-import { StartScreen } from './levels/start-screen';
-import { Tutorial } from './levels/tutorial';
+import {loader} from './resources';
+import {LevelBase, LevelData} from './levels/level-base';
+import {StartScreen} from './levels/start-screen';
+import {Tutorial} from './levels/tutorial';
 import './ui-components/audio-menu';
-import { AudioManager } from './audio-manager';
+import {AudioManager} from './audio-manager';
 
 const game = new ex.Engine({
     width: 800,

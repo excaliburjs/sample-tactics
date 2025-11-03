@@ -9,7 +9,7 @@
   "author": "Erik Onarheim",
   "license": "BSD-2-Clause",
   "dependencies": {
-    "excalibur": "0.29.0",
+    "excalibur": "^0.31.0",
     "lit": "3.1.2"
   },
   "devDependencies": {

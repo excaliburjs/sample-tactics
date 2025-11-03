@@ -1,23 +1,24 @@
 import * as ex from "excalibur";
-import { Board } from "./board";
-import { CursorAnimation, HighlightAnimation, RedHighlightAnimation, TerrainSpriteSheet } from "./resources";
-import { BOARD_OFFSET, SCALE } from "./config";
-import { PathNodeComponent } from "./path-finding/path-node-component";
-import { Unit } from "./unit";
+import {Board} from "./board";
+import {HighlightSpriteSheet, Resources, TerrainSpriteSheet} from "./resources";
+import {SCALE} from "./config";
+import {PathNodeComponent} from "./path-finding/path-node-component";
+import {Unit} from "./unit";
 
-const RangeHighlightAnimation = HighlightAnimation.clone();
-const PathHighlightAnimation = HighlightAnimation.clone();
-const AttackHighlightAnimation = RedHighlightAnimation.clone();
+const RangeHighlight = HighlightSpriteSheet.sprites[0].clone();
+const PathHighlight = HighlightSpriteSheet.sprites[1].clone();
+const AttackHighlight = HighlightSpriteSheet.sprites[2].clone();
 
 export enum Terrain {
     Grass = 'G',
     Water = 'W',
-    Sand  = 'S',
+    Sand = 'S',
     Stone = 'T'
 }
 
 export class Cell extends ex.Actor {
     decoration: ex.Actor;
+    cursor: ex.Actor;
     sprite!: ex.Sprite;
     pathNode: PathNodeComponent;
     unit: Unit | null = null;
@@ -25,10 +26,10 @@ export class Cell extends ex.Actor {
 
     /**
      * Individual cells on the board
-     * 
+     *
      * @param x integer coordinate
      * @param y integer coordinate
-     * @param board 
+     * @param board
      */
     constructor(public x: number, public y: number, public board: Board) {
         super({
@@ -42,23 +43,51 @@ export class Cell extends ex.Actor {
         this.decoration = new ex.Actor({anchor: ex.vec(0, 0)});
         this.addChild(this.decoration);
 
+        this.cursor = new ex.Actor({
+            pos: ex.vec(board.tileWidth / 2, board.tileHeight / 2 - 1).scale(SCALE),
+        });
+        this.addChild(this.cursor);
+
         this.pathNode = new PathNodeComponent(this.pos);
         this.addComponent(this.pathNode);
 
         this.terrain = Terrain.Grass;
+        this.graphics.offset = ex.vec(0, -16);
 
-        RangeHighlightAnimation.scale = SCALE;
-        RangeHighlightAnimation.opacity = 0.75;
-        PathHighlightAnimation.scale = SCALE;
-        PathHighlightAnimation.opacity = 0.75;
-        PathHighlightAnimation.tint = ex.Color.Green;
-        AttackHighlightAnimation.scale = SCALE;
-        AttackHighlightAnimation.opacity = 0.75;
-        CursorAnimation.scale = SCALE;
-        this.decoration.graphics.add('range', RangeHighlightAnimation);
-        this.decoration.graphics.add('path', PathHighlightAnimation);
-        this.decoration.graphics.add('attack', AttackHighlightAnimation);
-        this.decoration.graphics.add('cursor', CursorAnimation);
+        RangeHighlight.scale = SCALE;
+        PathHighlight.scale = SCALE;
+        AttackHighlight.scale = SCALE;
+
+        this.decoration.graphics.add('range', RangeHighlight);
+        this.decoration.graphics.add('path', PathHighlight);
+        this.decoration.graphics.add('attack', AttackHighlight);
+        this.decoration.actions.repeatForever((ctx) => {
+            ctx.fade(0.4, 700).delay(300).fade(0.6, 700).delay(300)
+        })
+
+        this.cursor.actions.repeatForever((ctx) => {
+            ctx.scaleTo(ex.vec(1.05, 1.05), ex.vec(0.75, 0.75))
+                .delay(200)
+                .scaleTo(ex.vec(1, 1), ex.vec(0.75, 0.75))
+                .delay(200)
+        })
+        const myNineSlice = new ex.NineSlice({
+            width: board.tileWidth + 4, height: board.tileHeight + 5,
+            source: Resources.SelectionSprite,
+            sourceConfig: {
+                width: 16,
+                height: 16,
+                leftMargin: 7, rightMargin: 7,
+                topMargin: 7, bottomMargin: 7,
+            },
+            destinationConfig: {
+                drawCenter: false,
+                horizontalStretch: ex.NineSliceStretch.Stretch,
+                verticalStretch: ex.NineSliceStretch.Stretch
+            }
+        });
+        this.cursor.graphics.add("cursor", myNineSlice);
+        myNineSlice.scale = SCALE;
     }
 
     get terrain() {
@@ -67,7 +96,7 @@ export class Cell extends ex.Actor {
 
     set terrain(terrain: Terrain) {
         this._terrain = terrain;
-        switch(this.terrain) {
+        switch (this.terrain) {
             case Terrain.Grass:
                 this.sprite = TerrainSpriteSheet.sprites[ex.randomIntInRange(0, 1)];
                 break;
@@ -80,7 +109,7 @@ export class Cell extends ex.Actor {
                 this.pathNode.isWalkable = false;
                 break;
             case Terrain.Stone:
-                this.sprite = TerrainSpriteSheet.sprites[5];
+                this.sprite = TerrainSpriteSheet.sprites[ex.randomIntInRange(4, 5)];
                 break;
         }
         this.sprite.scale = SCALE;
@@ -112,9 +141,9 @@ export class Cell extends ex.Actor {
 
     toggleCursor(show: boolean) {
         if (show) {
-            this.decoration.graphics.use('cursor');
+            this.cursor.graphics.use("cursor");
         } else {
-            this.decoration.graphics.hide();
+            this.cursor.graphics.hide();
         }
     }
 
@@ -124,7 +153,7 @@ export class Cell extends ex.Actor {
 
     /**
      * Returns the orthogonal neighbors (up, down, left, right)
-     * @returns 
+     * @returns
      */
     getNeighbors(): Cell[] {
         return [
