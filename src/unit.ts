@@ -158,6 +158,7 @@ export class Unit extends ex.Actor {
     }
 
     async attack(other: Unit) {
+        this.moved = true;
         this.attacked = true;
         other.health -= this.unitConfig.attack;
         Resources.HitSound.play();
