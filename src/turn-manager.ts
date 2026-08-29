@@ -237,7 +237,7 @@ export class TurnManager {
     }
 
     async start() {
-        while (this.maxTurns > 0) {
+        while (this.currentTurn <= this.maxTurns) {
             console.log('Current player turn:', this.currentPlayer.name);
             if (await this.checkWin(this.currentPlayer)) return;
             this.selectionManager.selectPlayer(this.currentPlayer);
@@ -249,8 +249,13 @@ export class TurnManager {
             } while (!move);
             await this.currentPlayer.turnEnd();
             this.nextTurn();
-            this.maxTurns--;
         }
+        console.log('Out of turns, ending in a draw');
+        await this.showGameOver();
+        this.engine.input.pointers.once('down', () => {
+            Resources.LevelMusic2.stop();
+            this.engine.goToScene(this.level.levelData.name);
+        });
     }
     
     nextTurn() {

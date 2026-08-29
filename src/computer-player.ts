@@ -79,11 +79,13 @@ export class ComputerPlayer extends Player {
             this.selectionManger.showHighlight(currentRange, 'attack');
             await ex.Util.delay(ENEMY_SPEED);
 
+            console.log(`[AI] ${unit.name} attacking ${closestEnemy.name}, targetCell=${closestEnemy.cell ? `(${closestEnemy.cell.x},${closestEnemy.cell.y})` : 'null'}`);
             this.selectionManger.showHighlight([closestEnemy.cell!.pathNode], 'path');
             await ex.Util.delay(ENEMY_SPEED);
 
             // attack
             await unit.attack(closestEnemy);
+            console.log(`[AI] ${unit.name} attack() resolved`);
             attacked = true;
         }
 
@@ -95,47 +97,62 @@ export class ComputerPlayer extends Player {
 
 
         for (let unit of units) {
-            // wait before moving each unit
-            await ex.Util.delay(ENEMY_SPEED);
+            try {
+                console.log(`[AI] ${unit.name} turn start`);
+                // wait before moving each unit
+                await ex.Util.delay(ENEMY_SPEED);
 
-            let range: PathNodeComponent[] = [];
-            if (unit.cell) {
-                range = this.board.pathFinder.getRange(unit.cell.pathNode, this.mask, unit.unitConfig.movement);
-            }
-
-            // find valid moves
-            let validCells = this.findValidMoveCells(unit);
-
-            // find the closest enemy
-            const closestEnemy = this.findClosestEnemy(unit);
-
-            if (closestEnemy) {
-                // attack if right next to enemy
-                const attacked = await this.maybeAttack(unit, closestEnemy);
-
-                // find the closest valid move to an enemy
-                const closestCell = this.findClosestCell(closestEnemy, validCells);
-
-                // move if did not attack
-                if (!attacked) {
-                    this.selectionManger.selectUnit(unit, 'move');
-                    await ex.Util.delay(ENEMY_SPEED);
-
-                    const currentPath = this.selectionManger.findPath(closestCell!, range);
-                    this.selectionManger.showHighlight(currentPath, 'path')
-                    await ex.Util.delay(ENEMY_SPEED);
-
-                    await this.selectionManger.selectDestinationAndMove(unit, closestCell!);
-                    await ex.Util.delay(ENEMY_SPEED);
-
-                    // try again to attack
-                    await this.maybeAttack(unit, closestEnemy);
+                let range: PathNodeComponent[] = [];
+                if (unit.cell) {
+                    range = this.board.pathFinder.getRange(unit.cell.pathNode, this.mask, unit.unitConfig.movement);
                 }
 
-                this.selectionManger.reset();
+                // find valid moves
+                let validCells = this.findValidMoveCells(unit);
+
+                // find the closest enemy
+                const closestEnemy = this.findClosestEnemy(unit);
+                console.log(`[AI] ${unit.name} closestEnemy=${closestEnemy?.name ?? 'none'}`);
+
+                if (closestEnemy) {
+                    // attack if right next to enemy
+                    console.log(`[AI] ${unit.name} maybeAttack (initial)`);
+                    const attacked = await this.maybeAttack(unit, closestEnemy);
+                    console.log(`[AI] ${unit.name} maybeAttack (initial) done, attacked=${attacked}`);
+
+                    // find the closest valid move to an enemy
+                    const closestCell = this.findClosestCell(closestEnemy, validCells);
+                    console.log(`[AI] ${unit.name} closestCell=${closestCell ? `(${closestCell.x},${closestCell.y})` : 'null'}`);
+
+                    // move if did not attack
+                    if (!attacked) {
+                        this.selectionManger.selectUnit(unit, 'move');
+                        await ex.Util.delay(ENEMY_SPEED);
+
+                        const currentPath = this.selectionManger.findPath(closestCell!, range);
+                        this.selectionManger.showHighlight(currentPath, 'path')
+                        await ex.Util.delay(ENEMY_SPEED);
+
+                        console.log(`[AI] ${unit.name} selectDestinationAndMove start, pathLen=${currentPath.length}`);
+                        await this.selectionManger.selectDestinationAndMove(unit, closestCell!);
+                        console.log(`[AI] ${unit.name} selectDestinationAndMove done`);
+                        await ex.Util.delay(ENEMY_SPEED);
+
+                        // try again to attack
+                        console.log(`[AI] ${unit.name} maybeAttack (retry)`);
+                        await this.maybeAttack(unit, closestEnemy);
+                        console.log(`[AI] ${unit.name} maybeAttack (retry) done`);
+                    }
+
+                    this.selectionManger.reset();
+                }
+                // pass if nothing done
+                unit.pass();
+                console.log(`[AI] ${unit.name} turn end`);
+            } catch (err) {
+                console.error(`[AI] ${unit.name} threw an error mid-turn, passing to avoid a stuck turn`, err);
+                unit.pass();
             }
-            // pass if nothing done
-            unit.pass();
         }
 
         return true;

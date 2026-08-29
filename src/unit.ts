@@ -18,6 +18,7 @@ export class Unit extends ex.Actor {
     attacked = false;
     anim: ex.Animation;
     health: number;
+    private dying = false;
     heart: ex.Actor;
     damageManager!: DamageManager;
     animationManger!: AnimationManager;
@@ -61,7 +62,8 @@ export class Unit extends ex.Actor {
             this.anim.tint = ex.Color.White;
         }
 
-        if (this.health <= 0) {
+        if (this.health <= 0 && !this.dying) {
+            this.dying = true;
             this.cell?.removeUnit(this);
             this.actions.delay(500).callMethod(() => {
                 this.animationManger.playExplosion(this.pos);
