@@ -89,7 +89,6 @@ const level3 = new LevelBase(Level3Data, 'level3')
 game.addScene(level3.name, level3);
 
 game.start(loader).then(() => {
-    game.screen.pixelRatioOverride = 4;
     game.screen.applyResolutionAndViewport();
     game.goToScene('start');
 });
